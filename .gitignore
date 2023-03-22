@@ -3,4 +3,5 @@ __pycache__/
 
 # scratch directory
 /results/*
-!/results/.keep
+!/results/patterns.yaml
+!/results/test.yaml
