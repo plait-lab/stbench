@@ -39,13 +39,6 @@ def main(args: Args):
         miss.append(len(semgrep - stsearch) / len(semgrep)
                     if semgrep else 0)
 
-        import re
-        if (p := run['pattern']['stsearch']) \
-                and len(semgrep & stsearch) >= 1 \
-                and re.search('[^\.]\.\w', p) \
-                and not p.startswith('$_'):
-            print(repr(p))
-
     aggregate: dict[str, tuple[int | str, float | str]] = {
         'total': (total, 1),
     }
