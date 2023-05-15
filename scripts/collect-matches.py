@@ -42,7 +42,7 @@ def collect(items: Iterable[dict]) -> Iterable[dict]:
         language: Language = item['language']
 
         paths = []
-        for location in item['locations']:
+        for location in item['sources']:
             source = Path(location['path'])
             if source in skip:
                 continue

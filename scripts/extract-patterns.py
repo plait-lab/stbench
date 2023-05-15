@@ -59,7 +59,7 @@ def main(args: Args):
     yaml.safe_dump_all(({
         'language': language,
         'pattern': {'semgrep': pattern, 'stsearch': to_st(pattern)},
-        'locations': [{'path': path, 'keys': keys} for path, keys in paths.items()],
+        'source': [{'path': path, 'keys': keys} for path, keys in paths.items()],
     } for (language, pattern), paths in out.items()), args.out, sort_keys=False)
 
 
