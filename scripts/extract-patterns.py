@@ -35,6 +35,7 @@ def main(args: Args):
 
     out = defaultdict(lambda: defaultdict(list))
 
+    print(f"Loaded {len(args.rules)} {args.mode} patterns.")
     for path in sorted(args.rules):
         with path.open() as f:
             config = yaml.safe_load(f)
@@ -56,6 +57,7 @@ def main(args: Args):
                     for language in languages.intersection(args.languages):
                         out[language, canonical(pattern)][path].append(key)
 
+    print(f"Collected {len(out)} atomic patterns.")
     yaml.safe_dump_all(({
         'language': language,
         'pattern': {'semgrep': pattern, 'stsearch': to_st(pattern)},
