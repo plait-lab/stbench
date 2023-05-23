@@ -3,6 +3,7 @@
 from typing import *
 
 import subprocess
+import shutil
 import json
 import yaml
 
@@ -99,9 +100,8 @@ def semgrep(language: Language, pattern: str, paths: list[Path]) -> Iterable[Ran
                                      capture_output=True, check=True, text=True)
         except subprocess.CalledProcessError as err:
             print(f"error$ {subprocess.list2cmdline(err.cmd)}")
-            with (tmp := Path('/tmp/config.yaml')).open('w') as f:
-                yaml.safe_dump({'rules': [rule]}, f, sort_keys=False)
-                print(f'Saved temporary config file to {tmp}')
+            shutil.copy2(config, (tmp := Path('/tmp/config.yaml')))
+            print(f'Copied temporary config file to {tmp}')
             return
 
         output = json.loads(process.stdout)
