@@ -19,83 +19,86 @@ from base import *
 class Args:
     patterns: TextIO
     matches: TextIO
-    test: bool
+    paths: list[Path]
 
 
 def add_args(parser: ArgumentParser):
     parser.add_argument('patterns', type=FileType('r'))
     parser.add_argument('matches', type=FileType('w'))
-    parser.add_argument('--test', action='store_true', required=True)
+    parser.add_argument('--paths', nargs='+', type=Path, required=True)
 
 
 def main(args: Args):
-    assert args.test
+    assert args.paths
 
-    items = yaml.safe_load_all(args.patterns)
-    yaml.safe_dump_all(collect(items), args.matches, sort_keys=False)
+    tools = {
+        'semgrep': semgrep,
+        'stsearch': stsearch,
+    }
+
+    items = list(yaml.safe_load_all(args.patterns))
+    yaml.safe_dump_all(collect(tools, items, args.paths),
+                       args.matches, sort_keys=False)
 
 
-def collect(items: Iterable[dict]) -> Iterable[dict]:
-    skip = set()
+def collect(tools: dict[str, 'Tool'], items: Iterable[dict], paths: Sequence[Path]) -> Iterable[dict]:
+    def patterns_for(name: str):
+        yield from ((item['language'], item['pattern'][name]) for item in items)
 
-    for item in items:
+    # We give all the patterns to the tool to allow for parsing optimization
+    all_results = {name: tool(patterns_for(name), paths)
+                   for name, tool in tools.items()}
+
+    # However, we then aggregate the results per pattern for a direct comparison
+    for item, *tool_results in zip(items, *all_results.values(), strict=True):
         pattern: dict[str, str] = item['pattern']
         language: Language = item['language']
 
-        paths = []
-        for location in item['sources']:
-            source = Path(location['path'])
-            if source in skip:
+        yield {
+            'language': language,
+            'pattern': pattern,
+            'results': {name: results for name, results
+                        in zip(all_results.keys(), tool_results, strict=True)}
+        }
+
+
+Tool: TypeAlias = Callable[[Iterable[tuple[Language, str]], Sequence[Path]],
+                           Iterable[Sequence[Match]]]
+
+
+def stsearch(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iterable[Sequence[Match]]:
+    for i, (language, pattern) in enumerate(patterns):
+        print(f'Running stsearch with pattern #{i+1} on all paths...')
+
+        results = []
+
+        for path in paths:
+            try:
+                process = subprocess.run(['stsearch', language.name, pattern, path],
+                                         capture_output=True, check=True, text=True)
+            except subprocess.CalledProcessError as err:
+                print(f"error$ {subprocess.list2cmdline(err.cmd)}")
                 continue
 
-            tests = [test for test
-                     in map(source.with_suffix, language.exts())
-                     if test.exists()]
+            results.extend(map(Match.parse, process.stdout.splitlines()))
 
-            if not tests:
-                print(f'{source}'
-                      f': no {language.exts()} file found')
-                skip.add(source)
-                continue
-
-            paths.extend(tests)
-
-        if paths:
-            yield {
-                'language': language,
-                'pattern': pattern,
-                'paths': paths,
-                'results': {
-                    'stsearch': list(stsearch(language, pattern['stsearch'], paths)),
-                    'semgrep': list(semgrep(language, pattern['semgrep'], paths)),
-                }
-            }
+        yield results
 
 
-def stsearch(language: Language, pattern: str, paths: list[Path]) -> Iterable[Range]:
-    for path in paths:
-        try:
-            process = subprocess.run(['stsearch', language.name, pattern, path],
-                                     capture_output=True, check=True, text=True)
-        except subprocess.CalledProcessError as err:
-            print(f"error$ {subprocess.list2cmdline(err.cmd)}")
-            continue
-
-        for line in process.stdout.splitlines():
-            yield Match.parse(line)
-
-
-def semgrep(language: Language, pattern: str, paths: list[Path]) -> Iterable[Range]:
+def semgrep(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iterable[Sequence[Match]]:
     from tempfile import NamedTemporaryFile as TempFile
     from operator import itemgetter
 
+    rules = [semgrep_rule(str(id), language, pattern)
+             for id, (language, pattern) in enumerate(patterns)]
+
     # FIX: not guaranteed to "reopen" according to docs
     with TempFile('w', suffix='.yaml') as config:
-        rule = semgrep_rule(language, pattern)
-        yaml.safe_dump({'rules': [rule]}, config, sort_keys=False)
+        yaml.safe_dump({'rules': rules}, config, sort_keys=False)
         config.flush()  # ensure it's written to disk
 
         try:
+            print(f'Running semgrep with all patterns on all paths...')
             process = subprocess.run(['semgrep', 'scan', f'--config={config.name}', *semgrep_extra_flags(), '--json', *paths],
                                      capture_output=True, check=True, text=True)
         except subprocess.CalledProcessError as err:
@@ -104,26 +107,30 @@ def semgrep(language: Language, pattern: str, paths: list[Path]) -> Iterable[Ran
             print(f'Copied temporary config file to {tmp}')
             return
 
-        output = json.loads(process.stdout)
-        assert not output['errors'], 'rule severity is info'
-        assert set(paths) == set(map(Path, output['paths']['scanned']))
-        assert not output['paths']['skipped']
+    output = json.loads(process.stdout)
+    assert not output['errors'], 'rule severity is info'
+    assert set(paths) == set(map(Path, output['paths']['scanned']))
+    assert not output['paths']['skipped']
 
-        for result in output['results']:
-            assert result['check_id'] == rule['id']
-            assert not result['extra']['is_ignored']
-            assert result['extra']['message'] == rule['message']
-            assert result['extra']['severity'] == rule['severity']
+    results = [[] for r in rules]
+    for result in output['results']:
+        id = int(result['check_id'])
+        assert not result['extra']['is_ignored']
+        assert result['extra']['message'] == rules[id]['message']
+        assert result['extra']['severity'] == rules[id]['severity']
 
-            path, start, end = itemgetter('path', 'start', 'end')(result)
-            (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
-            yield Match(Path(path), Range(Point(sr, sc), Point(er, ec)))
+        path, start, end = itemgetter('path', 'start', 'end')(result)
+        (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
+        match = Match(Path(path), Range(Point(sr, sc), Point(er, ec)))
+        results[id].append(match)
+
+    yield from results
 
 
-def semgrep_rule(language: Language, pattern: str) -> dict:
+def semgrep_rule(id: str, language: Language, pattern: str) -> dict:
     # See: https://semgrep.dev/docs/writing-rules/rule-syntax/
     return {
-        'id': 'search',
+        'id': id,
         'message': 'result',
         'severity': 'INFO',
         'languages': [language.name],
