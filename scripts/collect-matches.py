@@ -32,7 +32,7 @@ def main(args: Args):
     assert args.paths
 
     tools = {
-        # "semgrep": semgrep,
+        "semgrep": semgrep,
         "stsearch": stsearch,
     }
 
