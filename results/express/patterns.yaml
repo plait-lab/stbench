@@ -1,0 +1,4344 @@
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('express')
+  stsearch: $_ = require('express')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-csurf-middleware-usage.yaml'
+  keys:
+  - express-check-csurf-middleware-usage.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import {$H1} from 'csurf'
+  stsearch: import {$_} from 'csurf'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-csurf-middleware-usage.yaml'
+  keys:
+  - express-check-csurf-middleware-usage.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: require('csurf')
+  stsearch: require('csurf')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-csurf-middleware-usage.yaml'
+  keys:
+  - express-check-csurf-middleware-usage.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import {$H1} from 'csrf'
+  stsearch: import {$_} from 'csrf'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-csurf-middleware-usage.yaml'
+  keys:
+  - express-check-csurf-middleware-usage.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: require('csrf')
+  stsearch: require('csrf')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-csurf-middleware-usage.yaml'
+  keys:
+  - express-check-csurf-middleware-usage.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2()
+  stsearch: $_ = $_()
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-csurf-middleware-usage.yaml'
+  keys:
+  - express-check-csurf-middleware-usage.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.use(require('serve-index')(...))
+  stsearch: $_.use(require('serve-index')(...))
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-directory-listing.yaml'
+  keys:
+  - express-check-directory-listing.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('serve-index')
+  stsearch: $_ = require('serve-index')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-directory-listing.yaml'
+  keys:
+  - express-check-directory-listing.0.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'serve-index'
+  stsearch: import $_ from 'serve-index'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-directory-listing.yaml'
+  keys:
+  - express-check-directory-listing.0.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'serve-index'
+  stsearch: import * as $_ from 'serve-index'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-directory-listing.yaml'
+  keys:
+  - express-check-directory-listing.0.1.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2(...)
+  stsearch: $_ = $_(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-directory-listing.yaml'
+  keys:
+  - express-check-directory-listing.0.1.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1(...)
+  stsearch: $_(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-directory-listing.yaml'
+  keys:
+  - express-check-directory-listing.0.1.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-default-name.1
+  - express-cookie-session-default-name.2
+  - express-cookie-session-no-secure.1
+  - express-cookie-session-no-secure.2
+  - express-cookie-session-no-httponly.1
+  - express-cookie-session-no-httponly.2
+  - express-cookie-session-no-domain.1
+  - express-cookie-session-no-domain.2
+  - express-cookie-session-no-path.1
+  - express-cookie-session-no-path.2
+  - express-cookie-session-no-expires.1
+  - express-cookie-session-no-expires.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-jwt-not-revoked.yaml'
+  keys:
+  - express-jwt-not-revoked.1
+  - express-jwt-not-revoked.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sanitizers.3.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.1.1.1
+  - direct-response-write.sanitizers.1.1.3
+  - direct-response-write.sanitizers.2.1
+  - direct-response-write.sanitizers.3.1
+  - direct-response-write.sanitizers.5.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.use(..., $H2(...), ...)
+  stsearch: $_.use(... $_(...) ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-check-directory-listing.yaml'
+  keys:
+  - express-check-directory-listing.0.1.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('cookie-session')
+  stsearch: $_ = require('cookie-session')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-default-name.0.0
+  - express-cookie-session-no-secure.0.0
+  - express-cookie-session-no-httponly.0.0
+  - express-cookie-session-no-domain.0.0
+  - express-cookie-session-no-path.0.0
+  - express-cookie-session-no-expires.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('express-session')
+  stsearch: $_ = require('express-session')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-default-name.0.1
+  - express-cookie-session-no-secure.0.1
+  - express-cookie-session-no-httponly.0.1
+  - express-cookie-session-no-domain.0.1
+  - express-cookie-session-no-path.0.1
+  - express-cookie-session-no-expires.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-session-hardcoded-secret.yaml'
+  keys:
+  - express-session-hardcoded-secret.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{name:...}'
+  stsearch: '{name:...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-default-name.2.0
+  - express-cookie-session-default-name.3.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2($H3,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-default-name.3
+  - express-cookie-session-no-secure.3
+  - express-cookie-session-no-httponly.3
+  - express-cookie-session-no-domain.3
+  - express-cookie-session-no-path.3
+  - express-cookie-session-no-expires.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-jwt-not-revoked.yaml'
+  keys:
+  - express-jwt-not-revoked.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.name = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.name = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-default-name.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{cookie:{secure:true}}'
+  stsearch: '{cookie:{secure:true}}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-secure.2.0
+  - express-cookie-session-no-secure.3.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2 = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_ = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-secure.4
+  - express-cookie-session-no-httponly.4
+  - express-cookie-session-no-domain.4
+  - express-cookie-session-no-path.4
+  - express-cookie-session-no-expires.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{secure:true}'
+  stsearch: '{secure:true}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-secure.4.0
+  - express-cookie-session-no-secure.5.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.cookie = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.cookie = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-secure.5
+  - express-cookie-session-no-httponly.5
+  - express-cookie-session-no-domain.5
+  - express-cookie-session-no-path.5
+  - express-cookie-session-no-expires.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.secure = true;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.secure = true;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-secure.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.cookie.secure = true;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.cookie.secure = true;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-secure.7
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{cookie:{httpOnly:true}}'
+  stsearch: '{cookie:{httpOnly:true}}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-httponly.2.0
+  - express-cookie-session-no-httponly.3.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{httpOnly:true}'
+  stsearch: '{httpOnly:true}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-httponly.4.0
+  - express-cookie-session-no-httponly.5.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.httpOnly = true;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.httpOnly = true;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-httponly.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.cookie.httpOnly = true;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.cookie.httpOnly = true;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-httponly.7
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{cookie:{domain:...}}'
+  stsearch: '{cookie:{domain:...}}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-domain.2.0
+  - express-cookie-session-no-domain.3.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{domain:...}'
+  stsearch: '{domain:...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-domain.4.0
+  - express-cookie-session-no-domain.5.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.domain = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.domain = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-domain.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.cookie.domain = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.cookie.domain = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-domain.7
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{cookie:{path:...}}'
+  stsearch: '{cookie:{path:...}}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-path.2.0
+  - express-cookie-session-no-path.3.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{path:...}'
+  stsearch: '{path:...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-path.4.0
+  - express-cookie-session-no-path.5.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.path = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.path = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-path.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.cookie.path = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.cookie.path = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-path.7
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{cookie:{expires:...}}'
+  stsearch: '{cookie:{expires:...}}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-expires.2.0
+  - express-cookie-session-no-expires.3.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{expires:...}'
+  stsearch: '{expires:...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-expires.4.0
+  - express-cookie-session-no-expires.5.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.expires = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.expires = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-expires.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = ...;
+    ...
+    $H2.cookie.expires = ...;
+    ...
+    $H3($H4,...);
+  stsearch: |-
+    $_ = ...;
+    ...
+    $_.cookie.expires = ...;
+    ...
+    $_($_...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-cookie-settings.yaml'
+  keys:
+  - express-cookie-session-no-expires.7
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'notevil'
+  stsearch: import $_ from 'notevil'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import {$H1} from 'notevil'
+  stsearch: import {$_} from 'notevil'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('notevil')
+  stsearch: $_ = require('notevil')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1('...')
+  stsearch: $_('...')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.runInContext("$H2", ...)
+  stsearch: $_.runInContext("$_" ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.1.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-vm-noent.yaml'
+  keys:
+  - express-libxml-vm-noent.0.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.runInNewContext("$H2", ...)
+  stsearch: $_.runInNewContext("$_" ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.1.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-vm-noent.yaml'
+  keys:
+  - express-libxml-vm-noent.0.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.runInThisContext("$H2", ...)
+  stsearch: $_.runInThisContext("$_" ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.1.1.0.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-vm-noent.yaml'
+  keys:
+  - express-libxml-vm-noent.0.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.compileFunction("$H2", ...)
+  stsearch: $_.compileFunction("$_" ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-detect-notevil-usage.yaml'
+  keys:
+  - express-detect-notevil-usage.1.1.0.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-vm-noent.yaml'
+  keys:
+  - express-libxml-vm-noent.0.0.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('express-jwt')
+  stsearch: $_ = require('express-jwt')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-jwt-not-revoked.yaml'
+  keys:
+  - express-jwt-not-revoked.0
+- path: !path 'semgrep-rules/javascript/express/security/express-jwt-hardcoded-secret.yaml'
+  keys:
+  - express-jwt-hardcoded-secret.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '{isRevoked:...}'
+  stsearch: '{isRevoked:...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-jwt-not-revoked.yaml'
+  keys:
+  - express-jwt-not-revoked.2.0
+  - express-jwt-not-revoked.3.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: function ... ($H1, $H2) {...}
+  stsearch: function ... ($_, $_) {...}
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.0.0
+  - express-wkhtmltopdf-injection.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: function ... ($H1, $H2, $H3) {...}
+  stsearch: function ... ($_, $_, $_) {...}
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.0.1
+  - express-wkhtmltopdf-injection.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(..., function $H3($H4, $H5) {...})
+  stsearch: $_.$_(... function $_($_, $_) {...})
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.0.2.0
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.0.2.0.0
+  - express-wkhtmltopdf-injection.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.0.2
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.0.2.0.0
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.0.2.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(..., function $H3($H4, $H5, $H6) {...})
+  stsearch: $_.$_(... function $_($_, $_, $_) {...})
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.0.2.0.1
+  - express-wkhtmltopdf-injection.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.0.3
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.0.2.0.1
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.0.2.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.query
+  stsearch: $_.query
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.7.0
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.1.0
+  - express-wkhtmltopdf-injection.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.2.0
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.1.0
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.body
+  stsearch: $_.body
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.7.1
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.1.1
+  - express-wkhtmltopdf-injection.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.2.1
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.params
+  stsearch: $_.params
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.7.2
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.1.2
+  - express-wkhtmltopdf-injection.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.2.2
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.1.2
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.cookies
+  stsearch: $_.cookies
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.1.3
+  - express-wkhtmltopdf-injection.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.2.3
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.1.3
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.headers
+  stsearch: $_.headers
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.0.1.4
+  - express-wkhtmltopdf-injection.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.0.2.4
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.0.1.4
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.0.1.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.files.$H2.data.toString('utf8')
+  stsearch: $_.files.$_.data.toString('utf8')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.1.5
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.1.5
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.1.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.files.$H2['data'].toString('utf8')
+  stsearch: $_.files.$_['data'].toString('utf8')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.0.1.6
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.0.1.6
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.0.1.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
+    {...}
+  stsearch: |-
+    ({ $_ }: Request,$_: Response, $_: NextFunction) =>
+    {...}
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.1.0.0
+  - express-wkhtmltopdf-injection.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.1.0.0
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '({ $H1 }: Request,$H2: Response) => {...}'
+  stsearch: '({ $_ }: Request,$_: Response) => {...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.1.0.1
+  - express-wkhtmltopdf-injection.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: params
+  stsearch: params
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.1.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.5.0
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.1.2.0
+  - express-wkhtmltopdf-injection.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.1.2.0
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.1.2.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: query
+  stsearch: query
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.1.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.5.1
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.1.2.1
+  - express-wkhtmltopdf-injection.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.1.2.1
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.1.2.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: cookies
+  stsearch: cookies
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.1.1.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.1.2.2
+  - express-wkhtmltopdf-injection.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.1.2.2
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.1.2.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: headers
+  stsearch: headers
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.1.1.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.1.2.3
+  - express-wkhtmltopdf-injection.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.1.2.3
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.1.2.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: body
+  stsearch: body
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.1.1.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.5.2
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sources.1.2.4
+  - express-wkhtmltopdf-injection.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sources.1.2.4
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sources.1.2.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: files.$H1.data.toString('utf8')
+  stsearch: files.$_.data.toString('utf8')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.2.5
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.2.5
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.2.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: files.$H1['data'].toString('utf8')
+  stsearch: files.$_['data'].toString('utf8')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sources.1.2.6
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sources.1.2.6
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sources.1.2.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('$H2')
+  stsearch: $_ = require('$_')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sinks.0.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sinks.0.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from '$H2'
+  stsearch: import $_ from '$_'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sinks.0.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sinks.0.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from '$H2'
+  stsearch: import * as $_ from '$_'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sinks.0.0.0.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sinks.0.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3, {...,noent:true,...})
+  stsearch: $_.$_($_, {...noent:true...})
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sinks.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1
+  stsearch: $_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-noent.yaml'
+  keys:
+  - express-libxml-noent.sinks.0.0.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.0.0
+  - express-path-join-resolve-traversal.sinks.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sinks.0.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.3
+- path: !path 'semgrep-rules/javascript/express/security/audit/possible-user-input-redirect.yaml'
+  keys:
+  - unknown-value-in-redirect.1.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sinks.0.3
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sinks.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '$H1.parseXml($H2, {..., noent: true, ...}, ...)'
+  stsearch: '$_.parseXml($_, {... noent: true ...} ...)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-vm-noent.yaml'
+  keys:
+  - express-libxml-vm-noent.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '$H1 = {..., noent: true, ...}'
+  stsearch: '$_ = {... noent: true ...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-vm-noent.yaml'
+  keys:
+  - express-libxml-vm-noent.0.2.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.parseXml( $H2, $H3 )
+  stsearch: $_.parseXml( $_, $_ )
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-libxml-vm-noent.yaml'
+  keys:
+  - express-libxml-vm-noent.0.2.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect("$H2"+$H3. ... .$H4)
+  stsearch: $_.redirect("$_"+$_... .$_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect("$H2"+$H3. ... .$H4 + $...H5)
+  stsearch: $_.redirect("$_"+$_... .$_ + ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect(`$H2${$H3. ... .$H4}...`)
+  stsearch: $_.redirect(`$_${$_... .$_}...`)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect("$H2"+$H3.$H4[...])
+  stsearch: $_.redirect("$_"+$_.$_[...])
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.0.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect("$H2"+$H3.$H4[...] + $...H5)
+  stsearch: $_.redirect("$_"+$_.$_[...] + ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.0.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect(`$H2${$H3.$H4[...]}...`)
+  stsearch: $_.redirect(`$_${$_.$_[...]}...`)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.0.0.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1. ... .$H2
+  stsearch: $_... .$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.0.2.0
+  - express-open-redirect.sinks.1.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.4.0
+  - express-ssrf.sinks.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect($H2. ... .$H3)
+  stsearch: $_.redirect($_... .$_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect($H2. ... .$H3 + $...H4)
+  stsearch: $_.redirect($_... .$_ + ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect(`${$H2. ... .$H3}...`)
+  stsearch: $_.redirect(`${$_... .$_}...`)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.1.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect($H2.$H3['...'])
+  stsearch: $_.redirect($_.$_['...'])
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.2.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect($H2.$H3['...'] + $...H4)
+  stsearch: $_.redirect($_.$_['...'] + ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.2.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect(`${$H2.$H3['...']}...`)
+  stsearch: $_.redirect(`${$_.$_['...']}...`)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.2.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2
+  stsearch: $_.$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.2.1
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.2.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2. ... .$H3
+  stsearch: $_ = $_... .$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2.$H3['...']
+  stsearch: $_ = $_.$_['...']
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2. ... .$H3 + $...H4
+  stsearch: $_ = $_... .$_ + ...
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.0.2
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2.$H3['...'] + $...H4
+  stsearch: $_ = $_.$_['...'] + ...
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = `${$H2. ... .$H3}...`
+  stsearch: $_ = `${$_... .$_}...`
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.0.4
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = `${$H2.$H3['...']}...`
+  stsearch: $_ = `${$_.$_['...']}...`
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.0.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect($H2)
+  stsearch: $_.redirect($_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect($H2 + $...H3)
+  stsearch: $_.redirect($_ + ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect(`${$H2}...`)
+  stsearch: $_.redirect(`${$_}...`)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-open-redirect.yaml'
+  keys:
+  - express-open-redirect.sinks.3.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('path')
+  stsearch: $_ = require('path')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'path'
+  stsearch: import $_ from 'path'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.join(...,$H2,...)
+  stsearch: $_.join(...$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.0.2.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.resolve(...,$H2,...)
+  stsearch: $_.resolve(...$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.0.2.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import 'path'
+  stsearch: import 'path'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: path.join(...,$H1,...)
+  stsearch: path.join(...$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.1.2.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: path.resolve(...,$H1,...)
+  stsearch: path.resolve(...$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sinks.1.2.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.replace(...)
+  stsearch: $_.replace(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sanitizers.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.indexOf(...)
+  stsearch: $_.indexOf(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sanitizers.1
+  - express-path-join-resolve-traversal.sanitizers.2.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    function ... (...) {
+     ...
+    }
+  stsearch: |-
+    function ... (...) {
+     ...
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-path-join-resolve-traversal.yaml'
+  keys:
+  - express-path-join-resolve-traversal.sanitizers.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: 'function ... (...,$H1: $H2, ...) {...}'
+  stsearch: 'function ... (...$_: $_ ...) {...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sources.2.0.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3,...)
+  stsearch: $_.$_($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sinks.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.2.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3,$H4)
+  stsearch: $_.$_($_,$_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-res-sendfile.yaml'
+  keys:
+  - express-res-sendfile.sinks.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'express-session'
+  stsearch: import $_ from 'express-session'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-session-hardcoded-secret.yaml'
+  keys:
+  - express-session-hardcoded-secret.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import {..., $H1, ...} from 'express-session'
+  stsearch: import {... $_ ...} from 'express-session'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-session-hardcoded-secret.yaml'
+  keys:
+  - express-session-hardcoded-secret.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'express-session'
+  stsearch: import * as $_ from 'express-session'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-session-hardcoded-secret.yaml'
+  keys:
+  - express-session-hardcoded-secret.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.use($H2({...}))
+  stsearch: $_.use($_({...}))
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-session-hardcoded-secret.yaml'
+  keys:
+  - express-session-hardcoded-secret.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = $H2
+    ...
+    $H3.use($H4($H5))
+  stsearch: |-
+    $_ = $_
+    ...
+    $_.use($_($_))
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-session-hardcoded-secret.yaml'
+  keys:
+  - express-session-hardcoded-secret.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: 'secret: ''$H1'''
+  stsearch: 'secret: ''$_'''
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-session-hardcoded-secret.yaml'
+  keys:
+  - express-session-hardcoded-secret.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: function ... ($H1, ...) {...}
+  stsearch: function ... ($_ ...) {...}
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    ({ $H1 }: Request,...) =>
+    {...}
+  stsearch: |-
+    ({ $_ }: Request...) =>
+    {...}
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '({ $H1 }: $H2.Request,...) => {...}'
+  stsearch: '({ $_ }: $_.Request...) => {...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sources.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('request')
+  stsearch: $_ = require('request')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.0.0
+  - express-ssrf.sinks.1.0.0
+  - express-ssrf.sinks.2.0.0
+  - express-ssrf.sinks.3.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'request'
+  stsearch: import * as $_ from 'request'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.0.1
+  - express-ssrf.sinks.1.0.1
+  - express-ssrf.sinks.2.0.1
+  - express-ssrf.sinks.3.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'request'
+  stsearch: import $_ from 'request'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.0.2
+  - express-ssrf.sinks.1.0.2
+  - express-ssrf.sinks.2.0.2
+  - express-ssrf.sinks.3.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2("$H3"+$H4. ... .$H5)
+  stsearch: $_.$_("$_"+$_... .$_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2("$H3"+$H4. ... .$H5 + $...H6)
+  stsearch: $_.$_("$_"+$_... .$_ + ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(`$H3${$H4. ... .$H5}...`)
+  stsearch: $_.$_(`$_${$_... .$_}...`)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2("$H3"+$H4.$H5[...])
+  stsearch: $_.$_("$_"+$_.$_[...])
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2("$H3"+$H4.$H5[...] + $...H6)
+  stsearch: $_.$_("$_"+$_.$_[...] + ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.1.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(`$H3${$H4.$H5[...]}...`)
+  stsearch: $_.$_(`$_${$_.$_[...]}...`)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.0.1.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3. ... .$H4,...)
+  stsearch: $_.$_($_... .$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.1.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3. ... .$H4 + $...H5,...)
+  stsearch: $_.$_($_... .$_ + ......)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.1.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(`${$H3. ... .$H4}...`,...)
+  stsearch: $_.$_(`${$_... .$_}...`...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.1.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3.$H4['...'],...)
+  stsearch: $_.$_($_.$_['...']...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.2.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3.$H4['...'] + $...H5,...)
+  stsearch: $_.$_($_.$_['...'] + ......)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.2.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(`${$H3.$H4['...']}...`,...)
+  stsearch: $_.$_(`${$_.$_['...']}...`...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.2.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2. ... .$H3['...']
+  stsearch: $_ = $_... .$_['...']
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2. ... .$H3['...'] + $...H4
+  stsearch: $_ = $_... .$_['...'] + ...
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = `${$H2. ... .$H3['...']}...`
+  stsearch: $_ = `${$_... .$_['...']}...`
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = "$H2"+ $H3. ... .$H4
+  stsearch: $_ = "$_"+ $_... .$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.6.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = "$H2"+$H3. ... .$H4 + $...H5
+  stsearch: $_ = "$_"+$_... .$_ + ...
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.6.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = "$H2"+$H3.$H4[...]
+  stsearch: $_ = "$_"+$_.$_[...]
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.6.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = "$H2"+$H3.$H4[...] + $...H5
+  stsearch: $_ = "$_"+$_.$_[...] + ...
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.6.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = `$H2${$H3.$H4[...]}...`
+  stsearch: $_ = `$_${$_.$_[...]}...`
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.1.6.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3 + $...H4,...)
+  stsearch: $_.$_($_ + ......)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.2.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(`${$H3}...`,...)
+  stsearch: $_.$_(`${$_}...`...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.2.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2("$H3"+$H4,...)
+  stsearch: $_.$_("$_"+$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.2.3.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2("$H3"+$H4 + $...H5,...)
+  stsearch: $_.$_("$_"+$_ + ......)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.2.3.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(`$H3${$H4}...`,...)
+  stsearch: $_.$_(`$_${$_}...`...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-ssrf.yaml'
+  keys:
+  - express-ssrf.sinks.3.2.3.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2(...)
+  stsearch: $_.$_(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-third-party-object-deserialization.yaml'
+  keys:
+  - express-third-party-object-deserialization.sinks.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '({ $H1 }: Request,$H2: Response, $H3: NextFunction) => {...}'
+  stsearch: '({ $_ }: Request,$_: Response, $_: NextFunction) => {...}'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sources.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: require('xml2json')
+  stsearch: require('xml2json')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sinks.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import 'xml2json'
+  stsearch: import 'xml2json'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sinks.0.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.on('...', function(...) { ... $H2.toJson($H3,...); ... })
+  stsearch: $_.on('...', function(...) { ... $_.toJson($_...); ... })
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/express-xml2json-xxe-event.yaml'
+  keys:
+  - express-xml2json-xxe-event.sinks.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = query.$H2
+  stsearch: $_ = query.$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/possible-user-input-redirect.yaml'
+  keys:
+  - unknown-value-in-redirect.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2.query.$H3
+  stsearch: $_ = $_.query.$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/possible-user-input-redirect.yaml'
+  keys:
+  - unknown-value-in-redirect.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = req.$H2
+  stsearch: $_ = req.$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/possible-user-input-redirect.yaml'
+  keys:
+  - unknown-value-in-redirect.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.redirect(...)
+  stsearch: $_.redirect(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/possible-user-input-redirect.yaml'
+  keys:
+  - unknown-value-in-redirect.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1[...] = $H2
+  stsearch: $_[...] = $_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sinks.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1["..."] = $H2
+  stsearch: $_["..."] = $_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sinks.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1[...] = "..."
+  stsearch: $_[...] = "..."
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sinks.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '"..." + $H1'
+  stsearch: '"..." + $_'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sinks.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 + "..."
+  stsearch: $_ + "..."
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sinks.0.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: var $H1 = $H2
+  stsearch: var $_ = $_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sanitizers.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: var $H1 = $H2.$H3
+  stsearch: var $_ = $_.$_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/remote-property-injection.yaml'
+  keys:
+  - remote-property-injection.sanitizers.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.render($H2, ...)
+  stsearch: $_.render($_ ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/res-render-injection.yaml'
+  keys:
+  - res-render-injection.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    function ... ($H1, $H2) {
+     ...
+     $H3.$H4('Content-Type', '$H5')
+    }
+  stsearch: |-
+    function ... ($_, $_) {
+     ...
+     $_.$_('Content-Type', '$_')
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1.$H2(..., function $H3($H4, $H5) {
+     ...
+     $H6.$H7('Content-Type', '$H8')
+    })
+  stsearch: |-
+    $_.$_(... function $_($_, $_) {
+     ...
+     $_.$_('Content-Type', '$_')
+    })
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    function ... ($H1, $H2, $H3) {
+     ...
+     $H4.$H5('Content-Type', '$H6')
+    }
+  stsearch: |-
+    function ... ($_, $_, $_) {
+     ...
+     $_.$_('Content-Type', '$_')
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    function ... ($H1, $H2) {
+     ...
+     $H3.set('$H4')
+    }
+  stsearch: |-
+    function ... ($_, $_) {
+     ...
+     $_.set('$_')
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1.$H2(..., function $H3($H4, $H5) {
+     ...
+     $H6.set('$H7')
+    })
+  stsearch: |-
+    $_.$_(... function $_($_, $_) {
+     ...
+     $_.set('$_')
+    })
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    function ... ($H1, $H2, $H3) {
+     ...
+     $H4.set('$H5')
+    }
+  stsearch: |-
+    function ... ($_, $_, $_) {
+     ...
+     $_.set('$_')
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.0.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
+    {
+     ...
+     $H4.$H5('Content-Type', '$H6')
+    }
+  stsearch: |-
+    ({ $_ }: Request,$_: Response, $_: NextFunction) =>
+    {
+     ...
+     $_.$_('Content-Type', '$_')
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    ({ $H1 }: Request,$H2: Response) => {
+     ...
+     $H3.$H4('Content-Type', '$H5')
+    }
+  stsearch: |-
+    ({ $_ }: Request,$_: Response) => {
+     ...
+     $_.$_('Content-Type', '$_')
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
+    {
+     ...
+     $H4.set('$H5')
+    }
+  stsearch: |-
+    ({ $_ }: Request,$_: Response, $_: NextFunction) =>
+    {
+     ...
+     $_.set('$_')
+    }
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sources.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.write($H2)
+  stsearch: $_.write($_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sinks.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sinks.0.2.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.send($H2)
+  stsearch: $_.send($_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1. ... .set('...'). ... .send($H2)
+  stsearch: $_... .set('...')... .send($_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sinks.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1. ... .type('...'). ... .send($H2)
+  stsearch: $_... .type('...')... .send($_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sinks.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from "underscore.string"
+  stsearch: import $_ from "underscore.string"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.0.0.0
+  - direct-response-write.sanitizers.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from "underscore.string"
+  stsearch: import * as $_ from "underscore.string"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require("underscore.string")
+  stsearch: $_ = require("underscore.string")
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.0.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.escapeHTML(...)
+  stsearch: $_.escapeHTML(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from "dompurify"
+  stsearch: import $_ from "dompurify"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import { ..., $H1,... } from "dompurify"
+  stsearch: import { ... $_... } from "dompurify"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from "dompurify"
+  stsearch: import * as $_ from "dompurify"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require("dompurify")
+  stsearch: $_ = require("dompurify")
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from "isomorphic-dompurify"
+  stsearch: import $_ from "isomorphic-dompurify"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from "isomorphic-dompurify"
+  stsearch: import * as $_ from "isomorphic-dompurify"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.0.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require("isomorphic-dompurify")
+  stsearch: $_ = require("isomorphic-dompurify")
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.0.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.sanitize(...)
+  stsearch: $_.sanitize(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.1.0.1
+  - direct-response-write.sanitizers.1.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = $H2.sanitize
+  stsearch: $_ = $_.sanitize
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.1.1.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'xss'
+  stsearch: import $_ from 'xss'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.2.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'xss'
+  stsearch: import * as $_ from 'xss'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.2.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require("xss")
+  stsearch: $_ = require("xss")
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.2.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'sanitize-html'
+  stsearch: import $_ from 'sanitize-html'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.3.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from "sanitize-html"
+  stsearch: import * as $_ from "sanitize-html"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.3.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require("sanitize-html")
+  stsearch: $_ = require("sanitize-html")
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.3.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = new Remarkable()
+  stsearch: $_ = new Remarkable()
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.4.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.render(...)
+  stsearch: $_.render(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.4.1
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.1.3
+  - express-insecure-template-usage.sinks.0.2.1.0
+  - express-insecure-template-usage.sinks.0.5.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'express-xss-sanitizer'
+  stsearch: import $_ from 'express-xss-sanitizer'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.5.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from "express-xss-sanitizer"
+  stsearch: import * as $_ from "express-xss-sanitizer"
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.5.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: const { ..., $H1, ... } = require('express-xss-sanitizer')
+  stsearch: const { ... $_ ... } = require('express-xss-sanitizer')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.5.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: var { ..., $H1, ... } = require('express-xss-sanitizer')
+  stsearch: var { ... $_ ... } = require('express-xss-sanitizer')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.5.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: let { ...,$H1,... } = require('express-xss-sanitizer')
+  stsearch: let { ...$_... } = require('express-xss-sanitizer')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.5.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require("express-xss-sanitizer")
+  stsearch: $_ = require("express-xss-sanitizer")
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.5.0.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1. ... .type('$H2'). ... .send(...)
+  stsearch: $_... .type('$_')... .send(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/direct-response-write.yaml'
+  keys:
+  - direct-response-write.sanitizers.6.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: Mustache.escape = $H1
+  stsearch: Mustache.escape = $_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/mustache/escape-function-overwrite.yaml'
+  keys:
+  - escape-function-overwrite.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require("mustache")
+  stsearch: $_ = require("mustache")
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/mustache/escape-function-overwrite.yaml'
+  keys:
+  - escape-function-overwrite.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.escape = $H2
+  stsearch: $_.escape = $_
+source:
+- path: !path 'semgrep-rules/javascript/express/security/audit/xss/mustache/escape-function-overwrite.yaml'
+  keys:
+  - escape-function-overwrite.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.set($H2, $H3)
+  stsearch: $_.set($_, $_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.header($H2, $H3)
+  stsearch: $_.header($_, $_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.setHeader($H2, $H3)
+  stsearch: $_.setHeader($_, $_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sinks.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '$H1.set({$H2: $H3}, ...)'
+  stsearch: '$_.set({$_: $_} ...)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sinks.0.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '$H1.writeHead($H2, {$H3: $H4}, ...)'
+  stsearch: '$_.writeHead($_, {$_: $_} ...)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/cors-misconfiguration.yaml'
+  keys:
+  - cors-misconfiguration.sinks.0.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: Object.assign(...)
+  stsearch: Object.assign(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-data-exfiltration.yaml'
+  keys:
+  - express-data-exfiltration.sinks.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('node-expat')
+  stsearch: $_ = require('node-expat')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'node-expat'
+  stsearch: import $_ from 'node-expat'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'node-expat'
+  stsearch: import * as $_ from 'node-expat'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sinks.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = new $H2.Parser(...)
+  stsearch: $_ = new $_.Parser(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sinks.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.parse($H2)
+  stsearch: $_.parse($_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-expat-xxe.yaml'
+  keys:
+  - express-expat-xxe.sinks.0.2.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('pug')
+  stsearch: $_ = require('pug')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'pug'
+  stsearch: import * as $_ from 'pug'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('jade')
+  stsearch: $_ = require('jade')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'jade'
+  stsearch: import * as $_ from 'jade'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.compile(...)
+  stsearch: $_.compile(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.1.0
+  - express-insecure-template-usage.sinks.0.1.1.1
+  - express-insecure-template-usage.sinks.0.6.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.compileClient(...)
+  stsearch: $_.compileClient(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.compileClientWithDependenciesTracked(...)
+  stsearch: $_.compileClientWithDependenciesTracked(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('dot')
+  stsearch: $_ = require('dot')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'dot'
+  stsearch: import * as $_ from 'dot'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.template(...)
+  stsearch: $_.template(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.1.1.0
+  - express-insecure-template-usage.sinks.0.4.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('ejs')
+  stsearch: $_ = require('ejs')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.2.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'ejs'
+  stsearch: import * as $_ from 'ejs'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.2.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('nunjucks')
+  stsearch: $_ = require('nunjucks')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.3.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'nunjucks'
+  stsearch: import * as $_ from 'nunjucks'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.3.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.renderString(...)
+  stsearch: $_.renderString(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.3.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('lodash')
+  stsearch: $_ = require('lodash')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.4.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'lodash'
+  stsearch: import * as $_ from 'lodash'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.4.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('mustache')
+  stsearch: $_ = require('mustache')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.5.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'mustache'
+  stsearch: import * as $_ from 'mustache'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.5.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('eta')
+  stsearch: $_ = require('eta')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.5.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'eta'
+  stsearch: import * as $_ from 'eta'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.5.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('squirrelly')
+  stsearch: $_ = require('squirrelly')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.5.0.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'squirrelly'
+  stsearch: import * as $_ from 'squirrelly'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.5.0.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('hogan.js')
+  stsearch: $_ = require('hogan.js')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.6.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'hogan.js'
+  stsearch: import * as $_ from 'hogan.js'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.6.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('handlebars')
+  stsearch: $_ = require('handlebars')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.6.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'handlebars'
+  stsearch: import * as $_ from 'handlebars'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.sinks.0.6.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.$H2($H3).then((...,$H4,...)=>{...})
+  stsearch: $_.$_($_).then((...$_...)=>{...})
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-insecure-template-usage.yaml'
+  keys:
+  - express-insecure-template-usage.propagators.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import $H1 from 'express-jwt'
+  stsearch: import $_ from 'express-jwt'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-jwt-hardcoded-secret.yaml'
+  keys:
+  - express-jwt-hardcoded-secret.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import * as $H1 from 'express-jwt'
+  stsearch: import * as $_ from 'express-jwt'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-jwt-hardcoded-secret.yaml'
+  keys:
+  - express-jwt-hardcoded-secret.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import { ..., $H1, ... } from 'express-jwt'
+  stsearch: import { ... $_ ... } from 'express-jwt'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-jwt-hardcoded-secret.yaml'
+  keys:
+  - express-jwt-hardcoded-secret.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '$H1({...,secret: "$H2",...},...)'
+  stsearch: '$_({...secret: "$_"...}...)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-jwt-hardcoded-secret.yaml'
+  keys:
+  - express-jwt-hardcoded-secret.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: |-
+    $H1 = "$H2";
+    ...
+    $H3({...,secret: $H4},...);
+  stsearch: |-
+    $_ = "$_";
+    ...
+    $_({...secret: $_}...);
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-jwt-hardcoded-secret.yaml'
+  keys:
+  - express-jwt-hardcoded-secret.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: require('phantom')
+  stsearch: require('phantom')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import 'phantom'
+  stsearch: import 'phantom'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.open($H2,...)
+  stsearch: $_.open($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sinks.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.setContent($H2,...)
+  stsearch: $_.setContent($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sinks.0.1.1
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.openUrl($H2,...)
+  stsearch: $_.openUrl($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sinks.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.evaluateJavaScript($H2,...)
+  stsearch: $_.evaluateJavaScript($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sinks.0.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.property("content",$H2,...)
+  stsearch: $_.property("content",$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-phantom-injection.yaml'
+  keys:
+  - express-phantom-injection.sinks.0.1.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: require('puppeteer')
+  stsearch: require('puppeteer')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: import 'puppeteer'
+  stsearch: import 'puppeteer'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.goto($H2,...)
+  stsearch: $_.goto($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.evaluate($H2,...)
+  stsearch: $_.evaluate($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.evaluate($H2,$H3,...)
+  stsearch: $_.evaluate($_,$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.evaluateHandle($H2,...)
+  stsearch: $_.evaluateHandle($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.evaluateHandle($H2,$H3,...)
+  stsearch: $_.evaluateHandle($_,$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.evaluateOnNewDocument($H2,...)
+  stsearch: $_.evaluateOnNewDocument($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.6
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.evaluateOnNewDocument($H2,$H3,...)
+  stsearch: $_.evaluateOnNewDocument($_,$_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-puppeteer-injection.yaml'
+  keys:
+  - express-puppeteer-injection.sinks.0.1.7
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('sandbox')
+  stsearch: $_ = require('sandbox')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sinks.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = new $H2(...)
+  stsearch: $_ = new $_(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sinks.0.1.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.run(...)
+  stsearch: $_.run(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sinks.0.1.0.1
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new $H1($H2).run(...)
+  stsearch: new $_($_).run(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sinks.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new $H1().run(...)
+  stsearch: new $_().run(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-sandbox-injection.yaml'
+  keys:
+  - express-sandbox-code-injection.sinks.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('vm')
+  stsearch: $_ = require('vm')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sinks.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.runInContext(...)
+  stsearch: $_.runInContext(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sinks.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.runInNewContext(...)
+  stsearch: $_.runInNewContext(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sinks.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.compileFunction(...)
+  stsearch: $_.compileFunction(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sinks.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.runInThisContext(...)
+  stsearch: $_.runInThisContext(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sinks.0.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new $H1.Script(...)
+  stsearch: new $_.Script(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm-injection.yaml'
+  keys:
+  - express-vm-injection.sinks.0.1.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: require('vm2')
+  stsearch: require('vm2')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = new VM(...)
+  stsearch: $_ = new VM(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = new NodeVM(...)
+  stsearch: $_ = new NodeVM(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new VM(...).run(...)
+  stsearch: new VM(...).run(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new NodeVM(...).run(...)
+  stsearch: new NodeVM(...).run(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new VMScript(...)
+  stsearch: new VMScript(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new VM(...)
+  stsearch: new VM(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.4
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: new NodeVM(...)
+  stsearch: new NodeVM(...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-vm2-injection.yaml'
+  keys:
+  - express-vm2-injection.sinks.0.1.5
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.generate($H2,...)
+  stsearch: $_.generate($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltoimage-injection.sinks.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1 = require('wkhtmltopdf')
+  stsearch: $_ = require('wkhtmltopdf')
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltopdf-injection.sinks.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1($H2,...)
+  stsearch: $_($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-wkhtml-injection.yaml'
+  keys:
+  - express-wkhtmltopdf-injection.sinks.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.toJson($H2,...)
+  stsearch: $_.toJson($_...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/express-xml2json-xxe.yaml'
+  keys:
+  - express-xml2json-xxe.sinks.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '"$H1" + $H2'
+  stsearch: '"$_" + $_'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sinks.0.0.0.0.0
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sinks.0.0.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '"$H1".concat(...)'
+  stsearch: '"$_".concat(...)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sinks.0.0.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: util.format($H1, ...)
+  stsearch: util.format($_ ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sinks.0.0.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '`...`'
+  stsearch: '`...`'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/injection/raw-html-format.yaml'
+  keys:
+  - raw-html-format.sinks.0.0.1.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '"$H1".concat($H2)'
+  stsearch: '"$_".concat($_)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sinks.0.0.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: util.format($H1, $H2)
+  stsearch: util.format($_, $_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sinks.0.0.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '`$H1${$H2}...`'
+  stsearch: '`$_${$_}...`'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/injection/tainted-sql-string.yaml'
+  keys:
+  - tainted-sql-string.sinks.0.0.0.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: require($H1)
+  stsearch: require($_)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/require-request.yaml'
+  keys:
+  - require-request.sinks.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.set($H2, ...)
+  stsearch: $_.set($_ ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sinks.0.0.0
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.header($H2, ...)
+  stsearch: $_.header($_ ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sinks.0.0.1
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: $H1.setHeader($H2, ...)
+  stsearch: $_.setHeader($_ ...)
+source:
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sinks.0.0.2
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '$H1.set({$H2: ...}, ...)'
+  stsearch: '$_.set({$_: ...} ...)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sinks.0.0.3
+---
+language: !lang 'javascript'
+pattern:
+  semgrep: '$H1.writeHead($H2, {$H3: ...}, ...)'
+  stsearch: '$_.writeHead($_, {$_: ...} ...)'
+source:
+- path: !path 'semgrep-rules/javascript/express/security/x-frame-options-misconfiguration.yaml'
+  keys:
+  - x-frame-options-misconfiguration.sinks.0.0.4
