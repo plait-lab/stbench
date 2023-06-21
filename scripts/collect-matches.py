@@ -2,6 +2,8 @@
 
 from typing import *
 
+import re
+
 from dataclasses import dataclass, field
 
 from tools import Tool, Language, Path
@@ -13,10 +15,16 @@ class CLI(Args):
     patterns: TextIO = field(metadata=Arg(mode='r'))
     matches: TextIO = field(metadata=Arg(mode='w'))
     paths: list[Path] = field(metadata=Arg(flags=['--paths']))
+    tools: Optional[str] = field(metadata=Arg(flags=['--tools']))
 
 
 def main(args: CLI):
     from tools import runners
+
+    if args.tools:
+        runners = {name: runners[name] for name in runners
+                   if re.fullmatch(args.tools, name)}
+        print(f"Selected tools: {', '.join(runners)}")
 
     items = list(yaml.safe_load_all(args.patterns))
     yaml.safe_dump_all(collect(runners, items, args.paths),
