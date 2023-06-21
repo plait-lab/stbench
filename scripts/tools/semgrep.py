@@ -56,10 +56,9 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
 
     from tools.common import Range, Point, select_files
 
-    rules = [semgrep_rule(str(id), language, pattern)
+    rules = [semgrep_rule(f'{id:04d}', language, pattern)
              for id, (language, pattern) in enumerate(patterns)]
     languages = set(Language(l) for r in rules for l in r['languages'])
-    expected = set(select_files(languages, paths))
 
     # FIX: not guaranteed to "reopen" according to docs
     with TempFile('w', suffix='.yaml') as config:
@@ -102,6 +101,7 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
         print(f"warning: semgrep error {error['message']}")
 
     # Check selected files agreement
+    expected = set(select_files(languages, paths))
     scanned = set(Path(p) for p in output['paths']['scanned'])
     for path in scanned - expected:
         print(f'warning: semgrep unexpectedly scanned {path}')
@@ -181,9 +181,12 @@ def semgrep_extra_flags() -> list[str]:
         '--metrics=off',
         '--no-git-ignore',
         '--disable-version-check',
+        # Prevent changing the id
         '--no-rewrite-rule-ids',
         # Disable silencing matches
         '--disable-nosem',
         # Include all info in output
         '--verbose',
+        # Ensure reproducibility
+        '--oss-only',
     ]
