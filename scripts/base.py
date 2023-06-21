@@ -2,11 +2,60 @@ from typing import *
 
 import yaml
 
-from dataclasses import dataclass
+from argparse import ArgumentParser, FileType
+from dataclasses import dataclass, fields, MISSING
 
 from tools import Language, Match, Path
 
 
+class Arg(TypedDict, total=False):
+    flags: list[str]
+    choices: list
+    action: str
+    mode: str
+
+
+@dataclass
+class Args:
+    @classmethod
+    def add_args(cls, parser: ArgumentParser):
+        for field in fields(cls):
+            arg = Arg(**field.metadata)
+            args, kwargs = [], {}
+
+            if 'flags' in arg:
+                kwargs['dest'] = field.name
+                kwargs['required'] = True
+                args = arg['flags']
+            else:
+                args = [field.name]
+
+            if field.default is not MISSING:
+                kwargs['default'] = field.default
+            assert field.default_factory is MISSING
+
+            if 'choices' in arg:
+                kwargs['choices'] = arg['choices']
+
+            if (T := field.type) is not str:
+                if get_origin(T) is list:
+                    kwargs['nargs'] = '+'
+                    T, = get_args(T)
+                elif issubclass(T, IO):
+                    T = FileType(arg['mode'])
+                kwargs['type'] = T
+
+            if 'action' in arg:
+                kwargs['action'] = arg['action']
+                if arg['action'] == 'append':
+                    del kwargs['nargs']
+
+            parser.add_argument(*args, **kwargs)
+
+    @classmethod
+    def parser(cls) -> ArgumentParser:
+        cls.add_args(parser := ArgumentParser())
+        return parser
 
 
 def add_custom_tags(Loader: yaml.Loader, Dumper: yaml.Dumper):

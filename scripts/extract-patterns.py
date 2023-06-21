@@ -4,30 +4,21 @@ from typing import *
 
 import re
 
-from argparse import ArgumentParser, FileType
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from tools import semgrep, stsearch, Language, Path
-from base import yaml
+from base import Args, Arg, yaml
 
 
 @dataclass
-class Args:
-    out: TextIO
-    mode: str
+class CLI(Args):
+    out: TextIO = field(metadata=Arg(mode='w'))
+    mode: str = field(metadata=Arg(choices=['semgrep']))
+    languages: list[Language] = field(metadata=Arg(flags=['--lang', '-l'], action='append'))
     rules: list[Path]
-    languages: list[Language]
 
 
-def add_args(parser: ArgumentParser):
-    parser.add_argument('out', type=FileType('w'))
-    parser.add_argument('mode', choices=['semgrep'])
-    parser.add_argument('rules', nargs='+', metavar='rule', type=Path)
-    parser.add_argument('--lang', '-l', action='append', type=Language,
-                        dest='languages', required=True)
-
-
-def main(args: Args):
+def main(args: CLI):
     from collections import defaultdict
 
     assert args.mode == 'semgrep'
@@ -114,7 +105,4 @@ class PatternItem(NamedTuple):
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
-    add_args(parser)
-
-    main(parser.parse_args())
+    main(CLI.parser().parse_args())

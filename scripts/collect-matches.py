@@ -2,25 +2,17 @@
 
 from typing import *
 
-from argparse import ArgumentParser, FileType
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from tools import Tool, Language, Path
-from base import yaml
+from base import Args, Arg, yaml
 
 
 @dataclass
-class Args:
-    patterns: TextIO
-    matches: TextIO
-    paths: list[Path]
-
-
-def add_args(parser: ArgumentParser):
-    parser.add_argument('patterns', type=FileType('r'))
-    parser.add_argument('matches', type=FileType('w'))
-    parser.add_argument('--paths', nargs='+', type=Path, required=True)
-
+class CLI(Args):
+    patterns: TextIO = field(metadata=Arg(mode='r'))
+    matches: TextIO = field(metadata=Arg(mode='w'))
+    paths: list[Path] = field(metadata=Arg(flags=['--paths']))
 
 
 def main(args: Args):
@@ -53,7 +45,4 @@ def collect(tools: dict[str, Tool], items: Sequence[dict], paths: Sequence[Path]
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
-    add_args(parser)
-
-    main(parser.parse_args())
+    main(CLI.parser().parse_args())

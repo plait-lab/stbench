@@ -2,25 +2,17 @@
 
 from typing import *
 
-import yaml
+from dataclasses import dataclass, field
 
-from argparse import ArgumentParser, FileType
-from collections import Counter
-from dataclasses import dataclass
-
-from base import *
+from base import Args, Arg, yaml
 
 
 @dataclass
-class Args:
-    data: TextIO
+class CLI(Args):
+    data: TextIO = field(metadata=Arg(mode='r'))
 
 
-def add_args(parser: ArgumentParser):
-    parser.add_argument('data', type=FileType('r'))
-
-
-def main(args: Args):
+def main(args: CLI):
     total = 0
     extra = []
     miss = []
@@ -89,7 +81,4 @@ def fix(result: Match, reference: set[Match]) -> Match:
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
-    add_args(parser)
-
-    main(parser.parse_args())
+    main(CLI.parser().parse_args())
