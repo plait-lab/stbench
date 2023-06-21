@@ -73,28 +73,39 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
             process = subprocess.run(['semgrep', 'scan', f'--config={config.name}',
                                       *(f'--include=*{ext}' for l in languages for ext in l.exts()),
                                       *semgrep_extra_flags(), '--json', *paths],
-                                     capture_output=True, check=True, text=True)
+                                     capture_output=True, text=True)
         except subprocess.CalledProcessError as err:
-            print(f'error$ {subprocess.list2cmdline(err.cmd)}')
-            shutil.copy2(config, (tmp := Path('/tmp/config.yaml')))
-            print(f'Copied temporary config file to {tmp}')
+            # https://semgrep.dev/docs/cli-reference/#exit-codes
+            if err.returncode == 4:
+                pass  # ignore "invalid pattern" errors
+            else:
+                print(f'error$ {subprocess.list2cmdline(err.cmd)}')
+                shutil.copy2(config.name, (tmp := Path('/tmp/config.yaml')))
+                print(f'Copied temporary config file to {tmp}')
 
     output = json.loads(process.stdout)
-    assert not output['errors'], 'rule severity is info'
-    assert set(paths) == set(map(Path, output['paths']['scanned']))
-    assert not output['paths']['skipped']
+
+    # Check selected files agreement
+    scanned = set(Path(p) for p in output['paths']['scanned'])
+    for path in scanned - expected:
+        print(f'warning: semgrep unexpectedly scanned {path}')
+    for path in expected - scanned:
+        print(f'warning: semgrep unexpectedly skipped {path}')
 
     results = [[] for r in rules]
     for result in output['results']:
-        id = int(result['check_id'])
-        assert not result['extra']['is_ignored']
-        assert result['extra']['message'] == rules[id]['message']
-        assert result['extra']['severity'] == rules[id]['severity']
+        if m := re.match(r'search-(\d+)', result['check_id']):
+            id = int(m.group(1))  # extract rule index
+            assert result['extra']['message'] == rules[id]['message']
+            assert result['extra']['severity'] == rules[id]['severity']
+            assert not result['extra']['is_ignored']
 
-        path, start, end = itemgetter('path', 'start', 'end')(result)
-        (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
-        match = Match(Path(path), Range(Point(sr, sc), Point(er, ec)))
-        results[id].append(match)
+            path, start, end = itemgetter('path', 'start', 'end')(result)
+            (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
+            match = Match(Path(path), Range(Point(sr, sc), Point(er, ec)))
+            results[id].append(match)
+        else:
+            print(f'warning: unexpected semgrep result {result}')
 
     yield from results
 
@@ -102,7 +113,7 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
 def semgrep_rule(id: str, language: Language, pattern: str) -> dict:
     # See: https://semgrep.dev/docs/writing-rules/rule-syntax/
     return {
-        'id': id,
+        'id': f'search-{id}',
         'message': 'result',
         'severity': 'INFO',
         'languages': [language.name],
