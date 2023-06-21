@@ -35,7 +35,7 @@ def main(args: Args):
 
     out = defaultdict(lambda: defaultdict(list))
 
-    print(f"Loaded {len(args.rules)} {args.mode} patterns.")
+    print(f'Loaded {len(args.rules)} {args.mode} patterns.')
     for path in sorted(args.rules):
         with path.open() as f:
             config = yaml.safe_load(f)
@@ -57,7 +57,7 @@ def main(args: Args):
                     for language in languages.intersection(args.languages):
                         out[language, canonical(pattern)][path].append(key)
 
-    print(f"Collected {len(out)} atomic patterns.")
+    print(f'Collected {len(out)} atomic patterns.')
     yaml.safe_dump_all(({
         'language': language,
         'pattern': {'semgrep': pattern, 'stsearch': to_st(pattern)},
@@ -69,7 +69,7 @@ def to_st(pattern: str) -> str:
     # TODO: stsearch doesn't use metavar names or support named ellipsis
     # https://semgrep.dev/docs/writing-rules/pattern-syntax/#ellipsis-metavariables
     pattern = METAVAR.sub(
-        lambda m: '...' if m['kind'] == '...' else "$_", pattern)
+        lambda m: '...' if m['kind'] == '...' else '$_', pattern)
 
     # FIX: generalize to more languages
     pattern = re.sub(r',?(\s*\.{3}\s*),?', r'\1', pattern)
