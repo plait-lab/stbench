@@ -15,7 +15,7 @@ class CLI(Args):
     paths: list[Path] = field(metadata=Arg(flags=['--paths']))
 
 
-def main(args: Args):
+def main(args: CLI):
     from tools import runners
 
     items = list(yaml.safe_load_all(args.patterns))
