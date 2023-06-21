@@ -48,11 +48,9 @@ def canonical(pattern: str) -> str:
 
 
 def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iterable[Sequence[Match]]:
-    import shutil
-    import subprocess
-    import json
     import yaml
 
+    from subprocess import CalledProcessError
     from tempfile import NamedTemporaryFile as TempFile
     from operator import itemgetter
 
@@ -68,22 +66,40 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
         yaml.safe_dump({'rules': rules}, config, sort_keys=False)
         config.flush()  # ensure it's written to disk
 
-        try:
-            print(f'Running semgrep with all patterns on all paths...')
-            process = subprocess.run(['semgrep', 'scan', f'--config={config.name}',
-                                      *(f'--include=*{ext}' for l in languages for ext in l.exts()),
-                                      *semgrep_extra_flags(), '--json', *paths],
-                                     capture_output=True, text=True)
-        except subprocess.CalledProcessError as err:
-            # https://semgrep.dev/docs/cli-reference/#exit-codes
-            if err.returncode == 4:
-                pass  # ignore "invalid pattern" errors
-            else:
-                print(f'error$ {subprocess.list2cmdline(err.cmd)}')
-                shutil.copy2(config.name, (tmp := Path('/tmp/config.yaml')))
-                print(f'Copied temporary config file to {tmp}')
+        while True:
+            try:
+                semgrep_scan(config, ['--validate'], repro=False)
+            except CalledProcessError as err:
+                # https://semgrep.dev/docs/cli-reference/#exit-codes
+                # Should use 4, but it uses 2 for some reason...
+                if err.returncode == 2:
+                    for error in err.output['errors']:
+                        if m := re.search(r'parse error in rule search-(\d+)', error['message']):
+                            id = int(m.group(1))  # extract rule index
 
-    output = json.loads(process.stdout)
+                            rules[id] = None
+                            valid = [r for r in rules if r]
+                            print(f'warning: semgrep parse error for pattern #{id+1}.')
+
+                            config.seek(0)
+                            yaml.safe_dump({'rules': valid}, config, sort_keys=False)
+                            config.truncate()
+                else:
+                    raise err
+            else:
+                break
+
+        invalid = [i for i, r in enumerate(rules) if not r]
+        print(f'Dropped {len(invalid)} invalid rules for semgrep.')
+
+        print(f'Running semgrep with all patterns on all paths...')
+        output = semgrep_scan(config, [
+            *(f'--include=*{ext}' for l in languages for ext in l.exts()),
+            *paths
+        ])
+
+    for error in output['errors']:
+        print(f"warning: semgrep error {error['message']}")
 
     # Check selected files agreement
     scanned = set(Path(p) for p in output['paths']['scanned'])
@@ -108,6 +124,28 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
             print(f'warning: unexpected semgrep result {result}')
 
     yield from results
+
+
+def semgrep_scan(config: TextIO, args: list[str], *, repro=True) -> dict:
+    import shutil
+    import subprocess
+    import json
+
+    try:
+        process = subprocess.run(['semgrep', 'scan', f'--config={config.name}',
+                                  *semgrep_extra_flags(), '--json', *args],
+                                 capture_output=True, check=True, text=True)
+
+    except subprocess.CalledProcessError as err:
+        if repro:  # save config to reproduce error
+            shutil.copy2(config.name, (tmp := Path('/tmp/config.yaml')))
+            print(f'Copied temporary config file to {tmp}')
+            err.cmd[2] = f'--config={tmp}'  # easier to rerun
+            print(f'error$ {subprocess.list2cmdline(err.cmd)}')
+        err.output = json.loads(err.output)
+        raise err
+
+    return json.loads(process.stdout)
 
 
 def semgrep_rule(id: str, language: Language, pattern: str) -> dict:
