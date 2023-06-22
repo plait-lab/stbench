@@ -38,6 +38,12 @@ class Args:
                 kwargs['choices'] = arg['choices']
 
             if (T := field.type) is not str:
+                if get_origin(T) is Union:
+                    match get_args(T):
+                        case (T, NT) if NT is type(None):
+                            del kwargs['required']
+                        case _:
+                            assert False
                 if get_origin(T) is list:
                     kwargs['nargs'] = '+'
                     T, = get_args(T)
@@ -49,6 +55,8 @@ class Args:
                 kwargs['action'] = arg['action']
                 if arg['action'] == 'append':
                     del kwargs['nargs']
+                else:
+                    assert False
 
             parser.add_argument(*args, **kwargs)
 
