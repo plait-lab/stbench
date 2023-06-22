@@ -51,51 +51,41 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
     import yaml
 
     from subprocess import CalledProcessError
-    from tempfile import NamedTemporaryFile as TempFile
+    from tempfile import NamedTemporaryFile as TempFile, TemporaryDirectory as TempDir
     from operator import itemgetter
 
     from tools.common import Range, Point, select_files
 
-    rules = [semgrep_rule(f'{id:04d}', language, pattern)
-             for id, (language, pattern) in enumerate(patterns)]
-    languages = set(Language(l) for r in rules for l in r['languages'])
-
-    # FIX: not guaranteed to "reopen" according to docs
-    with TempFile('w', suffix='.yaml') as config:
-        yaml.safe_dump({'rules': rules}, config, sort_keys=False)
-        config.flush()  # ensure it's written to disk
-
-        while True:
+    print(f'Filtering invalid semgrep patterns...')
+    rules, invalid, languages = [], [], set()
+    with TempDir() as empty:
+        for id, (language, pattern) in enumerate(patterns):
             try:
-                semgrep_scan(config, ['--validate'], repro=False)
+                semgrep_scan([f'--lang={language.name}', f'--pattern={pattern}', empty], repro=False)
             except CalledProcessError as err:
                 # https://semgrep.dev/docs/cli-reference/#exit-codes
                 # Should use 4, but it uses 2 for some reason...
-                if err.returncode == 2:
-                    for error in err.output['errors']:
-                        if m := re.search(r'parse error in rule search-(\d+)', error['message']):
-                            id = int(m.group(1))  # extract rule index
-
-                            rules[id] = None
-                            valid = [r for r in rules if r]
-                            print(f'warning: semgrep parse error for pattern #{id+1}.')
-
-                            config.seek(0)
-                            yaml.safe_dump({'rules': valid}, config, sort_keys=False)
-                            config.truncate()
-                else:
+                if err.returncode != 2:
                     raise err
+                rules.append(None)  # mark invalid, use placeholder
             else:
-                break
+                rules.append(semgrep_rule(f'{id:04d}', language, pattern))
+                languages.add(language)
 
-        invalid = [i for i, r in enumerate(rules) if not r]
-        print(f'Dropped {len(invalid)} invalid rules for semgrep.')
+    invalid = [i for i, r in enumerate(rules) if r is None]
+    print(f'Dropped {len(invalid)} invalid rules for semgrep.')
+
+    # FIX: not guaranteed to "reopen" according to docs
+    with TempFile('w', suffix='.yaml') as config:
+        valid = [r for r in rules if r is not None]
+        yaml.safe_dump({'rules': valid}, config, sort_keys=False)
+        config.flush()  # ensure it's written to disk
 
         print(f'Running semgrep with all patterns on all paths...')
-        output = semgrep_scan(config, [
+        output = semgrep_scan([
             *(f'--include=*{ext}' for l in languages for ext in l.exts()),
             *paths
-        ])
+        ], config=config)
 
     for error in output['errors']:
         print(f"warning: semgrep error {error['message']}")
@@ -126,23 +116,25 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
     yield from results
 
 
-def semgrep_scan(config: TextIO, args: list[str], *, repro=True) -> dict:
+def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, repro=True) -> dict:
     import shutil
     import subprocess
     import json
 
     try:
-        process = subprocess.run(['semgrep', 'scan', f'--config={config.name}',
-                                  *semgrep_extra_flags(), '--json', *args],
+        flags = [f'--config={config.name}'] if config else []
+        flags.extend(semgrep_extra_flags())
+
+        process = subprocess.run(['semgrep', 'scan', *flags, '--json', *args],
                                  capture_output=True, check=True, text=True)
 
     except subprocess.CalledProcessError as err:
-        if repro:  # save config to reproduce error
-            shutil.copy2(config.name, (tmp := Path('/tmp/config.yaml')))
-            print(f'Copied temporary config file to {tmp}')
-            err.cmd[2] = f'--config={tmp}'  # easier to rerun
+        if repro:
+            if config:
+                shutil.copy2(config.name, (tmp := Path('/tmp/config.yaml')))
+                print(f'Copied temporary config file to {tmp}')
+                err.cmd[2] = f'--config={tmp}'  # easier to rerun
             print(f'error$ {subprocess.list2cmdline(err.cmd)}')
-        err.output = json.loads(err.output)
         raise err
 
     return json.loads(process.stdout)
