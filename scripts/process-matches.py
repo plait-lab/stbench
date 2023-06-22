@@ -4,6 +4,7 @@ from typing import *
 
 import re
 
+from csv import DictWriter
 from dataclasses import dataclass, field
 
 from base import Args, Arg, yaml
@@ -12,10 +13,12 @@ from base import Args, Arg, yaml
 @dataclass
 class CLI(Args):
     data: TextIO = field(metadata=Arg(mode='r'))
+    results: TextIO = field(metadata=Arg(mode='w'))
 
 
 def main(args: CLI):
-    agg = [['pattern', 'miss', 'extra', 'semgrep', 'stsearch']]
+    agg = DictWriter(args.results, ['pattern', 'miss', 'extra', 'semgrep', 'stsearch'])
+    agg.writeheader()
 
     for run in yaml.safe_load_all(args.data):
         results = run['results']
@@ -25,16 +28,13 @@ def main(args: CLI):
         results['semgrep'] = list(fix_all(results['semgrep'], stsearch))
         semgrep = set(results['semgrep'])
 
-        agg.append([
-            repr(run['pattern']['semgrep']),
-            len(semgrep - stsearch),
-            len(stsearch - semgrep),
-            len(semgrep),
-            len(stsearch),
-        ])
-
-    for line in agg:
-        print(*line, sep='\t')
+        agg.writerow(dict(
+            pattern=run['pattern']['semgrep'],
+            miss=len(semgrep - stsearch),
+            extra=len(stsearch - semgrep),
+            semgrep=len(semgrep),
+            stsearch=len(stsearch),
+        ))
 
 
 def fix_all(results: Iterable[Match], reference: set[Match]) -> Iterable[Match]:
