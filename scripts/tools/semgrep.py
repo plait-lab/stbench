@@ -48,6 +48,7 @@ def canonical(pattern: str) -> str:
 
 
 def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iterable[Sequence[Match]]:
+    import sys
     import yaml
 
     from subprocess import CalledProcessError
@@ -85,7 +86,7 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
         output = semgrep_scan([
             *(f'--include=*{ext}' for l in languages for ext in l.exts()),
             *paths
-        ], config=config)
+        ], config=config, stderr=sys.stderr)
 
     for error in output['errors']:
         print(f"warning: semgrep error {error['message']}")
@@ -116,17 +117,20 @@ def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iter
     yield from results
 
 
-def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, repro=True) -> dict:
+def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr: Optional[TextIO] = None, repro=True) -> dict:
     import shutil
     import subprocess
     import json
+
+    if stderr is None:
+        stderr = subprocess.PIPE
 
     try:
         flags = [f'--config={config.name}'] if config else []
         flags.extend(semgrep_extra_flags())
 
         process = subprocess.run(['semgrep', 'scan', *flags, '--json', *args],
-                                 capture_output=True, check=True, text=True)
+                                 check=True, text=True, stdout=subprocess.PIPE, stderr=stderr)
 
     except subprocess.CalledProcessError as err:
         if repro:
