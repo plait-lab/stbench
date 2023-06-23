@@ -1,6 +1,7 @@
 from typing import *
 
 import yaml
+import gzip
 
 from argparse import ArgumentParser, FileType
 from dataclasses import dataclass, fields, MISSING
@@ -48,7 +49,7 @@ class Args:
                     kwargs['nargs'] = '+'
                     T, = get_args(T)
                 elif issubclass(T, IO):
-                    T = FileType(arg['mode'])
+                    T = InputFile(arg['mode'])
                 kwargs['type'] = T
 
             if 'action' in arg:
@@ -64,6 +65,15 @@ class Args:
     def parser(cls) -> ArgumentParser:
         cls.add_args(parser := ArgumentParser())
         return parser
+
+
+class InputFile(FileType):
+    def __call__(self, string: str) -> IO[Any]:
+        if not string.endswith('.gz'):
+            return super().__call__(string)
+        mode = self._mode if self._mode.endswith('b') else f'{self._mode}t'
+        f = gzip.open(string, mode, encoding=self._encoding, errors=self._errors)
+        return f
 
 
 def add_custom_tags(Loader: yaml.Loader, Dumper: yaml.Dumper):
