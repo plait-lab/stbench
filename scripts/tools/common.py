@@ -20,7 +20,7 @@ class Language:
     }
 
     EXTS: ClassVar[dict[str, list[str]]] = {
-        'javascript': ['.js', '.mjs', '.cjs']
+        'javascript': ['.js']
     }
 
     def __init__(self, name: str) -> None:
