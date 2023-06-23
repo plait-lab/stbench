@@ -45,10 +45,10 @@ class Args:
                             del kwargs['required']
                         case _:
                             assert False
-                if get_origin(T) is list:
+                elif get_origin(T) is list:
                     kwargs['nargs'] = '+'
                     T, = get_args(T)
-                elif issubclass(T, IO):
+                if issubclass(T, IO):
                     T = InputFile(arg['mode'])
                 kwargs['type'] = T
 
