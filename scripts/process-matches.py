@@ -21,12 +21,10 @@ def main(args: CLI):
     agg.writeheader()
 
     for run in load_all(args.complete):
-        results = run['results']
+        results : dict = run.pop('results')
 
-        stsearch = set(results['stsearch'])
-
-        results['semgrep'] = list(fix_all(results['semgrep'], stsearch))
-        semgrep = set(results['semgrep'])
+        stsearch = set(results.pop('stsearch'))
+        semgrep = set(fix_all(results.pop('semgrep'), stsearch))
 
         agg.writerow(dict(
             pattern=run['pattern']['semgrep'],
