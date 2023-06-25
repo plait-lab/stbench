@@ -3,9 +3,10 @@
 from typing import *
 
 from itertools import chain, starmap, pairwise
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, make_dataclass
 
 from base import Args, Arg, load_all, dump_all
+from base import CustomTag, custom_tags, add_custom_tags
 
 
 @dataclass
@@ -16,6 +17,10 @@ class CLI(Args):
 
 
 def main(args: CLI):
+    # Optimization: do not parse custom tags!
+    add_custom_tags({name: dumb_tag(cls) for name, (cls, _parse)
+                     in custom_tags.items()})
+
     streams = map(load_all, args.files)
 
     match args.mode:
@@ -31,7 +36,7 @@ def merge(*maps: dict[str]):
     result = {k: None for m in maps for k in m}
 
     for key in result:
-        values = [m[key] for m in maps if key in m]
+        values = [m.pop(key) for m in maps if key in m]
 
         if len(values) == 1:
             value, = values
@@ -47,6 +52,12 @@ def merge(*maps: dict[str]):
         result[key] = value
 
     return result
+
+
+def dumb_tag(cls: Type) -> CustomTag:
+    Dummy = make_dataclass(f'Dummy{cls.__name__}', [('content', str)],
+                           namespace={'__str__': lambda self: self.content})
+    return (Dummy, Dummy)
 
 
 if __name__ == '__main__':

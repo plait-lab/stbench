@@ -83,16 +83,17 @@ def load_all(f): return yaml.load_all(f, Loader)
 def dump_all(l, f): return yaml.dump_all(l, f, Dumper, sort_keys=False)
 
 
-def add_custom_tags():
-    T = TypeVar('T')
+T = TypeVar('T')
+CustomTag: TypeAlias = tuple[T, Callable[[str], T]]
 
-    custom = [
-        # type, tag, parser
-        (Language, '!lang', Language),
-        (Match, '!match', Match.parse),
-        (type(Path()), '!path', Path),
-    ]
+custom_tags: dict[str, CustomTag] = {
+    'lang': (Language, Language),
+    'match': (Match, Match.parse),
+    'path': (type(Path()), Path),
+}
 
+
+def add_custom_tags(custom: dict[str, CustomTag]):
     def add_custom_tag(cls: Type[T], tag: str, parse: Callable[[str], T]) -> Type[T]:
         def constructor(self: yaml.Loader, node: yaml.Node) -> cls:
             return parse(self.construct_scalar(node))
@@ -104,8 +105,8 @@ def add_custom_tags():
         Dumper.add_representer(cls, representer)
 
     no_alias = []
-    for cls, *args in custom:
-        add_custom_tag(cls, *args)
+    for tag, (cls, parse) in custom.items():
+        add_custom_tag(cls, f'!{tag}', parse)
         no_alias.append(cls)
 
     def ignore_aliases(dumper: yaml.Dumper, data: Any):
@@ -124,5 +125,5 @@ def add_pretty_representers():
     Dumper.add_representer(str, str_representer)
 
 
-add_custom_tags()
+add_custom_tags(custom_tags)
 add_pretty_representers()
