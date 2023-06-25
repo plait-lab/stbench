@@ -17,22 +17,28 @@ class CLI(Args):
 
 
 def main(args: CLI):
-    agg = DictWriter(args.results, ['pattern', 'miss', 'extra', 'semgrep', 'stsearch'])
+    agg = DictWriter(args.results, headers)
     agg.writeheader()
 
-    for run in load_all(args.complete):
-        results : dict = run.pop('results')
+    agg.writerows(map(process, load_all(args.data)))
 
-        stsearch = set(results.pop('stsearch'))
-        semgrep = set(fix_all(results.pop('semgrep'), stsearch))
 
-        agg.writerow(dict(
-            pattern=run['pattern']['semgrep'],
-            miss=len(semgrep - stsearch),
-            extra=len(stsearch - semgrep),
-            semgrep=len(semgrep),
-            stsearch=len(stsearch),
-        ))
+headers = ('pattern', 'miss', 'extra', 'semgrep', 'stsearch')
+
+
+def process(run: dict) -> dict[str, str | int]:
+    results: dict = run.pop('results')
+
+    stsearch = set(results.pop('stsearch'))
+    semgrep = set(fix_all(results.pop('semgrep'), stsearch))
+
+    return dict(
+        pattern=run['pattern']['semgrep'],
+        miss=len(semgrep - stsearch),
+        extra=len(stsearch - semgrep),
+        semgrep=len(semgrep),
+        stsearch=len(stsearch),
+    )
 
 
 def fix_all(results: Iterable[Match], reference: set[Match]) -> Iterable[Match]:

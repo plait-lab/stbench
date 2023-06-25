@@ -106,7 +106,7 @@ class Point(NamedTuple):
 
 
 Tool: TypeAlias = Callable[[Iterable[tuple[Language, str]], Sequence[Path]],
-                           Iterable[Sequence[Match]]]
+                           Iterable[list[Match]]]
 
 
 def select_files(languages: Sequence[Language], paths: Iterable[Path]) -> Sequence[Path]:

@@ -26,29 +26,29 @@ def main(args: CLI):
                    if re.fullmatch(args.tools, name)}
         print(f"Selected tools: {', '.join(runners)}")
 
-    items = list(load_all(args.patterns))
-    dump_all(collect(runners, items, args.paths), args.matches)
+    patterns: list[TPattern] = [(item['language'], item['pattern'])
+                                for item in load_all(args.patterns)]
+
+    dump_all(({'language': lang, 'pattern': pattern, 'results': results} for (lang, pattern), results
+              in zip(patterns, collect(runners, patterns, args.paths))), args.matches)
 
 
-def collect(tools: dict[str, Tool], items: Sequence[dict], paths: Sequence[Path]) -> Iterable[dict]:
+T = TypeVar('T')
+PerTool: TypeAlias = Mapping[str, T]
+TPattern: TypeAlias = tuple[Language, PerTool[str]]
+
+
+def collect(tools: PerTool[Tool], patterns: Sequence[TPattern], paths: Collection[Path]) -> Iterable[PerTool[list[Match]]]:
     def patterns_for(name: str) -> Iterable[tuple[str, str]]:
-        return ((item['language'], item['pattern'][name]) for item in items)
+        return ((language, tools[name]) for language, tools in patterns)
 
     # We give all the patterns to the tool to allow for parsing optimization
     all_results = {name: tool(patterns_for(name), paths)
                    for name, tool in tools.items()}
 
     # However, we then aggregate the results per pattern for a direct comparison
-    for item, *tool_results in zip(items, *all_results.values(), strict=True):
-        pattern: dict[str, str] = item['pattern']
-        language: Language = item['language']
-
-        yield {
-            'language': language,
-            'pattern': pattern,
-            'results': {name: results for name, results
-                        in zip(all_results.keys(), tool_results, strict=True)},
-        }
+    for results in zip(*all_results.values(), strict=True):
+        yield dict(zip(tools.keys(), results))
 
 
 if __name__ == '__main__':
