@@ -72,7 +72,7 @@ class InputFile(FileType):
         if not string.endswith('.gz'):
             return super().__call__(string)
         mode = self._mode if self._mode.endswith('b') else f'{self._mode}t'
-        f = gzip.open(string, mode, encoding=self._encoding, errors=self._errors)
+        f = gzip.open(string, mode, 1, self._encoding, self._errors)
         return f
 
 
