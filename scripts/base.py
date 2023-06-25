@@ -76,7 +76,14 @@ class InputFile(FileType):
         return f
 
 
-def add_custom_tags(Loader: yaml.Loader, Dumper: yaml.Dumper):
+Loader, Dumper = yaml.CSafeLoader, yaml.CSafeDumper
+
+
+def load_all(f): return yaml.load_all(f, Loader)
+def dump_all(l, f): return yaml.dump_all(l, f, Dumper, sort_keys=False)
+
+
+def add_custom_tags():
     T = TypeVar('T')
 
     custom = [
@@ -91,10 +98,10 @@ def add_custom_tags(Loader: yaml.Loader, Dumper: yaml.Dumper):
             return parse(self.construct_scalar(node))
 
         def representer(self: yaml.Dumper, data: cls) -> yaml.ScalarNode:
-            return self.represent_scalar(tag, str(data))
+            return self.represent_scalar(tag, str(data), style="'")
 
-        yaml.add_constructor(tag, constructor, Loader=Loader)
-        yaml.add_representer(cls, representer, Dumper=Dumper)
+        Loader.add_constructor(tag, constructor)
+        Dumper.add_representer(cls, representer)
 
     no_alias = []
     for cls, *args in custom:
@@ -109,13 +116,13 @@ def add_custom_tags(Loader: yaml.Loader, Dumper: yaml.Dumper):
     Dumper.ignore_aliases = ignore_aliases
 
 
-def add_pretty_representers(Dumper: yaml.Dumper):
+def add_pretty_representers():
     def str_representer(self: yaml.Dumper, data: str) -> yaml.ScalarNode:
         return self.represent_scalar('tag:yaml.org,2002:str', data,
                                      style=('|' if '\n' in data else None))
 
-    yaml.add_representer(str, str_representer, Dumper=Dumper)
+    Dumper.add_representer(str, str_representer)
 
 
-add_custom_tags(yaml.SafeLoader, yaml.SafeDumper)
-add_pretty_representers(yaml.SafeDumper)
+add_custom_tags()
+add_pretty_representers()

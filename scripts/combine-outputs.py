@@ -3,10 +3,9 @@
 from typing import *
 
 from itertools import chain, starmap, pairwise
-
 from dataclasses import dataclass, field
 
-from base import Args, Arg, yaml
+from base import Args, Arg, load_all, dump_all
 
 
 @dataclass
@@ -17,7 +16,7 @@ class CLI(Args):
 
 
 def main(args: CLI):
-    streams = map(yaml.safe_load_all, args.files)
+    streams = map(load_all, args.files)
 
     match args.mode:
         case 'merge':
@@ -25,7 +24,7 @@ def main(args: CLI):
         case 'cat':
             combined = chain.from_iterable(streams)
 
-    yaml.safe_dump_all(combined, args.out)
+    dump_all(combined, args.out)
 
 
 def merge(*maps: dict[str]):

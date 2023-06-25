@@ -7,7 +7,7 @@ import re
 from csv import DictWriter
 from dataclasses import dataclass, field
 
-from base import Args, Arg, yaml
+from base import Args, Arg, load_all
 
 
 @dataclass
@@ -20,7 +20,7 @@ def main(args: CLI):
     agg = DictWriter(args.results, ['pattern', 'miss', 'extra', 'semgrep', 'stsearch'])
     agg.writeheader()
 
-    for run in yaml.safe_load_all(args.data):
+    for run in load_all(args.complete):
         results = run['results']
 
         stsearch = set(results['stsearch'])

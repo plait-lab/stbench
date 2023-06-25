@@ -7,7 +7,7 @@ import re
 from dataclasses import dataclass, field
 
 from tools import Tool, Language, Path
-from base import Args, Arg, yaml
+from base import Args, Arg, load_all, dump_all
 
 
 @dataclass
@@ -26,9 +26,8 @@ def main(args: CLI):
                    if re.fullmatch(args.tools, name)}
         print(f"Selected tools: {', '.join(runners)}")
 
-    items = list(yaml.safe_load_all(args.patterns))
-    yaml.safe_dump_all(collect(runners, items, args.paths),
-                       args.matches, sort_keys=False)
+    items = list(load_all(args.patterns))
+    dump_all(collect(runners, items, args.paths), args.matches)
 
 
 def collect(tools: dict[str, Tool], items: Sequence[dict], paths: Sequence[Path]) -> Iterable[dict]:

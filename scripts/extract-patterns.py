@@ -3,11 +3,12 @@
 from typing import *
 
 import re
+import yaml
 
 from dataclasses import dataclass, field
 
 from tools import semgrep, stsearch, Language, Path
-from base import Args, Arg, yaml
+from base import Args, Arg, dump_all
 
 
 @dataclass
@@ -49,11 +50,11 @@ def main(args: CLI):
                         out[language, canon][path].append(key)
 
     print(f'Collected {len(out)} atomic patterns.')
-    yaml.safe_dump_all(({
+    dump_all(({
         'language': language,
         'pattern': {'semgrep': pattern, 'stsearch': stsearch.from_semgrep(pattern)},
         'source': [{'path': path, 'keys': keys} for path, keys in paths.items()],
-    } for (language, pattern), paths in out.items()), args.out, sort_keys=False)
+    } for (language, pattern), paths in out.items()), args.out)
 
 
 def pattern_items(path: list[str], languages: list[str], operator: dict) -> Iterable['PatternItem']:

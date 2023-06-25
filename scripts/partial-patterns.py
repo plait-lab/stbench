@@ -9,7 +9,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.token import Comment, Whitespace
 
 from tools import stsearch
-from base import Args, Arg, yaml
+from base import Args, Arg, load_all, dump_all
 
 
 @dataclass
@@ -23,7 +23,7 @@ def main(args: CLI):
 
     out = defaultdict(list)
 
-    for item in yaml.safe_load_all(args.complete):
+    for item in load_all(args.complete):
         language, complete = item['language'], item['pattern']['semgrep']
 
         lexer = get_lexer_by_name(language.name)
@@ -36,11 +36,11 @@ def main(args: CLI):
                 out[(language, partial)].append(complete)
 
     print(f"Computed {len(out)} partial patterns.")
-    yaml.safe_dump_all(({
+    dump_all(({
         'language': language,
         'pattern': {'semgrep': pattern, 'stsearch': stsearch.from_semgrep(pattern)},
         'complete': complete,
-    } for (language, pattern), complete in out.items()), args.partial, sort_keys=False)
+    } for (language, pattern), complete in out.items()), args.partial)
 
 
 if __name__ == '__main__':
