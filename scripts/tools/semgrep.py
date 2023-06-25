@@ -186,3 +186,19 @@ def semgrep_extra_flags() -> list[str]:
         # Ensure reproducibility
         '--oss-only',
     ]
+
+
+def ignored(path: Path) -> bool:
+    DIRECTORIES = [
+        'node_modules', 'build', 'dist', 'vendor',
+        '.env', '.venv', '.tox', '.npm',
+        'test', 'tests',
+        '.semgrep', '.semgrep_logs'
+    ]
+
+    SUFFIXES = [
+        '.min.js', '_test.go'
+    ]
+
+    return not any(d in path.parents for d in DIRECTORIES) \
+        and not any(path.name.endswith(s) for s in SUFFIXES)
