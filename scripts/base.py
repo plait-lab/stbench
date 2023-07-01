@@ -95,26 +95,13 @@ custom_tags: dict[str, CustomTag] = {
 
 def add_custom_tags(custom: dict[str, CustomTag]):
     def add_custom_tag(cls: Type[T], tag: str, parse: Callable[[str], T]) -> Type[T]:
-        def constructor(self: yaml.Loader, node: yaml.Node) -> cls:
-            return parse(self.construct_scalar(node))
+        Loader.add_constructor(tag, lambda self, node:
+                               parse(self.construct_scalar(node)))
+        Dumper.add_representer(cls, lambda self, data:
+                               self.represent_scalar(tag, str(data), style="'"))
 
-        def representer(self: yaml.Dumper, data: cls) -> yaml.ScalarNode:
-            return self.represent_scalar(tag, str(data), style="'")
-
-        Loader.add_constructor(tag, constructor)
-        Dumper.add_representer(cls, representer)
-
-    no_alias = []
     for tag, (cls, parse) in custom.items():
         add_custom_tag(cls, f'!{tag}', parse)
-        no_alias.append(cls)
-
-    def ignore_aliases(dumper: yaml.Dumper, data: Any):
-        return any(isinstance(data, cls) for cls in no_alias) \
-            or ignore_aliases_old(dumper, data)
-
-    ignore_aliases_old = Dumper.ignore_aliases
-    Dumper.ignore_aliases = ignore_aliases
 
 
 def add_pretty_representers():
@@ -125,5 +112,6 @@ def add_pretty_representers():
     Dumper.add_representer(str, str_representer)
 
 
+Dumper.ignore_aliases = lambda dumper, data: True
 add_custom_tags(custom_tags)
 add_pretty_representers()
