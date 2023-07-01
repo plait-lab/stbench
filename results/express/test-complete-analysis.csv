@@ -1,0 +1,400 @@
+pattern,miss,extra,semgrep,stsearch
+$H1 = require('express'),0,26,0,26
+import {$H1} from 'csurf',0,0,0,0
+require('csurf'),0,0,0,0
+import {$H1} from 'csrf',0,0,0,0
+require('csrf'),0,0,0,0
+$H1 = $H2(),0,32,1,33
+$H1.use(require('serve-index')(...)),0,0,0,0
+$H1 = require('serve-index'),0,1,0,1
+import $H1 from 'serve-index',0,0,0,0
+import * as $H1 from 'serve-index',0,0,0,0
+$H1 = $H2(...),2,168,13,179
+$H1(...),0,824,706,1530
+"$H1.use(..., $H2(...), ...)",0,0,10,10
+$H1 = require('cookie-session'),0,0,0,0
+$H1 = require('express-session'),0,1,0,1
+{name:...},1,0,6,5
+"$H1 = ...;
+...
+$H2($H3,...);",51,85,53,87
+"$H1 = ...;
+...
+$H2.name = ...;
+...
+$H3($H4,...);",0,0,0,0
+{cookie:{secure:true}},0,0,0,0
+"$H1 = ...;
+...
+$H2 = ...;
+...
+$H3($H4,...);",2,32,2,32
+{secure:true},0,0,0,0
+"$H1 = ...;
+...
+$H2.cookie = ...;
+...
+$H3($H4,...);",0,0,0,0
+"$H1 = ...;
+...
+$H2.secure = true;
+...
+$H3($H4,...);",0,0,0,0
+"$H1 = ...;
+...
+$H2.cookie.secure = true;
+...
+$H3($H4,...);",0,0,0,0
+{cookie:{httpOnly:true}},0,0,0,0
+{httpOnly:true},0,0,0,0
+"$H1 = ...;
+...
+$H2.httpOnly = true;
+...
+$H3($H4,...);",0,0,0,0
+"$H1 = ...;
+...
+$H2.cookie.httpOnly = true;
+...
+$H3($H4,...);",0,0,0,0
+{cookie:{domain:...}},0,0,0,0
+{domain:...},0,0,0,0
+"$H1 = ...;
+...
+$H2.domain = ...;
+...
+$H3($H4,...);",0,0,0,0
+"$H1 = ...;
+...
+$H2.cookie.domain = ...;
+...
+$H3($H4,...);",0,0,0,0
+{cookie:{path:...}},0,0,0,0
+{path:...},0,0,7,7
+"$H1 = ...;
+...
+$H2.path = ...;
+...
+$H3($H4,...);",0,0,0,0
+"$H1 = ...;
+...
+$H2.cookie.path = ...;
+...
+$H3($H4,...);",0,0,0,0
+{cookie:{expires:...}},0,0,0,0
+{expires:...},0,0,0,0
+"$H1 = ...;
+...
+$H2.expires = ...;
+...
+$H3($H4,...);",0,0,0,0
+"$H1 = ...;
+...
+$H2.cookie.expires = ...;
+...
+$H3($H4,...);",0,0,0,0
+import $H1 from 'notevil',0,0,0,0
+import {$H1} from 'notevil',0,0,0,0
+$H1 = require('notevil'),0,0,0,0
+$H1('...'),7,95,140,228
+"$H1.runInContext(""$H2"", ...)",5,0,5,0
+"$H1.runInNewContext(""$H2"", ...)",3,0,3,0
+"$H1.runInThisContext(""$H2"", ...)",0,0,0,0
+"$H1.compileFunction(""$H2"", ...)",0,0,0,0
+$H1 = require('express-jwt'),0,2,0,2
+{isRevoked:...},0,0,1,1
+"function ... ($H1, $H2) {...}",0,79,4,83
+"function ... ($H1, $H2, $H3) {...}",0,1,0,1
+"$H1.$H2(..., function $H3($H4, $H5) {...})",54,0,64,10
+"$H1.$H2(..., function $H3($H4, $H5, $H6) {...})",0,0,0,0
+$H1.query,0,0,77,77
+$H1.body,0,0,44,44
+$H1.params,0,0,1,1
+$H1.cookies,0,0,0,0
+$H1.headers,0,0,1,1
+$H1.files.$H2.data.toString('utf8'),0,0,2,2
+$H1.files.$H2['data'].toString('utf8'),0,0,0,0
+"({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
+{...}",0,0,0,0
+"({ $H1 }: Request,$H2: Response) => {...}",0,0,0,0
+params,0,1,0,1
+query,0,81,10,91
+cookies,0,0,0,0
+headers,0,1,0,1
+body,0,47,3,50
+files.$H1.data.toString('utf8'),0,2,0,2
+files.$H1['data'].toString('utf8'),0,0,0,0
+$H1 = require('$H2'),2,57,2,57
+import $H1 from '$H2',0,0,0,0
+import * as $H1 from '$H2',0,0,0,0
+"$H1.$H2($H3, {...,noent:true,...})",0,0,5,5
+$H1,121,11545,4331,15755
+"$H1.parseXml($H2, {..., noent: true, ...}, ...)",0,0,3,3
+"$H1 = {..., noent: true, ...}",0,1,0,1
+"$H1.parseXml( $H2, $H3 )",0,0,7,7
+"$H1.redirect(""$H2""+$H3. ... .$H4)",0,0,2,2
+"$H1.redirect(""$H2""+$H3. ... .$H4 + $...H5)",0,0,0,0
+$H1.redirect(`$H2${$H3. ... .$H4}...`),1,0,1,0
+"$H1.redirect(""$H2""+$H3.$H4[...])",0,0,1,1
+"$H1.redirect(""$H2""+$H3.$H4[...] + $...H5)",0,0,1,1
+$H1.redirect(`$H2${$H3.$H4[...]}...`),1,0,1,0
+$H1. ... .$H2,17,1506,873,2362
+$H1.redirect($H2. ... .$H3),0,0,1,1
+$H1.redirect($H2. ... .$H3 + $...H4),0,0,4,4
+$H1.redirect(`${$H2. ... .$H3}...`),0,1,1,2
+$H1.redirect($H2.$H3['...']),1,0,1,0
+$H1.redirect($H2.$H3['...'] + $...H4),1,0,1,0
+$H1.redirect(`${$H2.$H3['...']}...`),1,0,1,0
+$H1.$H2,17,133,873,989
+$H1 = $H2. ... .$H3,1,184,3,186
+$H1 = $H2.$H3['...'],0,1,0,1
+$H1 = $H2. ... .$H3 + $...H4,0,0,0,0
+$H1 = $H2.$H3['...'] + $...H4,0,0,0,0
+$H1 = `${$H2. ... .$H3}...`,0,5,0,5
+$H1 = `${$H2.$H3['...']}...`,0,0,0,0
+$H1.redirect($H2),0,0,25,25
+$H1.redirect($H2 + $...H3),0,0,13,13
+$H1.redirect(`${$H2}...`),0,2,5,7
+$H1 = require('path'),0,1,0,1
+import $H1 from 'path',0,0,0,0
+"$H1.join(...,$H2,...)",0,0,10,10
+"$H1.resolve(...,$H2,...)",0,0,1,1
+import 'path',1,0,1,0
+"path.join(...,$H1,...)",0,0,10,10
+"path.resolve(...,$H1,...)",0,0,1,1
+$H1.replace(...),0,0,1,1
+$H1.indexOf(...),0,0,1,1
+"function ... (...) {
+ ...
+}",0,96,24,120
+"function ... (...,$H1: $H2, ...) {...}",0,0,1,1
+"$H1.$H2($H3,...)",0,44,509,553
+"$H1.$H2($H3,$H4)",0,4,219,223
+import $H1 from 'express-session',0,0,0,0
+"import {..., $H1, ...} from 'express-session'",0,0,0,0
+import * as $H1 from 'express-session',0,0,0,0
+$H1.use($H2({...})),0,0,2,2
+"$H1 = $H2
+...
+$H3.use($H4($H5))",0,7,0,7
+secret: '$H1',0,0,1,1
+"function ... ($H1, ...) {...}",0,89,6,95
+"({ $H1 }: Request,...) =>
+{...}",0,0,0,0
+"({ $H1 }: $H2.Request,...) => {...}",0,0,0,0
+$H1 = require('request'),0,0,0,0
+import * as $H1 from 'request',0,0,0,0
+import $H1 from 'request',0,0,0,0
+"$H1.$H2(""$H3""+$H4. ... .$H5)",2,0,6,4
+"$H1.$H2(""$H3""+$H4. ... .$H5 + $...H6)",1,0,1,0
+$H1.$H2(`$H3${$H4. ... .$H5}...`),4,0,4,0
+"$H1.$H2(""$H3""+$H4.$H5[...])",0,0,1,1
+"$H1.$H2(""$H3""+$H4.$H5[...] + $...H6)",0,0,1,1
+$H1.$H2(`$H3${$H4.$H5[...]}...`),1,0,1,0
+"$H1.$H2($H3. ... .$H4,...)",0,17,33,50
+"$H1.$H2($H3. ... .$H4 + $...H5,...)",0,0,4,4
+"$H1.$H2(`${$H3. ... .$H4}...`,...)",0,7,3,10
+"$H1.$H2($H3.$H4['...'],...)",0,1,1,2
+"$H1.$H2($H3.$H4['...'] + $...H5,...)",1,0,1,0
+"$H1.$H2(`${$H3.$H4['...']}...`,...)",1,0,1,0
+$H1 = $H2. ... .$H3['...'],0,1,0,1
+$H1 = $H2. ... .$H3['...'] + $...H4,0,0,0,0
+$H1 = `${$H2. ... .$H3['...']}...`,0,0,0,0
+"$H1 = ""$H2""+ $H3. ... .$H4",0,0,0,0
+"$H1 = ""$H2""+$H3. ... .$H4 + $...H5",0,1,0,1
+"$H1 = ""$H2""+$H3.$H4[...]",0,0,0,0
+"$H1 = ""$H2""+$H3.$H4[...] + $...H5",0,0,0,0
+$H1 = `$H2${$H3.$H4[...]}...`,0,0,0,0
+"$H1.$H2($H3 + $...H4,...)",1,7,36,42
+"$H1.$H2(`${$H3}...`,...)",0,25,7,32
+"$H1.$H2(""$H3""+$H4,...)",11,1,16,6
+"$H1.$H2(""$H3""+$H4 + $...H5,...)",8,2,9,3
+"$H1.$H2(`$H3${$H4}...`,...)",24,0,24,0
+$H1.$H2(...),0,29,552,581
+"({ $H1 }: Request,$H2: Response, $H3: NextFunction) => {...}",0,0,0,0
+require('xml2json'),0,0,4,4
+import 'xml2json',4,0,4,0
+"$H1.on('...', function(...) { ... $H2.toJson($H3,...); ... })",0,0,0,0
+$H1 = query.$H2,0,3,0,3
+$H1 = $H2.query.$H3,0,15,2,17
+$H1 = req.$H2,1,32,1,32
+$H1.redirect(...),0,0,25,25
+$H1[...] = $H2,0,5,3,8
+"$H1[""...""] = $H2",0,0,0,0
+"$H1[...] = ""...""",0,0,0,0
+"""..."" + $H1",43,0,43,0
+"$H1 + ""...""",12,19,24,31
+var $H1 = $H2,2,0,100,98
+var $H1 = $H2.$H3,0,8,13,21
+"$H1.render($H2, ...)",0,0,8,8
+"function ... ($H1, $H2) {
+ ...
+ $H3.$H4('Content-Type', '$H5')
+}",0,0,0,0
+"$H1.$H2(..., function $H3($H4, $H5) {
+ ...
+ $H6.$H7('Content-Type', '$H8')
+})",1,0,1,0
+"function ... ($H1, $H2, $H3) {
+ ...
+ $H4.$H5('Content-Type', '$H6')
+}",0,0,0,0
+"function ... ($H1, $H2) {
+ ...
+ $H3.set('$H4')
+}",0,0,0,0
+"$H1.$H2(..., function $H3($H4, $H5) {
+ ...
+ $H6.set('$H7')
+})",0,0,0,0
+"function ... ($H1, $H2, $H3) {
+ ...
+ $H4.set('$H5')
+}",0,0,0,0
+"({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
+{
+ ...
+ $H4.$H5('Content-Type', '$H6')
+}",0,0,0,0
+"({ $H1 }: Request,$H2: Response) => {
+ ...
+ $H3.$H4('Content-Type', '$H5')
+}",0,0,0,0
+"({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
+{
+ ...
+ $H4.set('$H5')
+}",0,0,0,0
+$H1.write($H2),0,0,12,12
+$H1.send($H2),0,2,96,98
+$H1. ... .set('...'). ... .send($H2),0,0,0,0
+$H1. ... .type('...'). ... .send($H2),1,0,1,0
+"import $H1 from ""underscore.string""",0,0,0,0
+"import * as $H1 from ""underscore.string""",0,0,0,0
+"$H1 = require(""underscore.string"")",0,0,0,0
+$H1.escapeHTML(...),0,0,0,0
+"import $H1 from ""dompurify""",0,0,0,0
+"import { ..., $H1,... } from ""dompurify""",0,0,0,0
+"import * as $H1 from ""dompurify""",0,0,0,0
+"$H1 = require(""dompurify"")",0,0,0,0
+"import $H1 from ""isomorphic-dompurify""",0,0,0,0
+"import * as $H1 from ""isomorphic-dompurify""",0,0,0,0
+"$H1 = require(""isomorphic-dompurify"")",0,0,0,0
+$H1.sanitize(...),0,0,0,0
+$H1 = $H2.sanitize,0,0,0,0
+import $H1 from 'xss',0,0,0,0
+import * as $H1 from 'xss',0,0,0,0
+"$H1 = require(""xss"")",0,1,0,1
+import $H1 from 'sanitize-html',0,0,0,0
+"import * as $H1 from ""sanitize-html""",0,0,0,0
+"$H1 = require(""sanitize-html"")",0,0,0,0
+$H1 = new Remarkable(),0,0,0,0
+$H1.render(...),0,0,8,8
+import $H1 from 'express-xss-sanitizer',0,0,0,0
+"import * as $H1 from ""express-xss-sanitizer""",0,0,0,0
+"const { ..., $H1, ... } = require('express-xss-sanitizer')",0,0,0,0
+"var { ..., $H1, ... } = require('express-xss-sanitizer')",0,0,0,0
+"let { ...,$H1,... } = require('express-xss-sanitizer')",0,0,0,0
+"$H1 = require(""express-xss-sanitizer"")",0,0,0,0
+$H1. ... .type('$H2'). ... .send(...),1,0,1,0
+Mustache.escape = $H1,0,0,1,1
+"$H1 = require(""mustache"")",0,2,0,2
+$H1.escape = $H2,0,0,2,2
+"$H1.set($H2, $H3)",0,2,8,10
+"$H1.header($H2, $H3)",0,0,0,0
+"$H1.setHeader($H2, $H3)",0,0,0,0
+"$H1.set({$H2: $H3}, ...)",0,0,0,0
+"$H1.writeHead($H2, {$H3: $H4}, ...)",0,0,1,1
+Object.assign(...),0,0,10,10
+$H1 = require('node-expat'),0,1,0,1
+import $H1 from 'node-expat',0,0,0,0
+import * as $H1 from 'node-expat',0,0,0,0
+$H1 = new $H2.Parser(...),0,7,0,7
+$H1.parse($H2),0,0,3,3
+$H1 = require('pug'),0,0,0,0
+import * as $H1 from 'pug',0,0,0,0
+$H1 = require('jade'),0,0,0,0
+import * as $H1 from 'jade',0,0,0,0
+$H1.compile(...),0,0,0,0
+$H1.compileClient(...),0,0,0,0
+$H1.compileClientWithDependenciesTracked(...),0,0,0,0
+$H1 = require('dot'),0,0,0,0
+import * as $H1 from 'dot',0,0,0,0
+$H1.template(...),0,0,0,0
+$H1 = require('ejs'),0,0,0,0
+import * as $H1 from 'ejs',0,0,0,0
+$H1 = require('nunjucks'),0,0,0,0
+import * as $H1 from 'nunjucks',0,0,0,0
+$H1.renderString(...),0,0,0,0
+$H1 = require('lodash'),0,0,0,0
+import * as $H1 from 'lodash',0,0,0,0
+$H1 = require('mustache'),0,0,0,0
+import * as $H1 from 'mustache',0,0,0,0
+$H1 = require('eta'),0,0,0,0
+import * as $H1 from 'eta',0,0,0,0
+$H1 = require('squirrelly'),0,0,0,0
+import * as $H1 from 'squirrelly',0,0,0,0
+$H1 = require('hogan.js'),0,0,0,0
+import * as $H1 from 'hogan.js',0,0,0,0
+$H1 = require('handlebars'),0,0,0,0
+import * as $H1 from 'handlebars',0,0,0,0
+"$H1.$H2($H3).then((...,$H4,...)=>{...})",0,0,0,0
+import $H1 from 'express-jwt',0,0,0,0
+import * as $H1 from 'express-jwt',0,0,0,0
+"import { ..., $H1, ... } from 'express-jwt'",0,0,0,0
+"$H1({...,secret: ""$H2"",...},...)",1,0,1,0
+"$H1 = ""$H2"";
+...
+$H3({...,secret: $H4},...);",0,0,0,0
+require('phantom'),0,0,1,1
+import 'phantom',1,0,1,0
+"$H1.open($H2,...)",0,0,0,0
+"$H1.setContent($H2,...)",0,0,5,5
+"$H1.openUrl($H2,...)",0,0,2,2
+"$H1.evaluateJavaScript($H2,...)",0,0,1,1
+"$H1.property(""content"",$H2,...)",3,0,3,0
+require('puppeteer'),0,0,1,1
+import 'puppeteer',1,0,1,0
+"$H1.goto($H2,...)",0,0,2,2
+"$H1.evaluate($H2,...)",0,0,1,1
+"$H1.evaluate($H2,$H3,...)",0,0,0,0
+"$H1.evaluateHandle($H2,...)",0,0,0,0
+"$H1.evaluateHandle($H2,$H3,...)",0,0,0,0
+"$H1.evaluateOnNewDocument($H2,...)",0,0,1,1
+"$H1.evaluateOnNewDocument($H2,$H3,...)",0,0,0,0
+$H1 = require('sandbox'),0,1,0,1
+$H1 = new $H2(...),0,28,0,28
+$H1.run(...),0,8,15,23
+new $H1($H2).run(...),0,0,4,4
+new $H1().run(...),0,0,0,0
+$H1 = require('vm'),0,1,0,1
+$H1.runInContext(...),0,0,5,5
+$H1.runInNewContext(...),0,0,3,3
+$H1.compileFunction(...),0,0,4,4
+$H1.runInThisContext(...),0,0,4,4
+new $H1.Script(...),0,0,2,2
+require('vm2'),0,0,1,1
+$H1 = new VM(...),0,1,0,1
+$H1 = new NodeVM(...),0,6,0,6
+new VM(...).run(...),0,0,4,4
+new NodeVM(...).run(...),0,0,0,0
+new VMScript(...),0,0,2,2
+new VM(...),0,0,4,4
+new NodeVM(...),0,0,6,6
+"$H1.generate($H2,...)",0,0,2,2
+$H1 = require('wkhtmltopdf'),0,1,0,1
+"$H1($H2,...)",0,803,623,1426
+"$H1.toJson($H2,...)",0,0,6,6
+"""$H1"" + $H2",43,0,43,0
+"""$H1"".concat(...)",0,0,0,0
+"util.format($H1, ...)",0,0,1,1
+`...`,0,0,47,47
+"""$H1"".concat($H2)",0,0,0,0
+"util.format($H1, $H2)",0,0,1,1
+`$H1${$H2}...`,31,0,31,0
+require($H1),0,0,65,65
+"$H1.set($H2, ...)",0,2,9,11
+"$H1.header($H2, ...)",0,0,0,0
+"$H1.setHeader($H2, ...)",0,0,0,0
+"$H1.set({$H2: ...}, ...)",0,0,0,0
+"$H1.writeHead($H2, {$H3: ...}, ...)",0,0,1,1
