@@ -45,6 +45,7 @@ def main(args: CLI):
                     continue
 
                 for (key, pattern) in pattern_items([rule['id']], args.languages, rule):
+                    # FIX: nested pattern might have a different set of languages
                     for language in languages.intersection(args.languages):
                         canon = semgrep.canonical(pattern)
                         out[language, canon][path].append(key)

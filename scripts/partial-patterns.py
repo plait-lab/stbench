@@ -8,7 +8,7 @@ import pygments
 from pygments.lexers import get_lexer_by_name
 from pygments.token import Comment, Whitespace
 
-from tools import Language, stsearch
+from tools import Language, stsearch, semgrep
 from base import Args, Arg, load_all, dump_all
 
 
@@ -19,8 +19,8 @@ class CLI(Args):
 
 
 def main(args: CLI):
-    out = all_partials((item['language'], item['pattern']['semgrep'])
-                       for item in load_all(args.complete))
+    out = all_partials([(item['language'], item['pattern']['semgrep'])
+                        for item in load_all(args.complete)])
     print(f'Computed {len(out)} partial patterns.')
 
     dump_all(({
@@ -30,14 +30,15 @@ def main(args: CLI):
     } for (language, pattern), complete in out.items()), args.partial)
 
 
-def all_partials(patterns: Iterable[tuple[Language, str]]) -> Mapping[tuple[Language, str], str]:
+def all_partials(patterns: Collection[tuple[Language, str]]) -> Mapping[tuple[Language, str], str]:
     from collections import defaultdict
 
     out = defaultdict(list)
 
     for language, complete in patterns:
         for partial in partials(language, complete):
-            out[(language, partial)].append(complete)
+            if (language, partial) not in patterns:
+                out[(language, partial)].append(complete)
 
     return out
 
@@ -47,9 +48,9 @@ def partials(language: Language, complete: str) -> Iterable[str]:
     tokens = list(pygments.lex(complete, lexer))
 
     partial = ''
-    for typ, val in tokens:
+    for typ, val in tokens[:-1]:
         partial += val
-        if typ not in Comment and typ not in Whitespace and val != '...':
+        if semgrep.canonical(partial) == partial:
             yield partial
 
 

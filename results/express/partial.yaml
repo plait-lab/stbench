@@ -1,285 +1,5 @@
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1
-  stsearch: $_
-complete:
-- $H1 = require('express')
-- $H1 = $H2()
-- $H1.use(require('serve-index')(...))
-- $H1 = require('serve-index')
-- $H1 = $H2(...)
-- $H1(...)
-- $H1.use(..., $H2(...), ...)
-- $H1 = require('cookie-session')
-- $H1 = require('express-session')
-- |-
-  $H1 = ...;
-  ...
-  $H2($H3,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.name = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2 = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.secure = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.secure = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.httpOnly = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.httpOnly = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.domain = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.domain = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.path = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.path = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.expires = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.expires = ...;
-  ...
-  $H3($H4,...);
-- $H1 = require('notevil')
-- $H1('...')
-- $H1.runInContext("$H2", ...)
-- $H1.runInNewContext("$H2", ...)
-- $H1.runInThisContext("$H2", ...)
-- $H1.compileFunction("$H2", ...)
-- $H1 = require('express-jwt')
-- $H1.$H2(..., function $H3($H4, $H5) {...})
-- $H1.$H2(..., function $H3($H4, $H5, $H6) {...})
-- $H1.query
-- $H1.body
-- $H1.params
-- $H1.cookies
-- $H1.headers
-- $H1.files.$H2.data.toString('utf8')
-- $H1.files.$H2['data'].toString('utf8')
-- $H1 = require('$H2')
-- $H1.$H2($H3, {...,noent:true,...})
-- $H1
-- '$H1.parseXml($H2, {..., noent: true, ...}, ...)'
-- '$H1 = {..., noent: true, ...}'
-- $H1.parseXml( $H2, $H3 )
-- $H1.redirect("$H2"+$H3. ... .$H4)
-- $H1.redirect("$H2"+$H3. ... .$H4 + $...H5)
-- $H1.redirect(`$H2${$H3. ... .$H4}...`)
-- $H1.redirect("$H2"+$H3.$H4[...])
-- $H1.redirect("$H2"+$H3.$H4[...] + $...H5)
-- $H1.redirect(`$H2${$H3.$H4[...]}...`)
-- $H1. ... .$H2
-- $H1.redirect($H2. ... .$H3)
-- $H1.redirect($H2. ... .$H3 + $...H4)
-- $H1.redirect(`${$H2. ... .$H3}...`)
-- $H1.redirect($H2.$H3['...'])
-- $H1.redirect($H2.$H3['...'] + $...H4)
-- $H1.redirect(`${$H2.$H3['...']}...`)
-- $H1.$H2
-- $H1 = $H2. ... .$H3
-- $H1 = $H2.$H3['...']
-- $H1 = $H2. ... .$H3 + $...H4
-- $H1 = $H2.$H3['...'] + $...H4
-- $H1 = `${$H2. ... .$H3}...`
-- $H1 = `${$H2.$H3['...']}...`
-- $H1.redirect($H2)
-- $H1.redirect($H2 + $...H3)
-- $H1.redirect(`${$H2}...`)
-- $H1 = require('path')
-- $H1.join(...,$H2,...)
-- $H1.resolve(...,$H2,...)
-- $H1.replace(...)
-- $H1.indexOf(...)
-- $H1.$H2($H3,...)
-- $H1.$H2($H3,$H4)
-- $H1.use($H2({...}))
-- |-
-  $H1 = $H2
-  ...
-  $H3.use($H4($H5))
-- $H1 = require('request')
-- $H1.$H2("$H3"+$H4. ... .$H5)
-- $H1.$H2("$H3"+$H4. ... .$H5 + $...H6)
-- $H1.$H2(`$H3${$H4. ... .$H5}...`)
-- $H1.$H2("$H3"+$H4.$H5[...])
-- $H1.$H2("$H3"+$H4.$H5[...] + $...H6)
-- $H1.$H2(`$H3${$H4.$H5[...]}...`)
-- $H1.$H2($H3. ... .$H4,...)
-- $H1.$H2($H3. ... .$H4 + $...H5,...)
-- $H1.$H2(`${$H3. ... .$H4}...`,...)
-- $H1.$H2($H3.$H4['...'],...)
-- $H1.$H2($H3.$H4['...'] + $...H5,...)
-- $H1.$H2(`${$H3.$H4['...']}...`,...)
-- $H1 = $H2. ... .$H3['...']
-- $H1 = $H2. ... .$H3['...'] + $...H4
-- $H1 = `${$H2. ... .$H3['...']}...`
-- $H1 = "$H2"+ $H3. ... .$H4
-- $H1 = "$H2"+$H3. ... .$H4 + $...H5
-- $H1 = "$H2"+$H3.$H4[...]
-- $H1 = "$H2"+$H3.$H4[...] + $...H5
-- $H1 = `$H2${$H3.$H4[...]}...`
-- $H1.$H2($H3 + $...H4,...)
-- $H1.$H2(`${$H3}...`,...)
-- $H1.$H2("$H3"+$H4,...)
-- $H1.$H2("$H3"+$H4 + $...H5,...)
-- $H1.$H2(`$H3${$H4}...`,...)
-- $H1.$H2(...)
-- $H1.on('...', function(...) { ... $H2.toJson($H3,...); ... })
-- $H1 = query.$H2
-- $H1 = $H2.query.$H3
-- $H1 = req.$H2
-- $H1.redirect(...)
-- $H1[...] = $H2
-- $H1["..."] = $H2
-- $H1[...] = "..."
-- $H1 + "..."
-- $H1.render($H2, ...)
-- |-
-  $H1.$H2(..., function $H3($H4, $H5) {
-   ...
-   $H6.$H7('Content-Type', '$H8')
-  })
-- |-
-  $H1.$H2(..., function $H3($H4, $H5) {
-   ...
-   $H6.set('$H7')
-  })
-- $H1.write($H2)
-- $H1.send($H2)
-- $H1. ... .set('...'). ... .send($H2)
-- $H1. ... .type('...'). ... .send($H2)
-- $H1 = require("underscore.string")
-- $H1.escapeHTML(...)
-- $H1 = require("dompurify")
-- $H1 = require("isomorphic-dompurify")
-- $H1.sanitize(...)
-- $H1 = $H2.sanitize
-- $H1 = require("xss")
-- $H1 = require("sanitize-html")
-- $H1 = new Remarkable()
-- $H1.render(...)
-- $H1 = require("express-xss-sanitizer")
-- $H1. ... .type('$H2'). ... .send(...)
-- $H1 = require("mustache")
-- $H1.escape = $H2
-- $H1.set($H2, $H3)
-- $H1.header($H2, $H3)
-- $H1.setHeader($H2, $H3)
-- '$H1.set({$H2: $H3}, ...)'
-- '$H1.writeHead($H2, {$H3: $H4}, ...)'
-- $H1 = require('node-expat')
-- $H1 = new $H2.Parser(...)
-- $H1.parse($H2)
-- $H1 = require('pug')
-- $H1 = require('jade')
-- $H1.compile(...)
-- $H1.compileClient(...)
-- $H1.compileClientWithDependenciesTracked(...)
-- $H1 = require('dot')
-- $H1.template(...)
-- $H1 = require('ejs')
-- $H1 = require('nunjucks')
-- $H1.renderString(...)
-- $H1 = require('lodash')
-- $H1 = require('mustache')
-- $H1 = require('eta')
-- $H1 = require('squirrelly')
-- $H1 = require('hogan.js')
-- $H1 = require('handlebars')
-- $H1.$H2($H3).then((...,$H4,...)=>{...})
-- '$H1({...,secret: "$H2",...},...)'
-- |-
-  $H1 = "$H2";
-  ...
-  $H3({...,secret: $H4},...);
-- $H1.open($H2,...)
-- $H1.setContent($H2,...)
-- $H1.openUrl($H2,...)
-- $H1.evaluateJavaScript($H2,...)
-- $H1.property("content",$H2,...)
-- $H1.goto($H2,...)
-- $H1.evaluate($H2,...)
-- $H1.evaluate($H2,$H3,...)
-- $H1.evaluateHandle($H2,...)
-- $H1.evaluateHandle($H2,$H3,...)
-- $H1.evaluateOnNewDocument($H2,...)
-- $H1.evaluateOnNewDocument($H2,$H3,...)
-- $H1 = require('sandbox')
-- $H1 = new $H2(...)
-- $H1.run(...)
-- $H1 = require('vm')
-- $H1.runInContext(...)
-- $H1.runInNewContext(...)
-- $H1.compileFunction(...)
-- $H1.runInThisContext(...)
-- $H1 = new VM(...)
-- $H1 = new NodeVM(...)
-- $H1.generate($H2,...)
-- $H1 = require('wkhtmltopdf')
-- $H1($H2,...)
-- $H1.toJson($H2,...)
-- $H1.set($H2, ...)
-- $H1.header($H2, ...)
-- $H1.setHeader($H2, ...)
-- '$H1.set({$H2: ...}, ...)'
-- '$H1.writeHead($H2, {$H3: ...}, ...)'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 =
   stsearch: $_ =
 complete:
@@ -514,13 +234,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('express')
-  stsearch: $_ = require('express')
-complete:
-- $H1 = require('express')
----
-language: !lang 'javascript'
-pattern:
   semgrep: import
   stsearch: import
 complete:
@@ -613,13 +326,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: import {$H1} from 'csurf'
-  stsearch: import {$_} from 'csurf'
-complete:
-- import {$H1} from 'csurf'
----
-language: !lang 'javascript'
-pattern:
   semgrep: require
   stsearch: require
 complete:
@@ -653,29 +359,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: require('csurf')
-  stsearch: require('csurf')
-complete:
-- require('csurf')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import {$H1} from 'csrf'
-  stsearch: import {$_} from 'csrf'
-complete:
-- import {$H1} from 'csrf'
----
-language: !lang 'javascript'
-pattern:
   semgrep: require('csrf'
   stsearch: require('csrf'
-complete:
-- require('csrf')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: require('csrf')
-  stsearch: require('csrf')
 complete:
 - require('csrf')
 ---
@@ -706,13 +391,6 @@ pattern:
 complete:
 - $H1 = $H2()
 - $H1 = $H2(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = $H2()
-  stsearch: $_ = $_()
-complete:
-- $H1 = $H2()
 ---
 language: !lang 'javascript'
 pattern:
@@ -900,22 +578,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.use(require('serve-index')(...))
-  stsearch: $_.use(require('serve-index')(...))
-complete:
-- $H1.use(require('serve-index')(...))
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('serve-index'
   stsearch: $_ = require('serve-index'
-complete:
-- $H1 = require('serve-index')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('serve-index')
-  stsearch: $_ = require('serve-index')
 complete:
 - $H1 = require('serve-index')
 ---
@@ -958,13 +622,6 @@ complete:
 - import $H1 from 'express-xss-sanitizer'
 - import $H1 from 'node-expat'
 - import $H1 from 'express-jwt'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'serve-index'
-  stsearch: import $_ from 'serve-index'
-complete:
-- import $H1 from 'serve-index'
 ---
 language: !lang 'javascript'
 pattern:
@@ -1084,20 +741,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: import * as $H1 from 'serve-index'
-  stsearch: import * as $_ from 'serve-index'
-complete:
-- import * as $H1 from 'serve-index'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = $H2(...)
-  stsearch: $_ = $_(...)
-complete:
-- $H1 = $H2(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1(
   stsearch: $_(
 complete:
@@ -1105,13 +748,6 @@ complete:
 - $H1('...')
 - '$H1({...,secret: "$H2",...},...)'
 - $H1($H2,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1(...)
-  stsearch: $_(...)
-complete:
-- $H1(...)
 ---
 language: !lang 'javascript'
 pattern:
@@ -1150,13 +786,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.use(..., $H2(...), ...)
-  stsearch: $_.use(... $_(...) ...)
-complete:
-- $H1.use(..., $H2(...), ...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('cookie-session'
   stsearch: $_ = require('cookie-session'
 complete:
@@ -1164,22 +793,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('cookie-session')
-  stsearch: $_ = require('cookie-session')
-complete:
-- $H1 = require('cookie-session')
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('express-session'
   stsearch: $_ = require('express-session'
-complete:
-- $H1 = require('express-session')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('express-session')
-  stsearch: $_ = require('express-session')
 complete:
 - $H1 = require('express-session')
 ---
@@ -1214,101 +829,6 @@ pattern:
   stsearch: '{name:'
 complete:
 - '{name:...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{name:...}'
-  stsearch: '{name:...}'
-complete:
-- '{name:...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = ...;
-  stsearch: $_ = ...;
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2($H3,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.name = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2 = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.secure = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.secure = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.httpOnly = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.httpOnly = true;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.domain = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.domain = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.path = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.path = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.expires = ...;
-  ...
-  $H3($H4,...);
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.expires = ...;
-  ...
-  $H3($H4,...);
 ---
 language: !lang 'javascript'
 pattern:
@@ -1462,22 +982,6 @@ pattern:
     $_ = ...;
     ...
     $_($_...)
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2($H3,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2($H3,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_($_...);
 complete:
 - |-
   $H1 = ...;
@@ -1734,28 +1238,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.name = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.name = ...;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.name = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{cookie'
   stsearch: '{cookie'
 complete:
@@ -1812,13 +1294,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '{cookie:{secure:true}'
   stsearch: '{cookie:{secure:true}'
-complete:
-- '{cookie:{secure:true}}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{cookie:{secure:true}}'
-  stsearch: '{cookie:{secure:true}}'
 complete:
 - '{cookie:{secure:true}}'
 ---
@@ -1970,28 +1445,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2 = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_ = ...;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2 = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{secure'
   stsearch: '{secure'
 complete:
@@ -2008,13 +1461,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '{secure:true'
   stsearch: '{secure:true'
-complete:
-- '{secure:true}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{secure:true}'
-  stsearch: '{secure:true}'
 complete:
 - '{secure:true}'
 ---
@@ -2217,28 +1663,6 @@ pattern:
   semgrep: |-
     $H1 = ...;
     ...
-    $H2.cookie = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.cookie = ...;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
     $H2.secure
   stsearch: |-
     $_ = ...;
@@ -2408,28 +1832,6 @@ pattern:
     $_.secure = true;
     ...
     $_($_...)
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.secure = true;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.secure = true;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.secure = true;
-    ...
-    $_($_...);
 complete:
 - |-
   $H1 = ...;
@@ -2664,28 +2066,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.cookie.secure = true;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.cookie.secure = true;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.secure = true;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{cookie:{httpOnly'
   stsearch: '{cookie:{httpOnly'
 complete:
@@ -2714,13 +2094,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '{cookie:{httpOnly:true}}'
-  stsearch: '{cookie:{httpOnly:true}}'
-complete:
-- '{cookie:{httpOnly:true}}'
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{httpOnly'
   stsearch: '{httpOnly'
 complete:
@@ -2737,13 +2110,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '{httpOnly:true'
   stsearch: '{httpOnly:true'
-complete:
-- '{httpOnly:true}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{httpOnly:true}'
-  stsearch: '{httpOnly:true}'
 complete:
 - '{httpOnly:true}'
 ---
@@ -2921,28 +2287,6 @@ pattern:
     $_.httpOnly = true;
     ...
     $_($_...)
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.httpOnly = true;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.httpOnly = true;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.httpOnly = true;
-    ...
-    $_($_...);
 complete:
 - |-
   $H1 = ...;
@@ -3135,28 +2479,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.cookie.httpOnly = true;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.cookie.httpOnly = true;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.httpOnly = true;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{cookie:{domain'
   stsearch: '{cookie:{domain'
 complete:
@@ -3178,13 +2500,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '{cookie:{domain:...}}'
-  stsearch: '{cookie:{domain:...}}'
-complete:
-- '{cookie:{domain:...}}'
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{domain'
   stsearch: '{domain'
 complete:
@@ -3194,13 +2509,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '{domain:'
   stsearch: '{domain:'
-complete:
-- '{domain:...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{domain:...}'
-  stsearch: '{domain:...}'
 complete:
 - '{domain:...}'
 ---
@@ -3360,28 +2668,6 @@ pattern:
     $_.domain = ...;
     ...
     $_($_...)
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.domain = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.domain = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.domain = ...;
-    ...
-    $_($_...);
 complete:
 - |-
   $H1 = ...;
@@ -3556,28 +2842,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.cookie.domain = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.cookie.domain = ...;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.domain = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{cookie:{path'
   stsearch: '{cookie:{path'
 complete:
@@ -3599,13 +2863,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '{cookie:{path:...}}'
-  stsearch: '{cookie:{path:...}}'
-complete:
-- '{cookie:{path:...}}'
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{path'
   stsearch: '{path'
 complete:
@@ -3615,13 +2872,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '{path:'
   stsearch: '{path:'
-complete:
-- '{path:...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{path:...}'
-  stsearch: '{path:...}'
 complete:
 - '{path:...}'
 ---
@@ -3781,28 +3031,6 @@ pattern:
     $_.path = ...;
     ...
     $_($_...)
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.path = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.path = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.path = ...;
-    ...
-    $_($_...);
 complete:
 - |-
   $H1 = ...;
@@ -3977,28 +3205,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.cookie.path = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.cookie.path = ...;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.path = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{cookie:{expires'
   stsearch: '{cookie:{expires'
 complete:
@@ -4020,13 +3226,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '{cookie:{expires:...}}'
-  stsearch: '{cookie:{expires:...}}'
-complete:
-- '{cookie:{expires:...}}'
----
-language: !lang 'javascript'
-pattern:
   semgrep: '{expires'
   stsearch: '{expires'
 complete:
@@ -4036,13 +3235,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '{expires:'
   stsearch: '{expires:'
-complete:
-- '{expires:...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{expires:...}'
-  stsearch: '{expires:...}'
 complete:
 - '{expires:...}'
 ---
@@ -4202,28 +3394,6 @@ pattern:
     $_.expires = ...;
     ...
     $_($_...)
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.expires = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.expires = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.expires = ...;
-    ...
-    $_($_...);
 complete:
 - |-
   $H1 = ...;
@@ -4398,42 +3568,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = ...;
-    ...
-    $H2.cookie.expires = ...;
-    ...
-    $H3($H4,...);
-  stsearch: |-
-    $_ = ...;
-    ...
-    $_.cookie.expires = ...;
-    ...
-    $_($_...);
-complete:
-- |-
-  $H1 = ...;
-  ...
-  $H2.cookie.expires = ...;
-  ...
-  $H3($H4,...);
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'notevil'
-  stsearch: import $_ from 'notevil'
-complete:
-- import $H1 from 'notevil'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import {$H1} from 'notevil'
-  stsearch: import {$_} from 'notevil'
-complete:
-- import {$H1} from 'notevil'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('notevil'
   stsearch: $_ = require('notevil'
 complete:
@@ -4441,22 +3575,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('notevil')
-  stsearch: $_ = require('notevil')
-complete:
-- $H1 = require('notevil')
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1('...'
   stsearch: $_('...'
-complete:
-- $H1('...')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1('...')
-  stsearch: $_('...')
 complete:
 - $H1('...')
 ---
@@ -4492,13 +3612,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.runInContext("$H2", ...)
-  stsearch: $_.runInContext("$_" ...)
-complete:
-- $H1.runInContext("$H2", ...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.runInNewContext
   stsearch: $_.runInNewContext
 complete:
@@ -4524,13 +3637,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.runInNewContext("$H2",
   stsearch: $_.runInNewContext("$_",
-complete:
-- $H1.runInNewContext("$H2", ...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.runInNewContext("$H2", ...)
-  stsearch: $_.runInNewContext("$_" ...)
 complete:
 - $H1.runInNewContext("$H2", ...)
 ---
@@ -4566,13 +3672,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.runInThisContext("$H2", ...)
-  stsearch: $_.runInThisContext("$_" ...)
-complete:
-- $H1.runInThisContext("$H2", ...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.compileFunction
   stsearch: $_.compileFunction
 complete:
@@ -4603,22 +3702,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.compileFunction("$H2", ...)
-  stsearch: $_.compileFunction("$_" ...)
-complete:
-- $H1.compileFunction("$H2", ...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('express-jwt'
   stsearch: $_ = require('express-jwt'
-complete:
-- $H1 = require('express-jwt')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('express-jwt')
-  stsearch: $_ = require('express-jwt')
 complete:
 - $H1 = require('express-jwt')
 ---
@@ -4633,13 +3718,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '{isRevoked:'
   stsearch: '{isRevoked:'
-complete:
-- '{isRevoked:...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '{isRevoked:...}'
-  stsearch: '{isRevoked:...}'
 complete:
 - '{isRevoked:...}'
 ---
@@ -4833,13 +3911,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: function ... ($H1, $H2) {...}
-  stsearch: function ... ($_, $_) {...}
-complete:
-- function ... ($H1, $H2) {...}
----
-language: !lang 'javascript'
-pattern:
   semgrep: function ... ($H1, $H2,
   stsearch: function ... ($_, $_,
 complete:
@@ -4905,54 +3976,6 @@ complete:
    ...
    $H4.set('$H5')
   }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: function ... ($H1, $H2, $H3) {...}
-  stsearch: function ... ($_, $_, $_) {...}
-complete:
-- function ... ($H1, $H2, $H3) {...}
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2
-  stsearch: $_.$_
-complete:
-- $H1.$H2(..., function $H3($H4, $H5) {...})
-- $H1.$H2(..., function $H3($H4, $H5, $H6) {...})
-- $H1.$H2($H3, {...,noent:true,...})
-- $H1.$H2
-- $H1.$H2($H3,...)
-- $H1.$H2($H3,$H4)
-- $H1.$H2("$H3"+$H4. ... .$H5)
-- $H1.$H2("$H3"+$H4. ... .$H5 + $...H6)
-- $H1.$H2(`$H3${$H4. ... .$H5}...`)
-- $H1.$H2("$H3"+$H4.$H5[...])
-- $H1.$H2("$H3"+$H4.$H5[...] + $...H6)
-- $H1.$H2(`$H3${$H4.$H5[...]}...`)
-- $H1.$H2($H3. ... .$H4,...)
-- $H1.$H2($H3. ... .$H4 + $...H5,...)
-- $H1.$H2(`${$H3. ... .$H4}...`,...)
-- $H1.$H2($H3.$H4['...'],...)
-- $H1.$H2($H3.$H4['...'] + $...H5,...)
-- $H1.$H2(`${$H3.$H4['...']}...`,...)
-- $H1.$H2($H3 + $...H4,...)
-- $H1.$H2(`${$H3}...`,...)
-- $H1.$H2("$H3"+$H4,...)
-- $H1.$H2("$H3"+$H4 + $...H5,...)
-- $H1.$H2(`$H3${$H4}...`,...)
-- $H1.$H2(...)
-- |-
-  $H1.$H2(..., function $H3($H4, $H5) {
-   ...
-   $H6.$H7('Content-Type', '$H8')
-  })
-- |-
-  $H1.$H2(..., function $H3($H4, $H5) {
-   ...
-   $H6.set('$H7')
-  })
-- $H1.$H2($H3).then((...,$H4,...)=>{...})
 ---
 language: !lang 'javascript'
 pattern:
@@ -5163,13 +4186,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2(..., function $H3($H4, $H5) {...})
-  stsearch: $_.$_(... function $_($_, $_) {...})
-complete:
-- $H1.$H2(..., function $H3($H4, $H5) {...})
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2(..., function $H3($H4, $H5,
   stsearch: $_.$_(... function $_($_, $_,
 complete:
@@ -5202,48 +4218,6 @@ pattern:
   stsearch: $_.$_(... function $_($_, $_, $_) {...}
 complete:
 - $H1.$H2(..., function $H3($H4, $H5, $H6) {...})
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2(..., function $H3($H4, $H5, $H6) {...})
-  stsearch: $_.$_(... function $_($_, $_, $_) {...})
-complete:
-- $H1.$H2(..., function $H3($H4, $H5, $H6) {...})
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.query
-  stsearch: $_.query
-complete:
-- $H1.query
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.body
-  stsearch: $_.body
-complete:
-- $H1.body
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.params
-  stsearch: $_.params
-complete:
-- $H1.params
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.cookies
-  stsearch: $_.cookies
-complete:
-- $H1.cookies
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.headers
-  stsearch: $_.headers
-complete:
-- $H1.headers
 ---
 language: !lang 'javascript'
 pattern:
@@ -5313,13 +4287,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.files.$H2.data.toString('utf8')
-  stsearch: $_.files.$_.data.toString('utf8')
-complete:
-- $H1.files.$H2.data.toString('utf8')
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.files.$H2[
   stsearch: $_.files.$_[
 complete:
@@ -5364,13 +4331,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.files.$H2['data'].toString('utf8'
   stsearch: $_.files.$_['data'].toString('utf8'
-complete:
-- $H1.files.$H2['data'].toString('utf8')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.files.$H2['data'].toString('utf8')
-  stsearch: $_.files.$_['data'].toString('utf8')
 complete:
 - $H1.files.$H2['data'].toString('utf8')
 ---
@@ -5839,19 +4799,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
-    {...}
-  stsearch: |-
-    ({ $_ }: Request,$_: Response, $_: NextFunction) =>
-    {...}
-complete:
-- |-
-  ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
-  {...}
----
-language: !lang 'javascript'
-pattern:
   semgrep: '({ $H1 }: Request,$H2: Response)'
   stsearch: '({ $_ }: Request,$_: Response)'
 complete:
@@ -5885,48 +4832,6 @@ complete:
    ...
    $H3.$H4('Content-Type', '$H5')
   }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '({ $H1 }: Request,$H2: Response) => {...}'
-  stsearch: '({ $_ }: Request,$_: Response) => {...}'
-complete:
-- '({ $H1 }: Request,$H2: Response) => {...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: params
-  stsearch: params
-complete:
-- params
----
-language: !lang 'javascript'
-pattern:
-  semgrep: query
-  stsearch: query
-complete:
-- query
----
-language: !lang 'javascript'
-pattern:
-  semgrep: cookies
-  stsearch: cookies
-complete:
-- cookies
----
-language: !lang 'javascript'
-pattern:
-  semgrep: headers
-  stsearch: headers
-complete:
-- headers
----
-language: !lang 'javascript'
-pattern:
-  semgrep: body
-  stsearch: body
-complete:
-- body
 ---
 language: !lang 'javascript'
 pattern:
@@ -5996,13 +4901,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: files.$H1.data.toString('utf8')
-  stsearch: files.$_.data.toString('utf8')
-complete:
-- files.$H1.data.toString('utf8')
----
-language: !lang 'javascript'
-pattern:
   semgrep: files.$H1[
   stsearch: files.$_[
 complete:
@@ -6052,38 +4950,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: files.$H1['data'].toString('utf8')
-  stsearch: files.$_['data'].toString('utf8')
-complete:
-- files.$H1['data'].toString('utf8')
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('$H2'
   stsearch: $_ = require('$_'
 complete:
 - $H1 = require('$H2')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('$H2')
-  stsearch: $_ = require('$_')
-complete:
-- $H1 = require('$H2')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from '$H2'
-  stsearch: import $_ from '$_'
-complete:
-- import $H1 from '$H2'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from '$H2'
-  stsearch: import * as $_ from '$_'
-complete:
-- import * as $H1 from '$H2'
 ---
 language: !lang 'javascript'
 pattern:
@@ -6155,13 +5025,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.$H2($H3, {...,noent:true,...}
   stsearch: $_.$_($_, {...noent:true...}
-complete:
-- $H1.$H2($H3, {...,noent:true,...})
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2($H3, {...,noent:true,...})
-  stsearch: $_.$_($_, {...noent:true...})
 complete:
 - $H1.$H2($H3, {...,noent:true,...})
 ---
@@ -6253,13 +5116,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '$H1.parseXml($H2, {..., noent: true, ...}, ...)'
-  stsearch: '$_.parseXml($_, {... noent: true ...} ...)'
-complete:
-- '$H1.parseXml($H2, {..., noent: true, ...}, ...)'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = {
   stsearch: $_ = {
 complete:
@@ -6302,13 +5158,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '$H1 = {..., noent: true, ...}'
-  stsearch: '$_ = {... noent: true ...}'
-complete:
-- '$H1 = {..., noent: true, ...}'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.parseXml( $H2
   stsearch: $_.parseXml( $_
 complete:
@@ -6325,13 +5174,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.parseXml( $H2, $H3
   stsearch: $_.parseXml( $_, $_
-complete:
-- $H1.parseXml( $H2, $H3 )
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.parseXml( $H2, $H3 )
-  stsearch: $_.parseXml( $_, $_ )
 complete:
 - $H1.parseXml( $H2, $H3 )
 ---
@@ -6437,13 +5279,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect("$H2"+$H3. ... .$H4)
-  stsearch: $_.redirect("$_"+$_... .$_)
-complete:
-- $H1.redirect("$H2"+$H3. ... .$H4)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect("$H2"+$H3. ... .$H4 +
   stsearch: $_.redirect("$_"+$_... .$_ +
 complete:
@@ -6460,13 +5295,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.redirect("$H2"+$H3. ... .$H4 + $...H5
   stsearch: $_.redirect("$_"+$_... .$_ + ...
-complete:
-- $H1.redirect("$H2"+$H3. ... .$H4 + $...H5)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.redirect("$H2"+$H3. ... .$H4 + $...H5)
-  stsearch: $_.redirect("$_"+$_... .$_ + ...)
 complete:
 - $H1.redirect("$H2"+$H3. ... .$H4 + $...H5)
 ---
@@ -6551,13 +5379,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect(`$H2${$H3. ... .$H4}...`)
-  stsearch: $_.redirect(`$_${$_... .$_}...`)
-complete:
-- $H1.redirect(`$H2${$H3. ... .$H4}...`)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect("$H2"+$H3.$H4
   stsearch: $_.redirect("$_"+$_.$_
 complete:
@@ -6582,13 +5403,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect("$H2"+$H3.$H4[...])
-  stsearch: $_.redirect("$_"+$_.$_[...])
-complete:
-- $H1.redirect("$H2"+$H3.$H4[...])
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect("$H2"+$H3.$H4[...] +
   stsearch: $_.redirect("$_"+$_.$_[...] +
 complete:
@@ -6605,13 +5419,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.redirect("$H2"+$H3.$H4[...] + $...H5
   stsearch: $_.redirect("$_"+$_.$_[...] + ...
-complete:
-- $H1.redirect("$H2"+$H3.$H4[...] + $...H5)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.redirect("$H2"+$H3.$H4[...] + $...H5)
-  stsearch: $_.redirect("$_"+$_.$_[...] + ...)
 complete:
 - $H1.redirect("$H2"+$H3.$H4[...] + $...H5)
 ---
@@ -6652,13 +5459,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect(`$H2${$H3.$H4[...]}...`)
-  stsearch: $_.redirect(`$_${$_.$_[...]}...`)
-complete:
-- $H1.redirect(`$H2${$H3.$H4[...]}...`)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1. ... .
   stsearch: $_... .
 complete:
@@ -6666,13 +5466,6 @@ complete:
 - $H1. ... .set('...'). ... .send($H2)
 - $H1. ... .type('...'). ... .send($H2)
 - $H1. ... .type('$H2'). ... .send(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1. ... .$H2
-  stsearch: $_... .$_
-complete:
-- $H1. ... .$H2
 ---
 language: !lang 'javascript'
 pattern:
@@ -6714,13 +5507,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect($H2. ... .$H3)
-  stsearch: $_.redirect($_... .$_)
-complete:
-- $H1.redirect($H2. ... .$H3)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect($H2. ... .$H3 +
   stsearch: $_.redirect($_... .$_ +
 complete:
@@ -6737,13 +5523,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.redirect($H2. ... .$H3 + $...H4
   stsearch: $_.redirect($_... .$_ + ...
-complete:
-- $H1.redirect($H2. ... .$H3 + $...H4)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.redirect($H2. ... .$H3 + $...H4)
-  stsearch: $_.redirect($_... .$_ + ...)
 complete:
 - $H1.redirect($H2. ... .$H3 + $...H4)
 ---
@@ -6803,13 +5582,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect(`${$H2. ... .$H3}...`)
-  stsearch: $_.redirect(`${$_... .$_}...`)
-complete:
-- $H1.redirect(`${$H2. ... .$H3}...`)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect($H2.$H3
   stsearch: $_.redirect($_.$_
 complete:
@@ -6842,13 +5614,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect($H2.$H3['...'])
-  stsearch: $_.redirect($_.$_['...'])
-complete:
-- $H1.redirect($H2.$H3['...'])
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect($H2.$H3['...'] +
   stsearch: $_.redirect($_.$_['...'] +
 complete:
@@ -6865,13 +5630,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.redirect($H2.$H3['...'] + $...H4
   stsearch: $_.redirect($_.$_['...'] + ...
-complete:
-- $H1.redirect($H2.$H3['...'] + $...H4)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.redirect($H2.$H3['...'] + $...H4)
-  stsearch: $_.redirect($_.$_['...'] + ...)
 complete:
 - $H1.redirect($H2.$H3['...'] + $...H4)
 ---
@@ -6919,13 +5677,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect(`${$H2.$H3['...']}...`)
-  stsearch: $_.redirect(`${$_.$_['...']}...`)
-complete:
-- $H1.redirect(`${$H2.$H3['...']}...`)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = $H2.
   stsearch: $_ = $_.
 complete:
@@ -6942,16 +5693,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = $H2. ... .
   stsearch: $_ = $_... .
-complete:
-- $H1 = $H2. ... .$H3
-- $H1 = $H2. ... .$H3 + $...H4
-- $H1 = $H2. ... .$H3['...']
-- $H1 = $H2. ... .$H3['...'] + $...H4
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = $H2. ... .$H3
-  stsearch: $_ = $_... .$_
 complete:
 - $H1 = $H2. ... .$H3
 - $H1 = $H2. ... .$H3 + $...H4
@@ -6984,14 +5725,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = $H2.$H3['...']
-  stsearch: $_ = $_.$_['...']
-complete:
-- $H1 = $H2.$H3['...']
-- $H1 = $H2.$H3['...'] + $...H4
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = $H2. ... .$H3 +
   stsearch: $_ = $_... .$_ +
 complete:
@@ -7006,13 +5739,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = $H2. ... .$H3 + $...H4
-  stsearch: $_ = $_... .$_ + ...
-complete:
-- $H1 = $H2. ... .$H3 + $...H4
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = $H2.$H3['...'] +
   stsearch: $_ = $_.$_['...'] +
 complete:
@@ -7022,13 +5748,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = $H2.$H3['...'] + $
   stsearch: $_ = $_.$_['...'] + $
-complete:
-- $H1 = $H2.$H3['...'] + $...H4
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = $H2.$H3['...'] + $...H4
-  stsearch: $_ = $_.$_['...'] + ...
 complete:
 - $H1 = $H2.$H3['...'] + $...H4
 ---
@@ -7094,13 +5813,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = `${$H2. ... .$H3}...`
-  stsearch: $_ = `${$_... .$_}...`
-complete:
-- $H1 = `${$H2. ... .$H3}...`
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = `${$H2.$H3
   stsearch: $_ = `${$_.$_
 complete:
@@ -7136,20 +5848,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = `${$H2.$H3['...']}...`
-  stsearch: $_ = `${$_.$_['...']}...`
-complete:
-- $H1 = `${$H2.$H3['...']}...`
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.redirect($H2)
-  stsearch: $_.redirect($_)
-complete:
-- $H1.redirect($H2)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect($H2 +
   stsearch: $_.redirect($_ +
 complete:
@@ -7171,13 +5869,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect($H2 + $...H3)
-  stsearch: $_.redirect($_ + ...)
-complete:
-- $H1.redirect($H2 + $...H3)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.redirect(`${$H2}
   stsearch: $_.redirect(`${$_}
 complete:
@@ -7192,31 +5883,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.redirect(`${$H2}...`)
-  stsearch: $_.redirect(`${$_}...`)
-complete:
-- $H1.redirect(`${$H2}...`)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('path'
   stsearch: $_ = require('path'
 complete:
 - $H1 = require('path')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('path')
-  stsearch: $_ = require('path')
-complete:
-- $H1 = require('path')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'path'
-  stsearch: import $_ from 'path'
-complete:
-- import $H1 from 'path'
 ---
 language: !lang 'javascript'
 pattern:
@@ -7255,13 +5925,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.join(...,$H2,...)
-  stsearch: $_.join(...$_...)
-complete:
-- $H1.join(...,$H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.resolve
   stsearch: $_.resolve
 complete:
@@ -7294,20 +5957,6 @@ pattern:
   stsearch: $_.resolve(...$_,
 complete:
 - $H1.resolve(...,$H2,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.resolve(...,$H2,...)
-  stsearch: $_.resolve(...$_...)
-complete:
-- $H1.resolve(...,$H2,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import 'path'
-  stsearch: import 'path'
-complete:
-- import 'path'
 ---
 language: !lang 'javascript'
 pattern:
@@ -7362,13 +6011,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: path.join(...,$H1,...)
-  stsearch: path.join(...$_...)
-complete:
-- path.join(...,$H1,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: path.resolve
   stsearch: path.resolve
 complete:
@@ -7404,13 +6046,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: path.resolve(...,$H1,...)
-  stsearch: path.resolve(...$_...)
-complete:
-- path.resolve(...,$H1,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.replace
   stsearch: $_.replace
 complete:
@@ -7420,13 +6055,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.replace(
   stsearch: $_.replace(
-complete:
-- $H1.replace(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.replace(...)
-  stsearch: $_.replace(...)
 complete:
 - $H1.replace(...)
 ---
@@ -7446,13 +6074,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.indexOf(...)
-  stsearch: $_.indexOf(...)
-complete:
-- $H1.indexOf(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: function ... (...)
   stsearch: function ... (...)
 complete:
@@ -7465,22 +6086,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: function ... (...) {
   stsearch: function ... (...) {
-complete:
-- |-
-  function ... (...) {
-   ...
-  }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    function ... (...) {
-     ...
-    }
-  stsearch: |-
-    function ... (...) {
-     ...
-    }
 complete:
 - |-
   function ... (...) {
@@ -7538,38 +6143,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: 'function ... (...,$H1: $H2, ...) {...}'
-  stsearch: 'function ... (...$_: $_ ...) {...}'
-complete:
-- 'function ... (...,$H1: $H2, ...) {...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2($H3,...)
-  stsearch: $_.$_($_...)
-complete:
-- $H1.$H2($H3,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2($H3,$H4
   stsearch: $_.$_($_,$_
 complete:
 - $H1.$H2($H3,$H4)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2($H3,$H4)
-  stsearch: $_.$_($_,$_)
-complete:
-- $H1.$H2($H3,$H4)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'express-session'
-  stsearch: import $_ from 'express-session'
-complete:
-- import $H1 from 'express-session'
 ---
 language: !lang 'javascript'
 pattern:
@@ -7608,20 +6185,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: import {..., $H1, ...} from 'express-session'
-  stsearch: import {... $_ ...} from 'express-session'
-complete:
-- import {..., $H1, ...} from 'express-session'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'express-session'
-  stsearch: import * as $_ from 'express-session'
-complete:
-- import * as $H1 from 'express-session'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.use($H2
   stsearch: $_.use($_
 complete:
@@ -7652,13 +6215,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.use($H2({...})
   stsearch: $_.use($_({...})
-complete:
-- $H1.use($H2({...}))
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.use($H2({...}))
-  stsearch: $_.use($_({...}))
 complete:
 - $H1.use($H2({...}))
 ---
@@ -7792,22 +6348,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = $H2
-    ...
-    $H3.use($H4($H5))
-  stsearch: |-
-    $_ = $_
-    ...
-    $_.use($_($_))
-complete:
-- |-
-  $H1 = $H2
-  ...
-  $H3.use($H4($H5))
----
-language: !lang 'javascript'
-pattern:
   semgrep: secret
   stsearch: secret
 complete:
@@ -7822,13 +6362,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: 'secret: ''$H1'''
-  stsearch: 'secret: ''$_'''
-complete:
-- 'secret: ''$H1'''
----
-language: !lang 'javascript'
-pattern:
   semgrep: function ... ($H1, ...)
   stsearch: function ... ($_ ...)
 complete:
@@ -7838,13 +6371,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: function ... ($H1, ...) {
   stsearch: function ... ($_ ...) {
-complete:
-- function ... ($H1, ...) {...}
----
-language: !lang 'javascript'
-pattern:
-  semgrep: function ... ($H1, ...) {...}
-  stsearch: function ... ($_ ...) {...}
 complete:
 - function ... ($H1, ...) {...}
 ---
@@ -7874,19 +6400,6 @@ pattern:
   stsearch: |-
     ({ $_ }: Request...) =>
     {
-complete:
-- |-
-  ({ $H1 }: Request,...) =>
-  {...}
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    ({ $H1 }: Request,...) =>
-    {...}
-  stsearch: |-
-    ({ $_ }: Request...) =>
-    {...}
 complete:
 - |-
   ({ $H1 }: Request,...) =>
@@ -7943,38 +6456,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '({ $H1 }: $H2.Request,...) => {...}'
-  stsearch: '({ $_ }: $_.Request...) => {...}'
-complete:
-- '({ $H1 }: $H2.Request,...) => {...}'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('request'
   stsearch: $_ = require('request'
 complete:
 - $H1 = require('request')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('request')
-  stsearch: $_ = require('request')
-complete:
-- $H1 = require('request')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'request'
-  stsearch: import * as $_ from 'request'
-complete:
-- import * as $H1 from 'request'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'request'
-  stsearch: import $_ from 'request'
-complete:
-- import $H1 from 'request'
 ---
 language: !lang 'javascript'
 pattern:
@@ -8040,13 +6525,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2("$H3"+$H4. ... .$H5)
-  stsearch: $_.$_("$_"+$_... .$_)
-complete:
-- $H1.$H2("$H3"+$H4. ... .$H5)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2("$H3"+$H4. ... .$H5 +
   stsearch: $_.$_("$_"+$_... .$_ +
 complete:
@@ -8063,13 +6541,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.$H2("$H3"+$H4. ... .$H5 + $...H6
   stsearch: $_.$_("$_"+$_... .$_ + ...
-complete:
-- $H1.$H2("$H3"+$H4. ... .$H5 + $...H6)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2("$H3"+$H4. ... .$H5 + $...H6)
-  stsearch: $_.$_("$_"+$_... .$_ + ...)
 complete:
 - $H1.$H2("$H3"+$H4. ... .$H5 + $...H6)
 ---
@@ -8159,13 +6630,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2(`$H3${$H4. ... .$H5}...`)
-  stsearch: $_.$_(`$_${$_... .$_}...`)
-complete:
-- $H1.$H2(`$H3${$H4. ... .$H5}...`)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2("$H3"+$H4.$H5
   stsearch: $_.$_("$_"+$_.$_
 complete:
@@ -8190,13 +6654,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2("$H3"+$H4.$H5[...])
-  stsearch: $_.$_("$_"+$_.$_[...])
-complete:
-- $H1.$H2("$H3"+$H4.$H5[...])
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2("$H3"+$H4.$H5[...] +
   stsearch: $_.$_("$_"+$_.$_[...] +
 complete:
@@ -8213,13 +6670,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.$H2("$H3"+$H4.$H5[...] + $...H6
   stsearch: $_.$_("$_"+$_.$_[...] + ...
-complete:
-- $H1.$H2("$H3"+$H4.$H5[...] + $...H6)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2("$H3"+$H4.$H5[...] + $...H6)
-  stsearch: $_.$_("$_"+$_.$_[...] + ...)
 complete:
 - $H1.$H2("$H3"+$H4.$H5[...] + $...H6)
 ---
@@ -8260,13 +6710,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2(`$H3${$H4.$H5[...]}...`)
-  stsearch: $_.$_(`$_${$_.$_[...]}...`)
-complete:
-- $H1.$H2(`$H3${$H4.$H5[...]}...`)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2($H3.
   stsearch: $_.$_($_.
 complete:
@@ -8300,13 +6743,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2($H3. ... .$H4,...)
-  stsearch: $_.$_($_... .$_...)
-complete:
-- $H1.$H2($H3. ... .$H4,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2($H3. ... .$H4 +
   stsearch: $_.$_($_... .$_ +
 complete:
@@ -8330,13 +6766,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.$H2($H3. ... .$H4 + $...H5,
   stsearch: $_.$_($_... .$_ + ...
-complete:
-- $H1.$H2($H3. ... .$H4 + $...H5,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2($H3. ... .$H4 + $...H5,...)
-  stsearch: $_.$_($_... .$_ + ......)
 complete:
 - $H1.$H2($H3. ... .$H4 + $...H5,...)
 ---
@@ -8403,13 +6832,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2(`${$H3. ... .$H4}...`,...)
-  stsearch: $_.$_(`${$_... .$_}...`...)
-complete:
-- $H1.$H2(`${$H3. ... .$H4}...`,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2($H3.$H4
   stsearch: $_.$_($_.$_
 complete:
@@ -8449,13 +6871,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2($H3.$H4['...'],...)
-  stsearch: $_.$_($_.$_['...']...)
-complete:
-- $H1.$H2($H3.$H4['...'],...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2($H3.$H4['...'] +
   stsearch: $_.$_($_.$_['...'] +
 complete:
@@ -8479,13 +6894,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.$H2($H3.$H4['...'] + $...H5,
   stsearch: $_.$_($_.$_['...'] + ...
-complete:
-- $H1.$H2($H3.$H4['...'] + $...H5,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2($H3.$H4['...'] + $...H5,...)
-  stsearch: $_.$_($_.$_['...'] + ......)
 complete:
 - $H1.$H2($H3.$H4['...'] + $...H5,...)
 ---
@@ -8540,13 +6948,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2(`${$H3.$H4['...']}...`,...)
-  stsearch: $_.$_(`${$_.$_['...']}...`...)
-complete:
-- $H1.$H2(`${$H3.$H4['...']}...`,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = $H2. ... .$H3[
   stsearch: $_ = $_... .$_[
 complete:
@@ -8563,14 +6964,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = $H2. ... .$H3['...']
-  stsearch: $_ = $_... .$_['...']
-complete:
-- $H1 = $H2. ... .$H3['...']
-- $H1 = $H2. ... .$H3['...'] + $...H4
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = $H2. ... .$H3['...'] +
   stsearch: $_ = $_... .$_['...'] +
 complete:
@@ -8580,13 +6973,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = $H2. ... .$H3['...'] + $
   stsearch: $_ = $_... .$_['...'] + $
-complete:
-- $H1 = $H2. ... .$H3['...'] + $...H4
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = $H2. ... .$H3['...'] + $...H4
-  stsearch: $_ = $_... .$_['...'] + ...
 complete:
 - $H1 = $H2. ... .$H3['...'] + $...H4
 ---
@@ -8615,13 +7001,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = `${$H2. ... .$H3['...']}
   stsearch: $_ = `${$_... .$_['...']}
-complete:
-- $H1 = `${$H2. ... .$H3['...']}...`
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = `${$H2. ... .$H3['...']}...`
-  stsearch: $_ = `${$_... .$_['...']}...`
 complete:
 - $H1 = `${$H2. ... .$H3['...']}...`
 ---
@@ -8667,13 +7046,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = "$H2"+ $H3. ... .
   stsearch: $_ = "$_"+ $_... .
-complete:
-- $H1 = "$H2"+ $H3. ... .$H4
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = "$H2"+ $H3. ... .$H4
-  stsearch: $_ = "$_"+ $_... .$_
 complete:
 - $H1 = "$H2"+ $H3. ... .$H4
 ---
@@ -8725,13 +7097,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = "$H2"+$H3. ... .$H4 + $...H5
-  stsearch: $_ = "$_"+$_... .$_ + ...
-complete:
-- $H1 = "$H2"+$H3. ... .$H4 + $...H5
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = "$H2"+$H3.$H4
   stsearch: $_ = "$_"+$_.$_
 complete:
@@ -8748,14 +7113,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = "$H2"+$H3.$H4[...]
-  stsearch: $_ = "$_"+$_.$_[...]
-complete:
-- $H1 = "$H2"+$H3.$H4[...]
-- $H1 = "$H2"+$H3.$H4[...] + $...H5
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = "$H2"+$H3.$H4[...] +
   stsearch: $_ = "$_"+$_.$_[...] +
 complete:
@@ -8765,13 +7122,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = "$H2"+$H3.$H4[...] + $
   stsearch: $_ = "$_"+$_.$_[...] + $
-complete:
-- $H1 = "$H2"+$H3.$H4[...] + $...H5
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = "$H2"+$H3.$H4[...] + $...H5
-  stsearch: $_ = "$_"+$_.$_[...] + ...
 complete:
 - $H1 = "$H2"+$H3.$H4[...] + $...H5
 ---
@@ -8840,13 +7190,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = `$H2${$H3.$H4[...]}...`
-  stsearch: $_ = `$_${$_.$_[...]}...`
-complete:
-- $H1 = `$H2${$H3.$H4[...]}...`
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2($H3 +
   stsearch: $_.$_($_ +
 complete:
@@ -8875,13 +7218,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2($H3 + $...H4,...)
-  stsearch: $_.$_($_ + ......)
-complete:
-- $H1.$H2($H3 + $...H4,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2(`${$H3}
   stsearch: $_.$_(`${$_}
 complete:
@@ -8903,22 +7239,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2(`${$H3}...`,...)
-  stsearch: $_.$_(`${$_}...`...)
-complete:
-- $H1.$H2(`${$H3}...`,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2("$H3"+$H4,
   stsearch: $_.$_("$_"+$_,
-complete:
-- $H1.$H2("$H3"+$H4,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2("$H3"+$H4,...)
-  stsearch: $_.$_("$_"+$_...)
 complete:
 - $H1.$H2("$H3"+$H4,...)
 ---
@@ -8952,13 +7274,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2("$H3"+$H4 + $...H5,...)
-  stsearch: $_.$_("$_"+$_ + ......)
-complete:
-- $H1.$H2("$H3"+$H4 + $...H5,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.$H2(`$H3${$H4}
   stsearch: $_.$_(`$_${$_}
 complete:
@@ -8980,29 +7295,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2(`$H3${$H4}...`,...)
-  stsearch: $_.$_(`$_${$_}...`...)
-complete:
-- $H1.$H2(`$H3${$H4}...`,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.$H2(...)
-  stsearch: $_.$_(...)
-complete:
-- $H1.$H2(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: '({ $H1 }: Request,$H2: Response, $H3: NextFunction) => {'
   stsearch: '({ $_ }: Request,$_: Response, $_: NextFunction) => {'
-complete:
-- '({ $H1 }: Request,$H2: Response, $H3: NextFunction) => {...}'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '({ $H1 }: Request,$H2: Response, $H3: NextFunction) => {...}'
-  stsearch: '({ $_ }: Request,$_: Response, $_: NextFunction) => {...}'
 complete:
 - '({ $H1 }: Request,$H2: Response, $H3: NextFunction) => {...}'
 ---
@@ -9012,20 +7306,6 @@ pattern:
   stsearch: require('xml2json'
 complete:
 - require('xml2json')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: require('xml2json')
-  stsearch: require('xml2json')
-complete:
-- require('xml2json')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import 'xml2json'
-  stsearch: import 'xml2json'
-complete:
-- import 'xml2json'
 ---
 language: !lang 'javascript'
 pattern:
@@ -9134,22 +7414,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.on('...', function(...) { ... $H2.toJson($H3,...);
-  stsearch: $_.on('...', function(...) { ... $_.toJson($_...);
-complete:
-- $H1.on('...', function(...) { ... $H2.toJson($H3,...); ... })
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.on('...', function(...) { ... $H2.toJson($H3,...); ... }
   stsearch: $_.on('...', function(...) { ... $_.toJson($_...); ... }
-complete:
-- $H1.on('...', function(...) { ... $H2.toJson($H3,...); ... })
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.on('...', function(...) { ... $H2.toJson($H3,...); ... })
-  stsearch: $_.on('...', function(...) { ... $_.toJson($_...); ... })
 complete:
 - $H1.on('...', function(...) { ... $H2.toJson($H3,...); ... })
 ---
@@ -9169,13 +7435,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = query.$H2
-  stsearch: $_ = query.$_
-complete:
-- $H1 = query.$H2
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = $H2.query
   stsearch: $_ = $_.query
 complete:
@@ -9185,13 +7444,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = $H2.query.
   stsearch: $_ = $_.query.
-complete:
-- $H1 = $H2.query.$H3
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = $H2.query.$H3
-  stsearch: $_ = $_.query.$_
 complete:
 - $H1 = $H2.query.$H3
 ---
@@ -9208,20 +7460,6 @@ pattern:
   stsearch: $_ = req.
 complete:
 - $H1 = req.$H2
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = req.$H2
-  stsearch: $_ = req.$_
-complete:
-- $H1 = req.$H2
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.redirect(...)
-  stsearch: $_.redirect(...)
-complete:
-- $H1.redirect(...)
 ---
 language: !lang 'javascript'
 pattern:
@@ -9250,13 +7488,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1[...] = $H2
-  stsearch: $_[...] = $_
-complete:
-- $H1[...] = $H2
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1["..."
   stsearch: $_["..."
 complete:
@@ -9278,20 +7509,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1["..."] = $H2
-  stsearch: $_["..."] = $_
-complete:
-- $H1["..."] = $H2
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1[...] = "..."
-  stsearch: $_[...] = "..."
-complete:
-- $H1[...] = "..."
----
-language: !lang 'javascript'
-pattern:
   semgrep: '"..."'
   stsearch: '"..."'
 complete:
@@ -9306,22 +7523,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '"..." + $H1'
-  stsearch: '"..." + $_'
-complete:
-- '"..." + $H1'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 +
   stsearch: $_ +
-complete:
-- $H1 + "..."
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 + "..."
-  stsearch: $_ + "..."
 complete:
 - $H1 + "..."
 ---
@@ -9352,23 +7555,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: var $H1 = $H2
-  stsearch: var $_ = $_
-complete:
-- var $H1 = $H2
-- var $H1 = $H2.$H3
----
-language: !lang 'javascript'
-pattern:
   semgrep: var $H1 = $H2.
   stsearch: var $_ = $_.
-complete:
-- var $H1 = $H2.$H3
----
-language: !lang 'javascript'
-pattern:
-  semgrep: var $H1 = $H2.$H3
-  stsearch: var $_ = $_.$_
 complete:
 - var $H1 = $H2.$H3
 ---
@@ -9399,13 +7587,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.render($H2,
   stsearch: $_.render($_,
-complete:
-- $H1.render($H2, ...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.render($H2, ...)
-  stsearch: $_.render($_ ...)
 complete:
 - $H1.render($H2, ...)
 ---
@@ -9548,25 +7729,6 @@ pattern:
     function ... ($_, $_) {
      ...
      $_.$_('Content-Type', '$_')
-complete:
-- |-
-  function ... ($H1, $H2) {
-   ...
-   $H3.$H4('Content-Type', '$H5')
-  }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    function ... ($H1, $H2) {
-     ...
-     $H3.$H4('Content-Type', '$H5')
-    }
-  stsearch: |-
-    function ... ($_, $_) {
-     ...
-     $_.$_('Content-Type', '$_')
-    }
 complete:
 - |-
   function ... ($H1, $H2) {
@@ -9742,25 +7904,6 @@ complete:
 language: !lang 'javascript'
 pattern:
   semgrep: |-
-    $H1.$H2(..., function $H3($H4, $H5) {
-     ...
-     $H6.$H7('Content-Type', '$H8')
-    })
-  stsearch: |-
-    $_.$_(... function $_($_, $_) {
-     ...
-     $_.$_('Content-Type', '$_')
-    })
-complete:
-- |-
-  $H1.$H2(..., function $H3($H4, $H5) {
-   ...
-   $H6.$H7('Content-Type', '$H8')
-  })
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
     function ... ($H1, $H2, $H3) {
      ...
      $H4
@@ -9907,25 +8050,6 @@ complete:
 language: !lang 'javascript'
 pattern:
   semgrep: |-
-    function ... ($H1, $H2, $H3) {
-     ...
-     $H4.$H5('Content-Type', '$H6')
-    }
-  stsearch: |-
-    function ... ($_, $_, $_) {
-     ...
-     $_.$_('Content-Type', '$_')
-    }
-complete:
-- |-
-  function ... ($H1, $H2, $H3) {
-   ...
-   $H4.$H5('Content-Type', '$H6')
-  }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
     function ... ($H1, $H2) {
      ...
      $H3.set
@@ -9984,25 +8108,6 @@ pattern:
     function ... ($_, $_) {
      ...
      $_.set('$_')
-complete:
-- |-
-  function ... ($H1, $H2) {
-   ...
-   $H3.set('$H4')
-  }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    function ... ($H1, $H2) {
-     ...
-     $H3.set('$H4')
-    }
-  stsearch: |-
-    function ... ($_, $_) {
-     ...
-     $_.set('$_')
-    }
 complete:
 - |-
   function ... ($H1, $H2) {
@@ -10100,25 +8205,6 @@ complete:
 language: !lang 'javascript'
 pattern:
   semgrep: |-
-    $H1.$H2(..., function $H3($H4, $H5) {
-     ...
-     $H6.set('$H7')
-    })
-  stsearch: |-
-    $_.$_(... function $_($_, $_) {
-     ...
-     $_.set('$_')
-    })
-complete:
-- |-
-  $H1.$H2(..., function $H3($H4, $H5) {
-   ...
-   $H6.set('$H7')
-  })
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
     function ... ($H1, $H2, $H3) {
      ...
      $H4.set
@@ -10177,25 +8263,6 @@ pattern:
     function ... ($_, $_, $_) {
      ...
      $_.set('$_')
-complete:
-- |-
-  function ... ($H1, $H2, $H3) {
-   ...
-   $H4.set('$H5')
-  }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    function ... ($H1, $H2, $H3) {
-     ...
-     $H4.set('$H5')
-    }
-  stsearch: |-
-    function ... ($_, $_, $_) {
-     ...
-     $_.set('$_')
-    }
 complete:
 - |-
   function ... ($H1, $H2, $H3) {
@@ -10367,28 +8434,6 @@ pattern:
     {
      ...
      $_.$_('Content-Type', '$_')
-complete:
-- |-
-  ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
-  {
-   ...
-   $H4.$H5('Content-Type', '$H6')
-  }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
-    ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
-    {
-     ...
-     $H4.$H5('Content-Type', '$H6')
-    }
-  stsearch: |-
-    ({ $_ }: Request,$_: Response, $_: NextFunction) =>
-    {
-     ...
-     $_.$_('Content-Type', '$_')
-    }
 complete:
 - |-
   ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
@@ -10536,25 +8581,6 @@ complete:
 language: !lang 'javascript'
 pattern:
   semgrep: |-
-    ({ $H1 }: Request,$H2: Response) => {
-     ...
-     $H3.$H4('Content-Type', '$H5')
-    }
-  stsearch: |-
-    ({ $_ }: Request,$_: Response) => {
-     ...
-     $_.$_('Content-Type', '$_')
-    }
-complete:
-- |-
-  ({ $H1 }: Request,$H2: Response) => {
-   ...
-   $H3.$H4('Content-Type', '$H5')
-  }
----
-language: !lang 'javascript'
-pattern:
-  semgrep: |-
     ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
     {
      ...
@@ -10634,28 +8660,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
-    {
-     ...
-     $H4.set('$H5')
-    }
-  stsearch: |-
-    ({ $_ }: Request,$_: Response, $_: NextFunction) =>
-    {
-     ...
-     $_.set('$_')
-    }
-complete:
-- |-
-  ({ $H1 }: Request,$H2: Response, $H3: NextFunction) =>
-  {
-   ...
-   $H4.set('$H5')
-  }
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.write
   stsearch: $_.write
 complete:
@@ -10677,13 +8681,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.write($H2)
-  stsearch: $_.write($_)
-complete:
-- $H1.write($H2)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.send
   stsearch: $_.send
 complete:
@@ -10700,13 +8697,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.send($H2
   stsearch: $_.send($_
-complete:
-- $H1.send($H2)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.send($H2)
-  stsearch: $_.send($_)
 complete:
 - $H1.send($H2)
 ---
@@ -10770,13 +8760,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1. ... .set('...'). ... .send($H2
   stsearch: $_... .set('...')... .send($_
-complete:
-- $H1. ... .set('...'). ... .send($H2)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1. ... .set('...'). ... .send($H2)
-  stsearch: $_... .set('...')... .send($_)
 complete:
 - $H1. ... .set('...'). ... .send($H2)
 ---
@@ -10847,36 +8830,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1. ... .type('...'). ... .send($H2)
-  stsearch: $_... .type('...')... .send($_)
-complete:
-- $H1. ... .type('...'). ... .send($H2)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from "underscore.string"
-  stsearch: import $_ from "underscore.string"
-complete:
-- import $H1 from "underscore.string"
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from "underscore.string"
-  stsearch: import * as $_ from "underscore.string"
-complete:
-- import * as $H1 from "underscore.string"
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require("underscore.string"
   stsearch: $_ = require("underscore.string"
-complete:
-- $H1 = require("underscore.string")
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require("underscore.string")
-  stsearch: $_ = require("underscore.string")
 complete:
 - $H1 = require("underscore.string")
 ---
@@ -10893,20 +8848,6 @@ pattern:
   stsearch: $_.escapeHTML(
 complete:
 - $H1.escapeHTML(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.escapeHTML(...)
-  stsearch: $_.escapeHTML(...)
-complete:
-- $H1.escapeHTML(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from "dompurify"
-  stsearch: import $_ from "dompurify"
-complete:
-- import $H1 from "dompurify"
 ---
 language: !lang 'javascript'
 pattern:
@@ -10948,20 +8889,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: import { ..., $H1,... } from "dompurify"
-  stsearch: import { ... $_... } from "dompurify"
-complete:
-- import { ..., $H1,... } from "dompurify"
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from "dompurify"
-  stsearch: import * as $_ from "dompurify"
-complete:
-- import * as $H1 from "dompurify"
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require("dompurify"
   stsearch: $_ = require("dompurify"
 complete:
@@ -10969,36 +8896,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require("dompurify")
-  stsearch: $_ = require("dompurify")
-complete:
-- $H1 = require("dompurify")
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from "isomorphic-dompurify"
-  stsearch: import $_ from "isomorphic-dompurify"
-complete:
-- import $H1 from "isomorphic-dompurify"
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from "isomorphic-dompurify"
-  stsearch: import * as $_ from "isomorphic-dompurify"
-complete:
-- import * as $H1 from "isomorphic-dompurify"
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require("isomorphic-dompurify"
   stsearch: $_ = require("isomorphic-dompurify"
-complete:
-- $H1 = require("isomorphic-dompurify")
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require("isomorphic-dompurify")
-  stsearch: $_ = require("isomorphic-dompurify")
 complete:
 - $H1 = require("isomorphic-dompurify")
 ---
@@ -11018,34 +8917,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.sanitize(...)
-  stsearch: $_.sanitize(...)
-complete:
-- $H1.sanitize(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = $H2.sanitize
-  stsearch: $_ = $_.sanitize
-complete:
-- $H1 = $H2.sanitize
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'xss'
-  stsearch: import $_ from 'xss'
-complete:
-- import $H1 from 'xss'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'xss'
-  stsearch: import * as $_ from 'xss'
-complete:
-- import * as $H1 from 'xss'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require("xss"
   stsearch: $_ = require("xss"
 complete:
@@ -11053,36 +8924,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require("xss")
-  stsearch: $_ = require("xss")
-complete:
-- $H1 = require("xss")
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'sanitize-html'
-  stsearch: import $_ from 'sanitize-html'
-complete:
-- import $H1 from 'sanitize-html'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from "sanitize-html"
-  stsearch: import * as $_ from "sanitize-html"
-complete:
-- import * as $H1 from "sanitize-html"
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require("sanitize-html"
   stsearch: $_ = require("sanitize-html"
-complete:
-- $H1 = require("sanitize-html")
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require("sanitize-html")
-  stsearch: $_ = require("sanitize-html")
 complete:
 - $H1 = require("sanitize-html")
 ---
@@ -11110,34 +8953,6 @@ pattern:
   stsearch: $_ = new Remarkable(
 complete:
 - $H1 = new Remarkable()
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = new Remarkable()
-  stsearch: $_ = new Remarkable()
-complete:
-- $H1 = new Remarkable()
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.render(...)
-  stsearch: $_.render(...)
-complete:
-- $H1.render(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'express-xss-sanitizer'
-  stsearch: import $_ from 'express-xss-sanitizer'
-complete:
-- import $H1 from 'express-xss-sanitizer'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from "express-xss-sanitizer"
-  stsearch: import * as $_ from "express-xss-sanitizer"
-complete:
-- import * as $H1 from "express-xss-sanitizer"
 ---
 language: !lang 'javascript'
 pattern:
@@ -11211,13 +9026,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: const { ..., $H1, ... } = require('express-xss-sanitizer')
-  stsearch: const { ... $_ ... } = require('express-xss-sanitizer')
-complete:
-- const { ..., $H1, ... } = require('express-xss-sanitizer')
----
-language: !lang 'javascript'
-pattern:
   semgrep: var {
   stsearch: var {
 complete:
@@ -11276,13 +9084,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: var { ..., $H1, ... } = require('express-xss-sanitizer'
   stsearch: var { ... $_ ... } = require('express-xss-sanitizer'
-complete:
-- var { ..., $H1, ... } = require('express-xss-sanitizer')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: var { ..., $H1, ... } = require('express-xss-sanitizer')
-  stsearch: var { ... $_ ... } = require('express-xss-sanitizer')
 complete:
 - var { ..., $H1, ... } = require('express-xss-sanitizer')
 ---
@@ -11358,22 +9159,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: let { ...,$H1,... } = require('express-xss-sanitizer')
-  stsearch: let { ...$_... } = require('express-xss-sanitizer')
-complete:
-- let { ...,$H1,... } = require('express-xss-sanitizer')
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require("express-xss-sanitizer"
   stsearch: $_ = require("express-xss-sanitizer"
-complete:
-- $H1 = require("express-xss-sanitizer")
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require("express-xss-sanitizer")
-  stsearch: $_ = require("express-xss-sanitizer")
 complete:
 - $H1 = require("express-xss-sanitizer")
 ---
@@ -11421,13 +9208,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1. ... .type('$H2'). ... .send(...)
-  stsearch: $_... .type('$_')... .send(...)
-complete:
-- $H1. ... .type('$H2'). ... .send(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: Mustache
   stsearch: Mustache
 complete:
@@ -11456,22 +9236,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: Mustache.escape = $H1
-  stsearch: Mustache.escape = $_
-complete:
-- Mustache.escape = $H1
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require("mustache"
   stsearch: $_ = require("mustache"
-complete:
-- $H1 = require("mustache")
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require("mustache")
-  stsearch: $_ = require("mustache")
 complete:
 - $H1 = require("mustache")
 ---
@@ -11486,13 +9252,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.escape =
   stsearch: $_.escape =
-complete:
-- $H1.escape = $H2
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.escape = $H2
-  stsearch: $_.escape = $_
 complete:
 - $H1.escape = $H2
 ---
@@ -11541,13 +9300,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.set($H2, $H3)
-  stsearch: $_.set($_, $_)
-complete:
-- $H1.set($H2, $H3)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.header
   stsearch: $_.header
 complete:
@@ -11587,13 +9339,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.header($H2, $H3)
-  stsearch: $_.header($_, $_)
-complete:
-- $H1.header($H2, $H3)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.setHeader
   stsearch: $_.setHeader
 complete:
@@ -11628,13 +9373,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.setHeader($H2, $H3
   stsearch: $_.setHeader($_, $_
-complete:
-- $H1.setHeader($H2, $H3)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.setHeader($H2, $H3)
-  stsearch: $_.setHeader($_, $_)
 complete:
 - $H1.setHeader($H2, $H3)
 ---
@@ -11680,13 +9418,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '$H1.set({$H2: $H3},'
   stsearch: '$_.set({$_: $_},'
-complete:
-- '$H1.set({$H2: $H3}, ...)'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '$H1.set({$H2: $H3}, ...)'
-  stsearch: '$_.set({$_: $_} ...)'
 complete:
 - '$H1.set({$H2: $H3}, ...)'
 ---
@@ -11769,13 +9500,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '$H1.writeHead($H2, {$H3: $H4}, ...)'
-  stsearch: '$_.writeHead($_, {$_: $_} ...)'
-complete:
-- '$H1.writeHead($H2, {$H3: $H4}, ...)'
----
-language: !lang 'javascript'
-pattern:
   semgrep: Object
   stsearch: Object
 complete:
@@ -11804,38 +9528,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: Object.assign(...)
-  stsearch: Object.assign(...)
-complete:
-- Object.assign(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('node-expat'
   stsearch: $_ = require('node-expat'
 complete:
 - $H1 = require('node-expat')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('node-expat')
-  stsearch: $_ = require('node-expat')
-complete:
-- $H1 = require('node-expat')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'node-expat'
-  stsearch: import $_ from 'node-expat'
-complete:
-- import $H1 from 'node-expat'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'node-expat'
-  stsearch: import * as $_ from 'node-expat'
-complete:
-- import * as $H1 from 'node-expat'
 ---
 language: !lang 'javascript'
 pattern:
@@ -11868,13 +9564,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = new $H2.Parser(...)
-  stsearch: $_ = new $_.Parser(...)
-complete:
-- $H1 = new $H2.Parser(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.parse
   stsearch: $_.parse
 complete:
@@ -11896,13 +9585,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.parse($H2)
-  stsearch: $_.parse($_)
-complete:
-- $H1.parse($H2)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('pug'
   stsearch: $_ = require('pug'
 complete:
@@ -11910,38 +9592,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('pug')
-  stsearch: $_ = require('pug')
-complete:
-- $H1 = require('pug')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'pug'
-  stsearch: import * as $_ from 'pug'
-complete:
-- import * as $H1 from 'pug'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('jade'
   stsearch: $_ = require('jade'
 complete:
 - $H1 = require('jade')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('jade')
-  stsearch: $_ = require('jade')
-complete:
-- $H1 = require('jade')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'jade'
-  stsearch: import * as $_ from 'jade'
-complete:
-- import * as $H1 from 'jade'
 ---
 language: !lang 'javascript'
 pattern:
@@ -11954,13 +9608,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.compile(
   stsearch: $_.compile(
-complete:
-- $H1.compile(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.compile(...)
-  stsearch: $_.compile(...)
 complete:
 - $H1.compile(...)
 ---
@@ -11980,13 +9627,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.compileClient(...)
-  stsearch: $_.compileClient(...)
-complete:
-- $H1.compileClient(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.compileClientWithDependenciesTracked
   stsearch: $_.compileClientWithDependenciesTracked
 complete:
@@ -12001,31 +9641,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.compileClientWithDependenciesTracked(...)
-  stsearch: $_.compileClientWithDependenciesTracked(...)
-complete:
-- $H1.compileClientWithDependenciesTracked(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('dot'
   stsearch: $_ = require('dot'
 complete:
 - $H1 = require('dot')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('dot')
-  stsearch: $_ = require('dot')
-complete:
-- $H1 = require('dot')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'dot'
-  stsearch: import * as $_ from 'dot'
-complete:
-- import * as $H1 from 'dot'
 ---
 language: !lang 'javascript'
 pattern:
@@ -12043,13 +9662,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.template(...)
-  stsearch: $_.template(...)
-complete:
-- $H1.template(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('ejs'
   stsearch: $_ = require('ejs'
 complete:
@@ -12057,38 +9669,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('ejs')
-  stsearch: $_ = require('ejs')
-complete:
-- $H1 = require('ejs')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'ejs'
-  stsearch: import * as $_ from 'ejs'
-complete:
-- import * as $H1 from 'ejs'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('nunjucks'
   stsearch: $_ = require('nunjucks'
 complete:
 - $H1 = require('nunjucks')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('nunjucks')
-  stsearch: $_ = require('nunjucks')
-complete:
-- $H1 = require('nunjucks')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'nunjucks'
-  stsearch: import * as $_ from 'nunjucks'
-complete:
-- import * as $H1 from 'nunjucks'
 ---
 language: !lang 'javascript'
 pattern:
@@ -12106,31 +9690,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.renderString(...)
-  stsearch: $_.renderString(...)
-complete:
-- $H1.renderString(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('lodash'
   stsearch: $_ = require('lodash'
 complete:
 - $H1 = require('lodash')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('lodash')
-  stsearch: $_ = require('lodash')
-complete:
-- $H1 = require('lodash')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'lodash'
-  stsearch: import * as $_ from 'lodash'
-complete:
-- import * as $H1 from 'lodash'
 ---
 language: !lang 'javascript'
 pattern:
@@ -12141,38 +9704,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('mustache')
-  stsearch: $_ = require('mustache')
-complete:
-- $H1 = require('mustache')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'mustache'
-  stsearch: import * as $_ from 'mustache'
-complete:
-- import * as $H1 from 'mustache'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('eta'
   stsearch: $_ = require('eta'
 complete:
 - $H1 = require('eta')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('eta')
-  stsearch: $_ = require('eta')
-complete:
-- $H1 = require('eta')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'eta'
-  stsearch: import * as $_ from 'eta'
-complete:
-- import * as $H1 from 'eta'
 ---
 language: !lang 'javascript'
 pattern:
@@ -12183,20 +9718,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('squirrelly')
-  stsearch: $_ = require('squirrelly')
-complete:
-- $H1 = require('squirrelly')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'squirrelly'
-  stsearch: import * as $_ from 'squirrelly'
-complete:
-- import * as $H1 from 'squirrelly'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('hogan.js'
   stsearch: $_ = require('hogan.js'
 complete:
@@ -12204,38 +9725,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('hogan.js')
-  stsearch: $_ = require('hogan.js')
-complete:
-- $H1 = require('hogan.js')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'hogan.js'
-  stsearch: import * as $_ from 'hogan.js'
-complete:
-- import * as $H1 from 'hogan.js'
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('handlebars'
   stsearch: $_ = require('handlebars'
 complete:
 - $H1 = require('handlebars')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('handlebars')
-  stsearch: $_ = require('handlebars')
-complete:
-- $H1 = require('handlebars')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'handlebars'
-  stsearch: import * as $_ from 'handlebars'
-complete:
-- import * as $H1 from 'handlebars'
 ---
 language: !lang 'javascript'
 pattern:
@@ -12323,27 +9816,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.$H2($H3).then((...,$H4,...)=>{...})
-  stsearch: $_.$_($_).then((...$_...)=>{...})
-complete:
-- $H1.$H2($H3).then((...,$H4,...)=>{...})
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import $H1 from 'express-jwt'
-  stsearch: import $_ from 'express-jwt'
-complete:
-- import $H1 from 'express-jwt'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import * as $H1 from 'express-jwt'
-  stsearch: import * as $_ from 'express-jwt'
-complete:
-- import * as $H1 from 'express-jwt'
----
-language: !lang 'javascript'
-pattern:
   semgrep: import { ..., $H1, ... }
   stsearch: import { ... $_ ... }
 complete:
@@ -12353,13 +9825,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: import { ..., $H1, ... } from
   stsearch: import { ... $_ ... } from
-complete:
-- import { ..., $H1, ... } from 'express-jwt'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import { ..., $H1, ... } from 'express-jwt'
-  stsearch: import { ... $_ ... } from 'express-jwt'
 complete:
 - import { ..., $H1, ... } from 'express-jwt'
 ---
@@ -12418,23 +9883,6 @@ pattern:
   stsearch: '$_({...secret: "$_"...},'
 complete:
 - '$H1({...,secret: "$H2",...},...)'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '$H1({...,secret: "$H2",...},...)'
-  stsearch: '$_({...secret: "$_"...}...)'
-complete:
-- '$H1({...,secret: "$H2",...},...)'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = "$H2";
-  stsearch: $_ = "$_";
-complete:
-- |-
-  $H1 = "$H2";
-  ...
-  $H3({...,secret: $H4},...);
 ---
 language: !lang 'javascript'
 pattern:
@@ -12598,40 +10046,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: |-
-    $H1 = "$H2";
-    ...
-    $H3({...,secret: $H4},...);
-  stsearch: |-
-    $_ = "$_";
-    ...
-    $_({...secret: $_}...);
-complete:
-- |-
-  $H1 = "$H2";
-  ...
-  $H3({...,secret: $H4},...);
----
-language: !lang 'javascript'
-pattern:
   semgrep: require('phantom'
   stsearch: require('phantom'
 complete:
 - require('phantom')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: require('phantom')
-  stsearch: require('phantom')
-complete:
-- require('phantom')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import 'phantom'
-  stsearch: import 'phantom'
-complete:
-- import 'phantom'
 ---
 language: !lang 'javascript'
 pattern:
@@ -12658,13 +10076,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.open($H2,
   stsearch: $_.open($_,
-complete:
-- $H1.open($H2,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.open($H2,...)
-  stsearch: $_.open($_...)
 complete:
 - $H1.open($H2,...)
 ---
@@ -12698,13 +10109,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.setContent($H2,...)
-  stsearch: $_.setContent($_...)
-complete:
-- $H1.setContent($H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.openUrl
   stsearch: $_.openUrl
 complete:
@@ -12733,13 +10137,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.openUrl($H2,...)
-  stsearch: $_.openUrl($_...)
-complete:
-- $H1.openUrl($H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.evaluateJavaScript
   stsearch: $_.evaluateJavaScript
 complete:
@@ -12763,13 +10160,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.evaluateJavaScript($H2,
   stsearch: $_.evaluateJavaScript($_,
-complete:
-- $H1.evaluateJavaScript($H2,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.evaluateJavaScript($H2,...)
-  stsearch: $_.evaluateJavaScript($_...)
 complete:
 - $H1.evaluateJavaScript($H2,...)
 ---
@@ -12817,31 +10207,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.property("content",$H2,...)
-  stsearch: $_.property("content",$_...)
-complete:
-- $H1.property("content",$H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: require('puppeteer'
   stsearch: require('puppeteer'
 complete:
 - require('puppeteer')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: require('puppeteer')
-  stsearch: require('puppeteer')
-complete:
-- require('puppeteer')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: import 'puppeteer'
-  stsearch: import 'puppeteer'
-complete:
-- import 'puppeteer'
 ---
 language: !lang 'javascript'
 pattern:
@@ -12868,13 +10237,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.goto($H2,
   stsearch: $_.goto($_,
-complete:
-- $H1.goto($H2,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.goto($H2,...)
-  stsearch: $_.goto($_...)
 complete:
 - $H1.goto($H2,...)
 ---
@@ -12912,13 +10274,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.evaluate($H2,...)
-  stsearch: $_.evaluate($_...)
-complete:
-- $H1.evaluate($H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.evaluate($H2,$H3
   stsearch: $_.evaluate($_,$_
 complete:
@@ -12928,13 +10283,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.evaluate($H2,$H3,
   stsearch: $_.evaluate($_,$_,
-complete:
-- $H1.evaluate($H2,$H3,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.evaluate($H2,$H3,...)
-  stsearch: $_.evaluate($_,$_...)
 complete:
 - $H1.evaluate($H2,$H3,...)
 ---
@@ -12972,13 +10320,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.evaluateHandle($H2,...)
-  stsearch: $_.evaluateHandle($_...)
-complete:
-- $H1.evaluateHandle($H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.evaluateHandle($H2,$H3
   stsearch: $_.evaluateHandle($_,$_
 complete:
@@ -12988,13 +10329,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.evaluateHandle($H2,$H3,
   stsearch: $_.evaluateHandle($_,$_,
-complete:
-- $H1.evaluateHandle($H2,$H3,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.evaluateHandle($H2,$H3,...)
-  stsearch: $_.evaluateHandle($_,$_...)
 complete:
 - $H1.evaluateHandle($H2,$H3,...)
 ---
@@ -13032,13 +10366,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.evaluateOnNewDocument($H2,...)
-  stsearch: $_.evaluateOnNewDocument($_...)
-complete:
-- $H1.evaluateOnNewDocument($H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1.evaluateOnNewDocument($H2,$H3
   stsearch: $_.evaluateOnNewDocument($_,$_
 complete:
@@ -13053,13 +10380,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.evaluateOnNewDocument($H2,$H3,...)
-  stsearch: $_.evaluateOnNewDocument($_,$_...)
-complete:
-- $H1.evaluateOnNewDocument($H2,$H3,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('sandbox'
   stsearch: $_ = require('sandbox'
 complete:
@@ -13067,22 +10387,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = require('sandbox')
-  stsearch: $_ = require('sandbox')
-complete:
-- $H1 = require('sandbox')
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = new $H2(
   stsearch: $_ = new $_(
-complete:
-- $H1 = new $H2(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = new $H2(...)
-  stsearch: $_ = new $_(...)
 complete:
 - $H1 = new $H2(...)
 ---
@@ -13097,13 +10403,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1.run(
   stsearch: $_.run(
-complete:
-- $H1.run(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.run(...)
-  stsearch: $_.run(...)
 complete:
 - $H1.run(...)
 ---
@@ -13175,13 +10474,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: new $H1($H2).run(...)
-  stsearch: new $_($_).run(...)
-complete:
-- new $H1($H2).run(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: new $H1()
   stsearch: new $_()
 complete:
@@ -13210,52 +10502,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: new $H1().run(...)
-  stsearch: new $_().run(...)
-complete:
-- new $H1().run(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('vm'
   stsearch: $_ = require('vm'
 complete:
 - $H1 = require('vm')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('vm')
-  stsearch: $_ = require('vm')
-complete:
-- $H1 = require('vm')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.runInContext(...)
-  stsearch: $_.runInContext(...)
-complete:
-- $H1.runInContext(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.runInNewContext(...)
-  stsearch: $_.runInNewContext(...)
-complete:
-- $H1.runInNewContext(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.compileFunction(...)
-  stsearch: $_.compileFunction(...)
-complete:
-- $H1.compileFunction(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.runInThisContext(...)
-  stsearch: $_.runInThisContext(...)
-complete:
-- $H1.runInThisContext(...)
 ---
 language: !lang 'javascript'
 pattern:
@@ -13280,22 +10530,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: new $H1.Script(...)
-  stsearch: new $_.Script(...)
-complete:
-- new $H1.Script(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: require('vm2'
   stsearch: require('vm2'
-complete:
-- require('vm2')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: require('vm2')
-  stsearch: require('vm2')
 complete:
 - require('vm2')
 ---
@@ -13315,13 +10551,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1 = new VM(...)
-  stsearch: $_ = new VM(...)
-complete:
-- $H1 = new VM(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = new NodeVM
   stsearch: $_ = new NodeVM
 complete:
@@ -13331,13 +10560,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1 = new NodeVM(
   stsearch: $_ = new NodeVM(
-complete:
-- $H1 = new NodeVM(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = new NodeVM(...)
-  stsearch: $_ = new NodeVM(...)
 complete:
 - $H1 = new NodeVM(...)
 ---
@@ -13353,14 +10575,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: new VM(
   stsearch: new VM(
-complete:
-- new VM(...).run(...)
-- new VM(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: new VM(...)
-  stsearch: new VM(...)
 complete:
 - new VM(...).run(...)
 - new VM(...)
@@ -13388,13 +10602,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: new VM(...).run(...)
-  stsearch: new VM(...).run(...)
-complete:
-- new VM(...).run(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: new NodeVM
   stsearch: new NodeVM
 complete:
@@ -13405,14 +10612,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: new NodeVM(
   stsearch: new NodeVM(
-complete:
-- new NodeVM(...).run(...)
-- new NodeVM(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: new NodeVM(...)
-  stsearch: new NodeVM(...)
 complete:
 - new NodeVM(...).run(...)
 - new NodeVM(...)
@@ -13440,13 +10639,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: new NodeVM(...).run(...)
-  stsearch: new NodeVM(...).run(...)
-complete:
-- new NodeVM(...).run(...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: new VMScript
   stsearch: new VMScript
 complete:
@@ -13456,13 +10648,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: new VMScript(
   stsearch: new VMScript(
-complete:
-- new VMScript(...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: new VMScript(...)
-  stsearch: new VMScript(...)
 complete:
 - new VMScript(...)
 ---
@@ -13496,22 +10681,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.generate($H2,...)
-  stsearch: $_.generate($_...)
-complete:
-- $H1.generate($H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: $H1 = require('wkhtmltopdf'
   stsearch: $_ = require('wkhtmltopdf'
-complete:
-- $H1 = require('wkhtmltopdf')
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1 = require('wkhtmltopdf')
-  stsearch: $_ = require('wkhtmltopdf')
 complete:
 - $H1 = require('wkhtmltopdf')
 ---
@@ -13526,13 +10697,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: $H1($H2,
   stsearch: $_($_,
-complete:
-- $H1($H2,...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1($H2,...)
-  stsearch: $_($_...)
 complete:
 - $H1($H2,...)
 ---
@@ -13566,13 +10730,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: $H1.toJson($H2,...)
-  stsearch: $_.toJson($_...)
-complete:
-- $H1.toJson($H2,...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: '"$H1"'
   stsearch: '"$_"'
 complete:
@@ -13584,13 +10741,6 @@ language: !lang 'javascript'
 pattern:
   semgrep: '"$H1" +'
   stsearch: '"$_" +'
-complete:
-- '"$H1" + $H2'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '"$H1" + $H2'
-  stsearch: '"$_" + $_'
 complete:
 - '"$H1" + $H2'
 ---
@@ -13617,13 +10767,6 @@ pattern:
 complete:
 - '"$H1".concat(...)'
 - '"$H1".concat($H2)'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '"$H1".concat(...)'
-  stsearch: '"$_".concat(...)'
-complete:
-- '"$H1".concat(...)'
 ---
 language: !lang 'javascript'
 pattern:
@@ -13675,25 +10818,11 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: util.format($H1, ...)
-  stsearch: util.format($_ ...)
-complete:
-- util.format($H1, ...)
----
-language: !lang 'javascript'
-pattern:
   semgrep: '`'
   stsearch: '`'
 complete:
 - '`...`'
 - '`$H1${$H2}...`'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '`...`'
-  stsearch: '`...`'
-complete:
-- '`...`'
 ---
 language: !lang 'javascript'
 pattern:
@@ -13704,22 +10833,8 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '"$H1".concat($H2)'
-  stsearch: '"$_".concat($_)'
-complete:
-- '"$H1".concat($H2)'
----
-language: !lang 'javascript'
-pattern:
   semgrep: util.format($H1, $H2
   stsearch: util.format($_, $_
-complete:
-- util.format($H1, $H2)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: util.format($H1, $H2)
-  stsearch: util.format($_, $_)
 complete:
 - util.format($H1, $H2)
 ---
@@ -13760,45 +10875,10 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '`$H1${$H2}...`'
-  stsearch: '`$_${$_}...`'
-complete:
-- '`$H1${$H2}...`'
----
-language: !lang 'javascript'
-pattern:
   semgrep: require($H1
   stsearch: require($_
 complete:
 - require($H1)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: require($H1)
-  stsearch: require($_)
-complete:
-- require($H1)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.set($H2, ...)
-  stsearch: $_.set($_ ...)
-complete:
-- $H1.set($H2, ...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.header($H2, ...)
-  stsearch: $_.header($_ ...)
-complete:
-- $H1.header($H2, ...)
----
-language: !lang 'javascript'
-pattern:
-  semgrep: $H1.setHeader($H2, ...)
-  stsearch: $_.setHeader($_ ...)
-complete:
-- $H1.setHeader($H2, ...)
 ---
 language: !lang 'javascript'
 pattern:
@@ -13816,13 +10896,6 @@ complete:
 ---
 language: !lang 'javascript'
 pattern:
-  semgrep: '$H1.set({$H2: ...}, ...)'
-  stsearch: '$_.set({$_: ...} ...)'
-complete:
-- '$H1.set({$H2: ...}, ...)'
----
-language: !lang 'javascript'
-pattern:
   semgrep: '$H1.writeHead($H2, {$H3: ...}'
   stsearch: '$_.writeHead($_, {$_: ...}'
 complete:
@@ -13832,12 +10905,5 @@ language: !lang 'javascript'
 pattern:
   semgrep: '$H1.writeHead($H2, {$H3: ...},'
   stsearch: '$_.writeHead($_, {$_: ...},'
-complete:
-- '$H1.writeHead($H2, {$H3: ...}, ...)'
----
-language: !lang 'javascript'
-pattern:
-  semgrep: '$H1.writeHead($H2, {$H3: ...}, ...)'
-  stsearch: '$_.writeHead($_, {$_: ...} ...)'
 complete:
 - '$H1.writeHead($H2, {$H3: ...}, ...)'

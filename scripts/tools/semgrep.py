@@ -37,8 +37,8 @@ def canonical(pattern: str) -> str:
             break
 
     # Remove most ambiguous unbounded ellipsis
-    pattern = re.sub(r'^\.{3}\s*\n|\n\s*\.{3}$', '', pattern).strip()
     pattern = re.sub(r'=\s*\.{3}$', f'= {metavar()}', pattern).strip()
+    pattern = re.sub(r'^\.{3}\s*(?!\.)|(?<!\.)\s*\.{3}$', '', pattern).strip()
 
     # Remove trivial deep expr for statement semantics
     if pattern.endswith(';') and pattern.count(';') == 1 and '\n' not in pattern:
