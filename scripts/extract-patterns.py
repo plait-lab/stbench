@@ -5,9 +5,10 @@ from typing import *
 import re
 import yaml
 
+from pathlib import Path
 from dataclasses import dataclass, field
 
-from tools import semgrep, stsearch, Language, Path
+from tools import semgrep, stsearch, Language
 from base import Args, Arg, dump_all
 
 

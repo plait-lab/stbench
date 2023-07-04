@@ -1,7 +1,8 @@
 from typing import *
 
+from pathlib import Path
 
-from tools.common import Language, Match, Path
+from tools import db
 
 
 def from_semgrep(pattern: str) -> str:
@@ -21,28 +22,35 @@ def from_semgrep(pattern: str) -> str:
     return pattern
 
 
-def run(patterns: Iterable[tuple[Language, str]], paths: Sequence[Path]) -> Iterable[Sequence[Match]]:
+def register():
+    tool, _ = db.Tool.get_or_create(name='stsearch')
+    return tool
+
+
+def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.Run, int, int, int, int]]:
     import subprocess
-    from tools.common import select_files
 
-    expanded = {}
+    from tools.common import Language, Match
 
-    for i, (language, pattern) in enumerate(patterns):
-        files = expanded.get(language)
-        if files is None:
-            files = expanded[language] = select_files([language], paths)
-
+    tool = register()
+    for i, query in enumerate(experiment.queries):
         print(f'Running stsearch with pattern #{i+1} on all paths...')
 
-        results = []
-        for file in files:
-            try:
-                process = subprocess.run(['stsearch', language.name, pattern, file],
-                                         capture_output=True, check=True, text=True)
-            except subprocess.CalledProcessError as err:
-                print(f'error$ {subprocess.list2cmdline(err.cmd)}')
-                continue
+        language = Language(query.language.name)
+        pattern = from_semgrep(query.pattern)
 
-            results.extend(map(Match.parse, process.stdout.splitlines()))
+        for file in experiment.files:
+            if any(file.path.endswith(ext) for ext in language.exts()):
+                try:
+                    process = subprocess.run(['stsearch', language.name, pattern, file.path],
+                                             check=True, text=True, stdout=subprocess.PIPE)
+                except subprocess.CalledProcessError as err:
+                    print(f'error$ {subprocess.list2cmdline(err.cmd)}')
+                    continue
 
-        yield results
+                with db.RESULTS.atomic() as txn:
+                    run, _ = db.Run.get_or_create(
+                        tool=tool, query=query, file=file)
+
+                    for _, ((sr, sc), (er, ec)) in map(Match.parse, process.stdout.splitlines()):
+                        yield (run, sr, sc, er, ec)

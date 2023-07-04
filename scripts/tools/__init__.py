@@ -6,7 +6,7 @@ from tools import stsearch
 from tools.common import *
 
 
-runners: dict[str, Tool] = {
-    'semgrep': semgrep.run,
-    'stsearch': stsearch.run,
+all: dict[str, Tool] = {
+    'semgrep': semgrep,
+    'stsearch': stsearch,
 }

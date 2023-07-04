@@ -5,6 +5,8 @@ import re
 from pathlib import Path
 from dataclasses import dataclass
 
+from tools import db
+
 
 @dataclass(frozen=True)
 class Language:
@@ -105,8 +107,14 @@ class Point(NamedTuple):
                      if self.row == other.row else self.column)
 
 
-Tool: TypeAlias = Callable[[Iterable[tuple[Language, str]], Sequence[Path]],
-                           Iterable[list[Match]]]
+class Tool(Protocol):
+    Match: TypeAlias = tuple[db.Run, int, int, int, int]
+
+    def register(self) -> db.Tool:
+        ...
+
+    def run(self, experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[Match]:
+        ...
 
 
 def select_files(languages: Sequence[Language], paths: Iterable[Path]) -> Sequence[Path]:

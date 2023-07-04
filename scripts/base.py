@@ -3,10 +3,11 @@ from typing import *
 import yaml
 import gzip
 
+from pathlib import Path
 from argparse import ArgumentParser, FileType
 from dataclasses import dataclass, fields, MISSING
 
-from tools import Language, Match, Path
+from tools import Language
 
 
 class Arg(TypedDict, total=False):
@@ -88,7 +89,6 @@ CustomTag: TypeAlias = tuple[T, Callable[[str], T]]
 
 custom_tags: dict[str, CustomTag] = {
     'lang': (Language, Language),
-    'match': (Match, Match.parse),
     'path': (type(Path()), Path),
 }
 

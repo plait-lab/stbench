@@ -4,41 +4,59 @@ from typing import *
 
 import re
 
+from pathlib import Path
 from csv import DictWriter
 from dataclasses import dataclass, field
 
-from base import Args, Arg, load_all
+from tools import db
+from base import Args, Arg
 
 
 @dataclass
 class CLI(Args):
-    data: TextIO = field(metadata=Arg(mode='r'))
+    experiment: str
+    matches: Path
     results: TextIO = field(metadata=Arg(mode='w'))
 
 
 def main(args: CLI):
-    agg = DictWriter(args.results, headers)
-    agg.writeheader()
+    agg = DictWriter(args.results,
+                     ('pattern', 'miss', 'extra', 'semgrep', 'stsearch'))
 
-    agg.writerows(map(process, load_all(args.data)))
+    db.init(args.matches)
+    with db.RESULTS.atomic():
+        experiment = db.Experiment.get(name=args.experiment)
 
+        def SUM(e): return db.fn.IFNULL(db.fn.SUM(e), 0)
 
-headers = ('pattern', 'miss', 'extra', 'semgrep', 'stsearch')
+        results = (
+            db.Result
+            .select(
+                db.Run.query_id,
+                *(SUM(db.Run.tool == tool).alias(tool.name)
+                  for tool in experiment.tools))
+            .join(db.Run)
+            .group_by(
+                db.Run.query, db.Run.file,
+                db.Result.sr, db.Result.sc,
+                db.Result.er, db.Result.ec)
+            .alias('results'))
 
+        analysis = (
+            experiment.queries
+            .select(
+                db.Query.pattern.alias('pattern'),
+                SUM(results.c.stsearch == 0).alias('miss'),
+                SUM(results.c.semgrep == 0).alias('extra'),
+                SUM(results.c.semgrep > 0).alias('semgrep'),
+                SUM(results.c.stsearch > 0).alias('stsearch'),
+            )
+            .join(results, db.JOIN.LEFT_OUTER,
+                  on=(db.Query.id == results.c.query_id))
+            .group_by(db.Query))
 
-def process(run: dict) -> dict[str, str | int]:
-    results: dict = run.pop('results')
-
-    stsearch = set(results.pop('stsearch'))
-    semgrep = set(fix_all(results.pop('semgrep'), stsearch))
-
-    return dict(
-        pattern=run['pattern']['semgrep'],
-        miss=len(semgrep - stsearch),
-        extra=len(stsearch - semgrep),
-        semgrep=len(semgrep),
-        stsearch=len(stsearch),
-    )
+        agg.writeheader()
+        agg.writerows(analysis.dicts())
 
 
 def fix_all(results: Iterable[Match], reference: set[Match]) -> Iterable[Match]:

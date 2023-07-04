@@ -4,51 +4,58 @@ from typing import *
 
 import re
 
+from pathlib import Path
 from dataclasses import dataclass, field
 
-from tools import Tool, Language, Path
-from base import Args, Arg, load_all, dump_all
+from base import Args, Arg, load_all
 
 
 @dataclass
 class CLI(Args):
+    experiment: str
+    matches: Path
     patterns: TextIO = field(metadata=Arg(mode='r'))
-    matches: TextIO = field(metadata=Arg(mode='w'))
     paths: list[Path] = field(metadata=Arg(flags=['--paths']))
     tools: Optional[str] = field(metadata=Arg(flags=['--tools']))
 
 
 def main(args: CLI):
-    from tools import runners
+    from tools import all as tools, db, select_files
+    from tools.stsearch import from_semgrep as to_st
 
     if args.tools:
-        runners = {name: runners[name] for name in runners
-                   if re.fullmatch(args.tools, name)}
-        print(f"Selected tools: {', '.join(runners)}")
+        tools = {name: tools[name] for name in tools
+                 if re.fullmatch(args.tools, name)}
+        print(f"Selected tools: {', '.join(tools)}")
 
-    patterns: list[TPattern] = [(item['language'], item['pattern'])
-                                for item in load_all(args.patterns)]
+    db.init(args.matches)
+    with db.RESULTS.atomic() as txn:
+        experiment = db.Experiment.create(name=args.experiment)
 
-    dump_all(({'language': lang, 'pattern': pattern, 'results': results} for (lang, pattern), results
-              in zip(patterns, collect(runners, patterns, args.paths))), args.matches)
+        language = None
+        languages = set()
+        for item in load_all(args.patterns):
+            if not language or language.name != item['language']:
+                language, _ = db.Language.get_or_create(name=item['language'])
+            languages.add(item['language'])
 
+            pattern = item['pattern']['semgrep']
+            assert to_st(pattern) == item['pattern']['stsearch']
 
-T = TypeVar('T')
-PerTool: TypeAlias = Mapping[str, T]
-TPattern: TypeAlias = tuple[Language, PerTool[str]]
+            query, _ = db.Query.get_or_create(language=language,
+                                              pattern=pattern)
+            experiment.queries.add(query)
 
+        for path in select_files(languages, args.paths):
+            file, _ = db.File.get_or_create(path=path)
+            experiment.files.add(file)
 
-def collect(tools: PerTool[Tool], patterns: Sequence[TPattern], paths: Collection[Path]) -> Iterable[PerTool[list[Match]]]:
-    def patterns_for(name: str) -> Iterable[tuple[str, str]]:
-        return ((language, tools[name]) for language, tools in patterns)
-
-    # We give all the patterns to the tool to allow for parsing optimization
-    all_results = {name: tool(patterns_for(name), paths)
-                   for name, tool in tools.items()}
-
-    # However, we then aggregate the results per pattern for a direct comparison
-    for results in zip(*all_results.values(), strict=True):
-        yield dict(zip(tools.keys(), results))
+    fields = ('run', 'sr', 'sc', 'er', 'ec')
+    # TODO: ridiculously parallelizable
+    for tool in tools.values():
+        experiment.tools.add(tool.register())
+        for chunk in db.chunked(tool.run(experiment, args.paths), 1000):
+            db.Result.replace_many(chunk, fields).execute()
 
 
 if __name__ == '__main__':
