@@ -32,6 +32,8 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
 
     from tools.common import Language, Match
 
+    def parse(s: str): return Match.parse(s.rstrip('\n'))
+
     tool = register()
     for i, query in enumerate(experiment.queries):
         print(f'Running stsearch with pattern #{i+1} on all paths...')
@@ -41,16 +43,16 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
 
         for file in experiment.files:
             if any(file.path.endswith(ext) for ext in language.exts()):
-                try:
-                    process = subprocess.run(['stsearch', language.name, pattern, file.path],
-                                             check=True, text=True, stdout=subprocess.PIPE)
-                except subprocess.CalledProcessError as err:
-                    print(f'error$ {subprocess.list2cmdline(err.cmd)}')
-                    continue
+                process = subprocess.Popen(['stsearch', language.name, pattern, file.path],
+                                           text=True, stdout=subprocess.PIPE)
 
                 with db.RESULTS.atomic() as txn:
                     run, _ = db.Run.get_or_create(
                         tool=tool, query=query, file=file)
 
-                    for _, ((sr, sc), (er, ec)) in map(Match.parse, process.stdout.splitlines()):
+                    for _, ((sr, sc), (er, ec)) in map(parse, process.stdout):
                         yield (run, sr, sc, er, ec)
+
+                if process.wait():
+                    print(f'error$ {subprocess.list2cmdline(process.args)}')
+                    continue

@@ -56,7 +56,6 @@ def register():
 
 
 def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.Run, int, int, int, int]]:
-    import sys
     import yaml
 
     from subprocess import CalledProcessError
@@ -75,7 +74,8 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
             language = Language(query.language.name)
             pattern = query.pattern
             try:
-                semgrep_scan([f'--lang={language.name}', f'--pattern={pattern}', empty], repro=False)
+                semgrep_scan([f'--lang={language.name}', f'--pattern={pattern}', empty],
+                             stderr=False, repro=False)
             except CalledProcessError as err:
                 # https://semgrep.dev/docs/cli-reference/#exit-codes
                 # Should use 4, but it uses 2 for some reason...
@@ -99,7 +99,7 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
         output = semgrep_scan([
             *(f'--include=*{ext}' for l in languages for ext in l.exts()),
             *paths
-        ], config=config, stderr=sys.stderr)
+        ], config=config)
 
     for error in output['errors']:
         print(f"warning: semgrep error {error['message']}")
@@ -136,20 +136,19 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
                 print(f'warning: unexpected semgrep result {result}')
 
 
-def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr: Optional[TextIO] = None, repro=True) -> dict:
+def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr=True, repro=True) -> dict:
     import shutil
     import subprocess
     import json
 
-    if stderr is None:
-        stderr = subprocess.PIPE
+    stderr = None if stderr else subprocess.DEVNULL
 
     try:
         flags = [f'--config={config.name}'] if config else []
         flags.extend(semgrep_extra_flags())
 
-        process = subprocess.run(['semgrep', 'scan', *flags, '--json', *args],
-                                 check=True, text=True, stdout=subprocess.PIPE, stderr=stderr)
+        output = subprocess.check_output(['semgrep', 'scan', *flags, '--json', *args],
+                                         text=True, stderr=stderr)
 
     except subprocess.CalledProcessError as err:
         if repro:
@@ -160,7 +159,7 @@ def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr: Op
             print(f'error$ {subprocess.list2cmdline(err.cmd)}')
         raise err
 
-    return json.loads(process.stdout)
+    return json.loads(output)
 
 
 def semgrep_rule(id: str, language: Language, pattern: str) -> dict:
