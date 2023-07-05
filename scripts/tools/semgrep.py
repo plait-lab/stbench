@@ -3,6 +3,7 @@ from typing import *
 import re
 
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
 from tools import db
 from tools.common import Language
@@ -68,23 +69,26 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
     paths = roots  # let semgrep discover the paths
 
     print(f'Filtering invalid semgrep patterns...')
-    rules, invalid, languages = [], [], set()
     with TempDir() as empty:
-        for id, query in enumerate(queries):
-            language = Language(query.language.name)
-            pattern = query.pattern
+        def validate(id: int, language: str, pattern: str) -> Optional[dict]:
             try:
-                semgrep_scan([f'--lang={language.name}', f'--pattern={pattern}', empty],
+                semgrep_scan([f'--lang={language}', f'--pattern={pattern}', empty],
                              stderr=False, repro=False)
             except CalledProcessError as err:
                 # https://semgrep.dev/docs/cli-reference/#exit-codes
                 # Should use 4, but it uses 2 for some reason...
                 if err.returncode != 2:
                     raise err
-                rules.append(None)  # mark invalid, use placeholder
+                return None  # mark invalid, use placeholder
             else:
-                rules.append(semgrep_rule(f'{id:04d}', language, pattern))
-                languages.add(language)
+                return semgrep_rule(f'{id:04d}', language, pattern)
+
+        with ThreadPoolExecutor() as p:
+            rules = list(p.map(lambda args: validate(*args),
+                               ((i, q.language.name, q.pattern) for i, q in enumerate(queries)),
+                               chunksize=15))
+            languages = set(Language(l)
+                            for r in rules if r for l in r['languages'])
 
     invalid = [queries[i] for i, r in enumerate(rules) if r is None]
     print(f'Dropped {len(invalid)} invalid rules for semgrep.')
@@ -162,13 +166,13 @@ def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr=Tru
     return json.loads(output)
 
 
-def semgrep_rule(id: str, language: Language, pattern: str) -> dict:
+def semgrep_rule(id: str, language: str, pattern: str) -> dict:
     # See: https://semgrep.dev/docs/writing-rules/rule-syntax/
     return {
         'id': f'search-{id}',
         'message': 'result',
         'severity': 'INFO',
-        'languages': [language.name],
+        'languages': [language],
         'pattern': pattern,
         'options': {
             # Disable known unsupported features
