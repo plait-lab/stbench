@@ -1336,7 +1336,7 @@ $H1 = require('eta',0,0,0,0
 $H1 = require('squirrelly',0,0,0,0
 $H1 = require('hogan.js',0,0,0,0
 $H1 = require('handlebars',0,0,0,0
-$H1.$H2($H3),0,24,264,288
+$H1.$H2($H3),1,25,264,288
 $H1.$H2($H3).,0,4,0,4
 $H1.$H2($H3).then,0,0,0,0
 $H1.$H2($H3).then(,0,0,0,0

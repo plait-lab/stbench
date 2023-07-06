@@ -64,12 +64,18 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
     from operator import itemgetter
 
     tool = register()
-    queries = [q for q in experiment.queries]
+    queries = list(experiment.queries
+                   .select(db.Query, db.Language)
+                   .join_from(db.Query, db.Language))
+    languages = set(Language(q.language.name) for q in queries)
     files = {f.path: f for f in experiment.files}
     paths = roots  # let semgrep discover the paths
 
-    print(f'Filtering invalid semgrep patterns...')
+    print(f'semgrep: Filtering invalid patterns...')
     with TempDir() as empty:
+        for language in languages:
+            Path(empty, f'empty{language.exts()[0]}').touch()
+
         def validate(id: int, language: str, pattern: str) -> Optional[dict]:
             try:
                 semgrep_scan([f'--lang={language}', f'--pattern={pattern}', empty],
@@ -85,10 +91,9 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
 
         with ThreadPoolExecutor() as p:
             rules = list(p.map(lambda args: validate(*args),
-                               ((i, q.language.name, q.pattern) for i, q in enumerate(queries)),
+                               ((i, q.language.name, q.pattern)
+                                for i, q in enumerate(queries)),
                                chunksize=15))
-            languages = set(Language(l)
-                            for r in rules if r for l in r['languages'])
 
     invalid = [queries[i] for i, r in enumerate(rules) if r is None]
     print(f'Dropped {len(invalid)} invalid rules for semgrep.')
