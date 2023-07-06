@@ -68,8 +68,7 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
                    .select(db.Query, db.Language)
                    .join_from(db.Query, db.Language))
     languages = set(Language(q.language.name) for q in queries)
-    files = {f.path: f for f in experiment.files}
-    paths = roots  # let semgrep discover the paths
+    files = {Path(f.path): f for f in experiment.files}
 
     print(f'semgrep: Filtering invalid patterns...')
     with TempDir() as empty:
@@ -104,45 +103,46 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
         yaml.safe_dump({'rules': valid}, config, sort_keys=False)
         config.flush()  # ensure it's written to disk
 
-        print(f'Running semgrep with all patterns on all paths...')
-        output = semgrep_scan([
-            *(f'--include=*{ext}' for l in languages for ext in l.exts()),
-            *paths
-        ], config=config)
+        includes = [f'--include=*{ext}' for l in languages for ext in l.exts()]
 
-    for error in output['errors']:
-        print(f"warning: semgrep error {error['message']}")
+        for i, root in enumerate(roots, start=1):
+            print(f'Running semgrep with all patterns on root #{i}: {root}')
 
-    # Check selected files agreement
-    expected = set(files.keys())
-    scanned = set(output['paths']['scanned'])
-    for path in scanned - expected:
-        print(f'warning: semgrep unexpectedly scanned {path}')
-    for path in expected - scanned:
-        print(f'warning: semgrep unexpectedly skipped {path}')
+            # let semgrep discover the paths
+            output = semgrep_scan([*includes, root], config=config)
 
-    with db.RESULTS.atomic() as txn:
-        runs = [{path: db.Run(tool=tool, query=query, file=files[path])
-                 for path in scanned & expected}
-                for query in queries]
-        db.Run.bulk_create((r for rs in runs for r in rs.values()),
-                           batch_size=1000)
+            for error in output['errors']:
+                print(f"warning: semgrep error {error['message']}")
 
-        for result in output['results']:
-            if m := re.match(r'search-(\d+)', result['check_id']):
-                id = int(m.group(1))  # extract rule index
-                assert result['extra']['message'] == rules[id]['message']
-                assert result['extra']['severity'] == rules[id]['severity']
-                assert not result['extra']['is_ignored']
+            # Check selected files agreement
+            expected = set(str(p) for p in files if p.is_relative_to(root))
+            scanned = set(output['paths']['scanned'])
+            for path in scanned - expected:
+                print(f'warning: semgrep unexpectedly scanned {path}')
+            for path in expected - scanned:
+                print(f'warning: semgrep unexpectedly skipped {path}')
 
-                path, start, end = itemgetter('path', 'start', 'end')(result)
-                (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
+            with db.RESULTS.atomic() as txn:
+                runs = [{path: db.Run(tool=tool, query=query, file=files[Path(path)])
+                        for path in scanned & expected}
+                        for query in queries]
+                db.Run.bulk_create((r for rs in runs for r in rs.values()),
+                                   batch_size=1000)
 
-                if path in expected:
-                    query, file, run = queries[id], files[path], runs[id][path]
-                    yield (run, sr, sc, er, ec)
-            else:
-                print(f'warning: unexpected semgrep result {result}')
+                for result in output['results']:
+                    if m := re.match(r'search-(\d+)', result['check_id']):
+                        id = int(m.group(1))  # extract rule index
+                        assert result['extra']['message'] == rules[id]['message']
+                        assert result['extra']['severity'] == rules[id]['severity']
+                        assert not result['extra']['is_ignored']
+
+                        path, start, end = itemgetter('path', 'start', 'end')(result)
+                        (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
+
+                        if path in expected:
+                            yield (runs[id][path], sr, sc, er, ec)
+                    else:
+                        print(f'warning: unexpected semgrep result {result}')
 
 
 def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr=True, repro=True) -> dict:
