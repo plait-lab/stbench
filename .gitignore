@@ -5,3 +5,5 @@ __pycache__/
 /results/*
 !/results/patterns.yaml
 !/results/test.yaml
+
+/repos
