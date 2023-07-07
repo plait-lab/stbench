@@ -134,7 +134,8 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
                         id = int(m.group(1))  # extract rule index
                         assert result['extra']['message'] == rules[id]['message']
                         assert result['extra']['severity'] == rules[id]['severity']
-                        assert not result['extra']['is_ignored']
+                        if result['extra']['is_ignored']:
+                            print(f'warning: semgrep unexpectedly ignored {result}')
 
                         path, start, end = itemgetter('path', 'start', 'end')(result)
                         (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
