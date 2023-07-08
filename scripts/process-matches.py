@@ -118,7 +118,7 @@ def dump(experiment: db.Experiment) -> db.Query:
             db.Result.er, db.Result.ec,
         )
         .join_from(db.Query, db.Language)
-        .join_from(db.Query, db.Run)
+        .join_from(db.Query, db.Run, db.JOIN.LEFT_OUTER)
         .join_from(db.Run, db.Tool)
         .join_from(db.Run, db.File)
         .join_from(db.Run, db.Result, db.JOIN.LEFT_OUTER)
