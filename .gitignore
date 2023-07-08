@@ -1,9 +1,8 @@
 __pycache__/
 *.py[cod]
 
-# scratch directory
-/results/*
-!/results/patterns.yaml
-!/results/test.yaml
+# common binary results
+*.db
+*.gz
 
 /repos
