@@ -59,7 +59,6 @@ def register():
 def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.Run, int, int, int, int]]:
     import yaml
 
-    from subprocess import CalledProcessError
     from tempfile import NamedTemporaryFile as TempFile, TemporaryDirectory as TempDir
     from operator import itemgetter
 
@@ -76,17 +75,11 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
             Path(empty, f'empty{language.exts()[0]}').touch()
 
         def validate(id: int, language: str, pattern: str) -> Optional[dict]:
-            try:
-                semgrep_scan([f'--lang={language}', f'--pattern={pattern}', empty],
-                             stderr=False, repro=False)
-            except CalledProcessError as err:
-                # https://semgrep.dev/docs/cli-reference/#exit-codes
-                # Should use 4, but it uses 2 for some reason...
-                if err.returncode != 2:
-                    raise err
+            output = semgrep_scan([f'--lang={language}', f'--pattern={pattern}', empty],
+                                  stderr=False, repro=False)
+            if any('Pattern parse error' in err['message'] for err in output['errors']):
                 return None  # mark invalid, use placeholder
-            else:
-                return semgrep_rule(f'{id:04d}', language, pattern)
+            return semgrep_rule(f'{id:04d}', language, pattern)
 
         with ThreadPoolExecutor() as p:
             rules = list(p.map(lambda args: validate(*args),
@@ -167,7 +160,7 @@ def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr=Tru
                 print(f'Copied temporary config file to {tmp}')
                 err.cmd[2] = f'--config={tmp}'  # easier to rerun
             print(f'error$ {subprocess.list2cmdline(err.cmd)}')
-        raise err
+        output = err.output
 
     return json.loads(output)
 
