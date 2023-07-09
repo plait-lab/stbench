@@ -6,6 +6,7 @@ import re
 
 from pathlib import Path
 from dataclasses import dataclass, field
+from concurrent.futures import ThreadPoolExecutor
 
 from base import Args, Arg, load_all
 
@@ -29,7 +30,7 @@ def main(args: CLI):
         print(f"Selected tools: {', '.join(tools)}")
 
     db.init(args.matches)
-    with db.RESULTS.atomic() as txn:
+    with db.transact():
         experiment = db.Experiment.create(name=args.experiment)
 
         language = None
@@ -50,12 +51,11 @@ def main(args: CLI):
             file, _ = db.File.get_or_create(path=path)
             experiment.files.add(file)
 
-    fields = ('run', 'sr', 'sc', 'er', 'ec')
-    # TODO: ridiculously parallelizable
-    for tool in tools.values():
-        experiment.tools.add(tool.register())
-        for chunk in db.chunked(tool.run(experiment, args.paths), 1000):
-            db.Result.replace_many(chunk, fields).execute()
+        for tool in tools.values():
+            experiment.tools.add(tool.register())
+
+    with ThreadPoolExecutor() as tp:
+        all(tp.map(lambda tool: tool.run(args.experiment, args.paths),  tools.values()))
 
 
 if __name__ == '__main__':

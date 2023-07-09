@@ -113,14 +113,14 @@ class Tool(Protocol):
     def register(self) -> db.Tool:
         ...
 
-    def run(self, experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[Match]:
+    def run(self, experiment: str, roots: Sequence[Path]) -> Literal[True]:
         ...
 
 
 def select_files(languages: Sequence[Language], paths: Iterable[Path]) -> Sequence[Path]:
     files = [p for p in all_files(paths)
              if any(p.suffix in l.exts() for l in languages)]
-    print(f'Found {len(files)} files for: '
+    print(f'common: Found {len(files)} files for: '
           + ', '.join(str(l) for l in languages))
     return files
 
@@ -136,5 +136,5 @@ def all_files(paths: Iterable[Path]) -> Sequence[Path]:
             for root, _dirs, files in os.walk(path):
                 result.extend(Path(root, file) for file in files)
         else:
-            print(f'Unknown path: {path}')
+            print(f'ERROR: common: Unknown path: {path}')
     return result

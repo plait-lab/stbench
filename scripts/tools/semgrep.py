@@ -56,18 +56,21 @@ def register():
     return tool
 
 
-def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.Run, int, int, int, int]]:
+def run(experiment: str, roots: Sequence[Path]) -> Literal[True]:
     import yaml
 
     from tempfile import NamedTemporaryFile as TempFile, TemporaryDirectory as TempDir
     from operator import itemgetter
 
-    tool = register()
-    queries = list(experiment.queries
-                   .select(db.Query, db.Language)
-                   .join_from(db.Query, db.Language))
-    languages = set(Language(q.language.name) for q in queries)
-    files = {Path(f.path): f for f in experiment.files}
+    with db.transact():
+        experiment = db.Experiment.get(name=experiment)
+
+        tool = register()
+        queries = list(experiment.queries
+                       .select(db.Query, db.Language)
+                       .join_from(db.Query, db.Language))
+        languages = set(Language(q.language.name) for q in queries)
+        files = {f.path: f for f in experiment.files}
 
     print(f'semgrep: Filtering invalid patterns...')
     with TempDir() as empty:
@@ -81,14 +84,12 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
                 return None  # mark invalid, use placeholder
             return semgrep_rule(f'{id:04d}', language, pattern)
 
-        with ThreadPoolExecutor() as p:
-            rules = list(p.map(lambda args: validate(*args),
-                               ((i, q.language.name, q.pattern)
-                                for i, q in enumerate(queries)),
-                               chunksize=15))
+        with ThreadPoolExecutor() as tp:
+            rules = list(tp.map(lambda args: validate(*args),
+                                ((i, q.language.name, q.pattern) for i, q in enumerate(queries))))
 
     invalid = [queries[i] for i, r in enumerate(rules) if r is None]
-    print(f'Dropped {len(invalid)} invalid rules for semgrep.')
+    print(f'semgrep: Dropped {len(invalid)} invalid rules for semgrep.')
 
     # FIX: not guaranteed to "reopen" according to docs
     with TempFile('w', suffix='.yaml') as config:
@@ -98,45 +99,53 @@ def run(experiment: db.Experiment, roots: Sequence[Path]) -> Iterable[tuple[db.R
 
         includes = [f'--include=*{ext}' for l in languages for ext in l.exts()]
 
-        for i, root in enumerate(roots, start=1):
-            print(f'Running semgrep with all patterns on root #{i}: {root}')
+        def worker(root: Path):
+            print(f'semgrep: Running with all patterns on root: {root}')
 
             # let semgrep discover the paths
             output = semgrep_scan([*includes, root], config=config)
 
             for error in output['errors']:
-                print(f"warning: semgrep error {error['message']}")
+                print(f"WARNING: semgrep: unexpected error {error['message']}")
 
             # Check selected files agreement
-            expected = set(str(p) for p in files if p.is_relative_to(root))
+            expected = set(p for p in files if p.startswith(str(root)))
             scanned = set(output['paths']['scanned'])
             for path in scanned - expected:
-                print(f'warning: semgrep unexpectedly scanned {path}')
+                print(f'WARNING: semgrep: unexpectedly scanned {path}')
             for path in expected - scanned:
-                print(f'warning: semgrep unexpectedly skipped {path}')
+                print(f'WARNING: semgrep: unexpectedly skipped {path}')
 
-            with db.RESULTS.atomic() as txn:
-                runs = [{path: db.Run(tool=tool, query=query, file=files[Path(path)])
+            with db.transact():
+                runs = [{path: db.Run(tool=tool, query=query, file=files[path])
                         for path in scanned & expected}
                         for query in queries]
                 db.Run.bulk_create((r for rs in runs for r in rs.values()),
                                    batch_size=1000)
 
-                for result in output['results']:
+                def transform(result: dict) -> Optional[tuple]:
                     if m := re.match(r'search-(\d+)', result['check_id']):
                         id = int(m.group(1))  # extract rule index
                         assert result['extra']['message'] == rules[id]['message']
                         assert result['extra']['severity'] == rules[id]['severity']
                         if result['extra']['is_ignored']:
-                            print(f'warning: semgrep unexpectedly ignored {result}')
+                            print(f'WARNING: semgrep: unexpectedly ignored {result}')
 
                         path, start, end = itemgetter('path', 'start', 'end')(result)
                         (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
 
                         if path in expected:
-                            yield (runs[id][path], sr, sc, er, ec)
+                            return (runs[id][path], sr, sc, er, ec)
                     else:
-                        print(f'warning: unexpected semgrep result {result}')
+                        print(f'WARNING: semgrep: unexpected result {result}')
+
+                db.Result.bulk_insert(filter(None, map(transform, output.pop('results'))),
+                                      ('run', 'sr', 'sc', 'er', 'ec'))
+
+            print(f'semgrep: Finished all patterns on root: {root}')
+
+        with ThreadPoolExecutor(4) as tp:
+            return all(tp.map(worker, roots))
 
 
 def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr=True, repro=True) -> dict:
@@ -157,9 +166,9 @@ def semgrep_scan(args: list[str], *, config: Optional[TextIO] = None, stderr=Tru
         if repro:
             if config:
                 shutil.copy2(config.name, (tmp := Path('/tmp/config.yaml')))
-                print(f'Copied temporary config file to {tmp}')
+                print(f'semgrep: Copied temporary config file to {tmp}')
                 err.cmd[2] = f'--config={tmp}'  # easier to rerun
-            print(f'error$ {subprocess.list2cmdline(err.cmd)}')
+            print(f'ERROR: semgrep: $ {subprocess.list2cmdline(err.cmd)}')
         output = err.output
 
     return json.loads(output)

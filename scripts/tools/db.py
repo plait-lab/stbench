@@ -2,10 +2,13 @@ from typing import *
 
 from pathlib import Path
 from datetime import datetime
+from threading import BoundedSemaphore
+from contextlib import contextmanager
 
 from peewee import *
 
 
+CONNECT = BoundedSemaphore()
 RESULTS = DatabaseProxy()
 through = []
 
@@ -13,6 +16,11 @@ through = []
 class Model(Model):
     class Meta:
         database = RESULTS
+
+    @classmethod
+    def bulk_insert(cls, it: Iterable[tuple], fields=None, chunk_size=1000):
+        for chunk in chunked(it, chunk_size):
+            cls.insert_many(chunk, fields).execute()
 
 
 class Tool(Model):
@@ -73,3 +81,10 @@ def init(db: Path | str):
     RESULTS.connect()
     RESULTS.create_tables([m for m in Model.__subclasses__()])
     RESULTS.create_tables([f.through_model for f in through])
+
+
+@contextmanager
+def transact():
+    # sqlite doesn't seem to support concurrent writers :/
+    with CONNECT, RESULTS:
+        yield
