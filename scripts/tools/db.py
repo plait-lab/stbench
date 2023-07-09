@@ -72,11 +72,20 @@ through.extend([
 ])
 
 
-def init(db: Path | str):
-    RESULTS.initialize(SqliteDatabase(db, returning_clause=True, pragmas={
-        'foreign_keys': 1,
-        'ignore_check_constraints': 0,
-    }))
+def init(database: Path | str):
+    # https://docs.peewee-orm.com/en/latest/peewee/database.html#recommended-settings
+    RESULTS.initialize(SqliteDatabase(
+        database,
+        returning_clause=True,
+        autoconnect=False,
+        pragmas={
+            'journal_mode': 'wal',
+            'cache_size': -1 * 64000,  # 64MB
+            'foreign_keys': 1,
+            'ignore_check_constraints': 0,
+            'synchronous': 0,
+        }
+    ))
 
     RESULTS.connect()
     RESULTS.create_tables([m for m in Model.__subclasses__()])
