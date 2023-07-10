@@ -16,6 +16,7 @@ class CLI(Args):
     experiment: str
     partial: Optional[str] = field(metadata=Arg(flags=['--partial']))
     mode: str = field(metadata=Arg(choices=['analyze', 'dump', 'mismatch']))
+    skip: Optional[TextIO] = field(metadata=Arg(flags=['--skip'], mode='r'))
     matches: Path
     output: TextIO = field(metadata=Arg(mode='w'))
 
@@ -24,7 +25,9 @@ def main(args: CLI):
     db.init(args.matches)
 
     with db.RESULTS.atomic():
-        assert args.mode == 'analyze' or not args.partial
+        assert args.mode == 'analyze' and not (args.partial and args.skip) \
+            or (not args.partial and not args.skip)
+
         experiment = db.Experiment.get(name=args.experiment)
 
         match args.mode:
@@ -33,7 +36,8 @@ def main(args: CLI):
                     partial = db.Experiment.get(name=args.partial)
                     query = completions(experiment, partial)
                 else:
-                    query = analysis(experiment)
+                    skip = args.skip.read().splitlines() if args.skip else []
+                    query = analysis(experiment, skip)
             case 'dump':
                 query = dump(experiment)
             case 'mismatch':
@@ -78,7 +82,7 @@ def completions(complete: db.Experiment, partial: db.Experiment) -> db.Query:
     )
 
 
-def analysis(experiment: db.Experiment) -> db.Query:
+def analysis(experiment: db.Experiment, skip: list[str]) -> db.Query:
     results = (
         db.Result.select(
             db.Run.query_id,
@@ -86,10 +90,15 @@ def analysis(experiment: db.Experiment) -> db.Query:
                 for tool in experiment.tools),
         )
         .join(db.Run)
+        .join_from(db.Run, db.File)
         .group_by(
             db.Run.query, db.Run.file,
             db.Result.sr, db.Result.sc,
             db.Result.er, db.Result.ec,
+        )
+        .where(
+            True,
+            *(db.File.path != p for p in skip)
         )
         .alias('results')
     )
