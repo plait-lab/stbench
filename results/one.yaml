@@ -1,0 +1,5 @@
+language: !lang 'javascript'
+pattern:
+  semgrep: '1'
+  stsearch: '1'
+source: []
