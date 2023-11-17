@@ -2,9 +2,9 @@
 
 from typing import *
 
+import os
 import math
 
-from pathlib import Path
 from dataclasses import dataclass, field
 from csv import DictReader
 
@@ -19,21 +19,28 @@ class CLI(Args):
 def main(args: CLI):
     metrics = DictReader(args.results)
 
-    patterns, files, times = {}, {}, {}
+    patterns, files, ftimes, rtimes = {}, {}, {}, {}
 
     for row in metrics:
-        pattern, file = int(row['pattern']), Path(row['file'])
-        fsize = file.stat().st_size
+        pattern, file = int(row['pattern']), row['file']
+        fsize = os.stat(file).st_size
+
+        path = row['file'].split('/')
+        repo = path[1] if not path[1].startswith('@') else os.path.join(*path[1:3])
 
         qsize = int(row['query length']), int(row['hole count'])
         dsize = fsize, int(row['tree size']), int(row['tree depth'])
         time = int(row['parse time']), int(row['search time'])
+        time = *time, time[0] + time[1]
 
         assert patterns.setdefault(pattern, qsize) == qsize
         assert files.setdefault(file, dsize) == dsize
 
-        assert (pattern, file) not in times
-        times[(pattern, file)] = time
+        assert (pattern, file) not in ftimes
+        ftimes[(pattern, file)] = time
+
+        rtimes[(pattern, repo)] = tuple(
+            sum(t) for t in zip(rtimes.setdefault((pattern, repo), (0, 0, 0)), time))
 
     print('# SOURCE STATS')
     for i, tag in enumerate(['FILE SIZE', 'TREE SIZE', 'TREE DEPTH']):
@@ -43,9 +50,13 @@ def main(args: CLI):
     for i, tag in enumerate(['LENGTH', 'HOLES']):
         print(tag, Stats({k: v[i] for k, v in patterns.items()}), sep='\n')
 
-    print('# TIMING STATS')
-    for i, tag in enumerate(['PARSING', 'SEARCHING']):
-        print(tag, Stats({k: v[i] for k, v in times.items()}), sep='\n')
+    print('# TIMING STATS (per file)')
+    for i, tag in enumerate(['PARSING', 'SEARCHING', 'TOTAL']):
+        print(tag, Stats({k: v[i] for k, v in ftimes.items()}), sep='\n')
+
+    print('# TIMING STATS (per repo)')
+    for i, tag in enumerate(['PARSING', 'SEARCHING', 'TOTAL']):
+        print(tag, Stats({k: v[i] for k, v in rtimes.items()}), sep='\n')
 
 
 T = TypeVar('T')
