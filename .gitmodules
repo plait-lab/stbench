@@ -1,0 +1,3 @@
+[submodule "queries"]
+	path = queries
+	url = https://github.com/returntocorp/semgrep-rules

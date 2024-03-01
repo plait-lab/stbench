@@ -6,6 +6,8 @@ Benchmarking framework for `stsearch` a code search tool with support for partia
 
 ```console
 $ pip install -r requirements.txt
+$ git submodule update --init --recursive
+$ tar xf corpus.tgz  # provided separately
 ```
 
 ## Usage
