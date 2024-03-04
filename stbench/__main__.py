@@ -12,6 +12,9 @@ from pathlib import Path
 from pygments import lex
 from pygments.lexers import get_lexer_by_name
 
+from .db import prepare, select
+from .db.model import Tool, Spec, File, Run
+
 from .langs import find
 from .tools import Query, semgrep, stsearch
 from .stats import stats
@@ -75,6 +78,20 @@ def main(args: Args):
 
     def fsize(p: Path): return p.stat().st_size
     print(stats('file size', files, fsize, 'B'))
+
+    logging.info(f'collecting matches!')
+    prepare(args.results / 'matches.db', truncate=True)
+    st, sg = Tool.from_names('stsearch', 'semgrep')
+    complete = Spec.from_qs([sg, st], queries.items())
+
+    for project, files in projects.items():
+        logging.info(f' > project: {project}')
+        fmodels = File.from_proj(files)
+        Run.batch(st, complete, fmodels, stsearch.run)
+
+    logging.info(f'analyzing matches')
+    save(args.results / f'{st.name}',
+         ((*q, t) for q, t in select.qtotals(st)))
 
 
 def prefixes(query: Query) -> Iterable[Query]:

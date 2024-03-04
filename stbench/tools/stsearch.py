@@ -1,6 +1,12 @@
-import re
+from typing import Iterable
 
-from . import Query
+import logging
+import re
+import subprocess
+
+from pathlib import Path
+
+from . import Query, Match
 from .semgrep import METAVAR
 
 
@@ -19,3 +25,13 @@ def from_semgrep(query: Query) -> Query:
     pattern = re.sub(r'(?<!\.)\.\s*(\.{3}\s*\.)(?!\.)', r'\1', pattern)
 
     return query._replace(syntax=pattern)
+
+
+def run(query: Query, file: Path | str) -> Iterable[Match]:
+    cmd = ['stsearch', query.language.name, query.syntax, file]
+    logging.debug(f'$ {subprocess.list2cmdline(cmd)}')
+    with subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE) as process:
+        yield from map(Match.parse, process.stdout or ())
+
+        if code := process.wait():
+            logging.error(f'stsearch: exit {code}')

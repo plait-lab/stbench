@@ -1,4 +1,7 @@
 /corpus
+/results/**/*.db
+/results/**/*.db-wal
+/results/**/*.db-shm
 
 __pycache__/
 *.pyc
