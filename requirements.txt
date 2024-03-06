@@ -1,3 +1,4 @@
 peewee==3.16.2
 Pygments==2.15.1
 PyYAML==6.0
+semgrep==1.15.0

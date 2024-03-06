@@ -1,13 +1,17 @@
-from typing import Optional, Iterable
+from typing import Optional, Iterable, Sequence
 
+import json
 import logging
 import re
+import subprocess
 
+from operator import itemgetter
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 import yaml
 
-from . import Language, Query
+from . import Language, Query, Match, Range
 
 
 METAVAR = re.compile(r'(?P<name>\$(?P<kind>(\.{3})?)[A-Z0-9_]+)')
@@ -129,3 +133,86 @@ def canonical(query: Query) -> Query:
         logging.debug(f'canonical: {query.syntax!r} => {pattern!r}')
 
     return query._replace(syntax=pattern)
+
+
+def run(queries: list[Query], project: Path | str, files: Sequence[Path | str]) -> Iterable[tuple[Query, Match]]:
+    rules = [rule(str(i), q) for i, q in enumerate(queries)]
+    languages = {q.language for q in queries}
+
+    with NamedTemporaryFile('w', suffix='.yaml') as config:
+        yaml.safe_dump({'rules': rules}, config, sort_keys=False)
+        config.flush()
+
+        cmd = ['semgrep', 'scan', project, f'--config={config.name}', *FLAGS]
+        logging.debug(f'$ {subprocess.list2cmdline(cmd)}')
+
+        try:
+            output = subprocess.check_output(cmd, text=True, stderr=subprocess.DEVNULL)
+        except subprocess.CalledProcessError as err:
+            logging.error(f'semgrep: {err}')
+            output = err.output
+
+        data = json.loads(output)
+
+        for error in data.pop('errors'):
+            logging.error(f'semgrep: unexpected error:' + error['message'])
+
+        expected = set(map(str, files))
+        for path in expected.difference(data.pop('paths')['scanned']):
+            logging.warning(f'semgrep: unexpectedly skipped {path}')
+
+        for result in data.pop('results'):
+            i = int(result['check_id'])  # used id to track index
+            path, start, end = itemgetter('path', 'start', 'end')(result)
+            (sr, sc), (er, ec) = map(itemgetter('line', 'col'), (start, end))
+
+            if path in expected:
+                yield (queries[i], Match(path, Range(sr, sc, er, ec)))
+
+
+def rule(id: str, query: Query) -> dict:
+    includes = [f'*{ext}' for ext in query.language.exts()]
+    return {
+        # See: https://semgrep.dev/docs/writing-rules/rule-syntax/
+        'id': id,
+        'message': 'result',
+        'severity': 'INFO',
+        'languages': [query.language.name],
+        'pattern': query.syntax,
+        'paths': {'include': includes},
+        'options': OPTIONS.copy(),
+    }
+
+
+# Disable known unsupported features
+OPTIONS = {
+    # See: https://semgrep.dev/docs/writing-rules/rule-syntax/#options
+    'ac_matching': False,
+    'constant_propagation': False,
+    # See: https://github.com/returntocorp/semgrep/blob/develop/interfaces/Config_semgrep.atd
+    'vardef_assign': False,
+    'attr_expr': False,
+    'arrow_is_function': False,
+    'let_is_var': False,
+    'go_deeper_expr': False,
+    'go_deeper_stmt': False,
+    'implicit_deep_exprstmt': False,
+    'implicit_ellipsis': False,
+}
+
+
+# See: https://semgrep.dev/docs/cli-reference/#semgrep-scan-options
+FLAGS = [
+    '--json',
+    # Track queries through ids
+    '--no-rewrite-rule-ids',
+    # Everything must be reported
+    '--disable-nosem',
+    '--verbose',
+    # For performance
+    '--metrics=off',
+    '--no-git-ignore',
+    '--disable-version-check',
+    # For reproducibility
+    '--oss-only',
+]

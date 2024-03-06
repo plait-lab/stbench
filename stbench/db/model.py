@@ -38,6 +38,10 @@ class Spec(Base):
     def query(self, tool: Tool):
         return Query(Language(self.data['lang']), self.data[tool.name])
 
+    @classmethod
+    def queryc(cls, tool: Tool):
+        return cls.data.extract_json(f'$.{tool.name}')  # type: ignore
+
 
 class File(Base):
     path: str = CharField(unique=True)  # type: ignore
@@ -74,6 +78,18 @@ class Run(Base):
     def batch(cls, tool: Tool, specs: list[Spec], fmodels: dict[str, File], runner: Runner):
         for spec, file in product(specs, fmodels.values()):
             cls.collect(tool, spec, file, runner)
+
+    RunnerX: TypeAlias = Callable[[list[Query], Path, list[str]],
+                                  Iterable[tuple[Query, Match]]]
+
+    @classmethod
+    def batchX(cls, tool: Tool, specs: list[Spec], root: Path, fmodels: dict[str, File], runner: RunnerX):
+        qmodels = {spec.query(tool): spec for spec in specs}
+        runs = {(q, p): cls.register(tool, s, f) for (q, s), (p, f)
+                in product(qmodels.items(), fmodels.items())}
+
+        matches = runner(list(qmodels), root, list(fmodels))
+        Result.bulk_insert((runs[q, f], *r) for q, (f, r) in matches)
 
 
 class Result(Base):

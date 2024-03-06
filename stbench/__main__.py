@@ -17,7 +17,7 @@ from .db.model import Tool, Spec, File, Run
 
 from .langs import find
 from .tools import Query, semgrep, stsearch
-from .stats import stats
+from .stats import stats, mmatrix
 
 
 class Args:
@@ -87,11 +87,24 @@ def main(args: Args):
     for project, files in projects.items():
         logging.info(f' > project: {project}')
         fmodels = File.from_proj(files)
+
+        logging.info(f'    * complete - {st.name}')
         Run.batch(st, complete, fmodels, stsearch.run)
 
+        logging.info(f'    * complete - {sg.name}')
+        Run.batchX(sg, complete, project, fmodels, semgrep.run)
+
     logging.info(f'analyzing matches')
-    save(args.results / f'{st.name}',
-         ((*q, t) for q, t in select.qtotals(st)))
+    matches = {r: tuple(d) for l, *d, r in select.qdiff(st, sg)}
+    save(args.results / 'matches', ((*l, *d) for l, d in matches.items()))
+
+    matches = {l: d for l, d in matches.items() if any(d)}
+    print(f'selected {len(matches)} queries w/ results')
+
+    incl, both, excl = map(sum, zip(*matches.values()))
+    print(mmatrix('stsearch', incl, both, excl, 'semgrep'))
+    no_excl = sum(1 for i, b, e in matches.values() if not e)
+    print(f'{100 * no_excl / len(matches):.2f}% queries w/o excluded')
 
 
 def prefixes(query: Query) -> Iterable[Query]:
