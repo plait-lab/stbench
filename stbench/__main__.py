@@ -56,8 +56,10 @@ def main(args: Args):
     print(f'{len(queries)} unique queries')
 
     partial = {q: list(prefixes(q)) for q in queries}
+    save(args.results / 'partials',
+         ((*q, *(p.syntax for p in ps)) for q, ps in partial.items()))
+
     partials = set().union(*partial.values()).difference(queries)
-    save(args.results / 'partials', sorted(partials))
     print(f'{len(partials)} partial queries')
 
     languages = {q.language for q in queries}
@@ -82,7 +84,10 @@ def main(args: Args):
     logging.info(f'collecting matches!')
     prepare(args.results / 'matches.db', truncate=True)
     st, sg = Tool.from_names('stsearch', 'semgrep')
+
     complete = Spec.from_qs([sg, st], queries.items())
+    sm2st = queries | {q: stsearch.from_semgrep(q) for q in partials}
+    partials = Spec.from_qs([st], set((sm2st[q],) for q in partials))
 
     for project, files in projects.items():
         logging.info(f' > project: {project}')
@@ -93,6 +98,9 @@ def main(args: Args):
 
         logging.info(f'    * complete - {sg.name}')
         Run.batchX(sg, complete, project, fmodels, semgrep.run)
+
+        logging.info(f'    * partials - {st.name}')
+        Run.batch(st, partials, fmodels, stsearch.run)
 
     logging.info(f'analyzing matches')
     matches = {r: tuple(d) for l, *d, r in select.qdiff(st, sg)}
@@ -105,6 +113,11 @@ def main(args: Args):
     print(mmatrix('stsearch', incl, both, excl, 'semgrep'))
     no_excl = sum(1 for i, b, e in matches.values() if not e)
     print(f'{100 * no_excl / len(matches):.2f}% queries w/o excluded')
+
+    totals = {q: t for q, t in report.qtotals(st)}
+    ptotals = {q: [totals[st] for sm, st in sorted(sm2st.items())
+                   if q.syntax.startswith(sm.syntax)] for q in queries}
+    save(args.results / 'progress', ((*q, *ts) for q, ts in ptotals.items()))
 
 
 def prefixes(query: Query) -> Iterable[Query]:
