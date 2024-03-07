@@ -1,12 +1,14 @@
-from typing import Iterable
+from typing import Optional, Iterable, NamedTuple, TextIO
 
+import csv
 import logging
 import re
 import subprocess
 
 from pathlib import Path
+from io import StringIO
 
-from . import Query, Match
+from . import Language, Query, Match
 from .semgrep import METAVAR
 
 
@@ -27,10 +29,59 @@ def from_semgrep(query: Query) -> Query:
     return query._replace(syntax=pattern)
 
 
-def run(query: Query, file: Path | str) -> Iterable[Match]:
+class Runner:
+    def __init__(self, metrics: Optional[TextIO] = None) -> None:
+        self.log = metrics
+
+    def __call__(self, query: Query, file: Path | str) -> Iterable[Match]:
+        if self.log is not None:
+            # prefix metrics with run info
+            csv.writer(buffer := StringIO()).writerow((*query, file, ''))
+            self.log.write(buffer.getvalue().rstrip())
+            self.log.flush()
+
+        yield from run(query, file, self.log)
+
+    def metrics(self) -> Iterable['Metrics']:
+        assert self.log is not None, 'metrics not recorded'
+        assert self.log.readable(), 'metrics not readable'
+        self.log.seek(0)
+
+        for l, q, p, *vs in csv.reader(self.log):
+            n, d, k, w, pt, st = map(int, vs)
+            yield Metrics(
+                Query(Language(l), q), Metrics.Seq(k, w),
+                p, Metrics.Tree(n, d),
+                Metrics.Time(pt, st),
+            )
+
+
+class Metrics(NamedTuple):
+    class Seq(NamedTuple):
+        length: int
+        wcount: int
+    query: Query
+    seq: Seq
+
+    class Tree(NamedTuple):
+        size: int
+        depth: int
+    path: str
+    tree: Tree
+
+    class Time(NamedTuple):
+        parse: int
+        search: int
+    time: Time
+
+
+def run(query: Query, file: Path | str, metrics: Optional[TextIO] = None) -> Iterable[Match]:
     cmd = ['stsearch', query.language.name, query.syntax, file]
+    if metrics:
+        cmd.append('--metrics')
+
     logging.debug(f'$ {subprocess.list2cmdline(cmd)}')
-    with subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE) as process:
+    with subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=metrics) as process:
         yield from map(Match.parse, process.stdout or ())
 
         if code := process.wait():

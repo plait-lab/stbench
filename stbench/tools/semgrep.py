@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, Sequence
+from typing import Optional, Iterable, Sequence, TextIO
 
 import json
 import logging
@@ -135,19 +135,28 @@ def canonical(query: Query) -> Query:
     return query._replace(syntax=pattern)
 
 
-def run(queries: list[Query], project: Path | str, files: Sequence[Path | str]) -> Iterable[tuple[Query, Match]]:
+class Runner:
+    def __init__(self, config: Optional[Path] = None, stderr: Optional[TextIO] = None) -> None:
+        self.config, self.stderr, self.epaths = config, stderr, set[str]()
+
+    def __call__(self, queries: list[Query], project: Path, files: Sequence[Path | str]) -> Iterable[tuple[Query, Match]]:
+        return run(queries, project, files, self.epaths, self.config, self.stderr)
+
+
+def run(queries: list[Query], project: Path, files: Sequence[Path | str], epaths: Optional[set[str]] = None,
+        config: Optional[Path] = None, stderr: Optional[TextIO] = None) -> Iterable[tuple[Query, Match]]:
     rules = [rule(str(i), q) for i, q in enumerate(queries)]
     languages = {q.language for q in queries}
 
-    with NamedTemporaryFile('w', suffix='.yaml') as config:
-        yaml.safe_dump({'rules': rules}, config, sort_keys=False)
-        config.flush()
+    with config.open('w') if config else NamedTemporaryFile('w', suffix='.yaml') as file:
+        yaml.safe_dump({'rules': rules}, file, sort_keys=False)
+        file.flush()
 
-        cmd = ['semgrep', 'scan', project, f'--config={config.name}', *FLAGS]
+        cmd = ['semgrep', 'scan', project, f'--config={file.name}', *FLAGS]
         logging.debug(f'$ {subprocess.list2cmdline(cmd)}')
 
         try:
-            output = subprocess.check_output(cmd, text=True, stderr=subprocess.DEVNULL)
+            output = subprocess.check_output(cmd, text=True, stderr=stderr)
         except subprocess.CalledProcessError as err:
             logging.error(f'semgrep: {err}')
             output = err.output
@@ -156,10 +165,14 @@ def run(queries: list[Query], project: Path | str, files: Sequence[Path | str]) 
 
         for error in data.pop('errors'):
             logging.error(f'semgrep: unexpected error:' + error['message'])
+            if epaths is not None and (path := error.get('path')):
+                epaths.add(path)
 
         expected = set(map(str, files))
         for path in expected.difference(data.pop('paths')['scanned']):
             logging.warning(f'semgrep: unexpectedly skipped {path}')
+            if epaths is not None:
+                epaths.add(path)
 
         for result in data.pop('results'):
             i = int(result['check_id'])  # used id to track index

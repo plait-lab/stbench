@@ -93,7 +93,7 @@ class Run(Base):
 
 
 class Result(Base):
-    run: Run = ForeignKeyField(Run)  # type: ignore
+    run: Run = ForeignKeyField(Run, on_delete='CASCADE')  # type: ignore
 
     # range flattened
     sr, sc = IntegerField(), IntegerField()

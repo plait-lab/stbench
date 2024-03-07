@@ -6,7 +6,7 @@ import csv
 import logging
 
 from argparse import ArgumentParser
-from itertools import accumulate
+from itertools import accumulate, product
 from pathlib import Path
 
 from pygments import lex
@@ -89,20 +89,30 @@ def main(args: Args):
     sm2st = queries | {q: stsearch.from_semgrep(q) for q in partials}
     partials = Spec.from_qs([st], set((sm2st[q],) for q in partials))
 
+    strunner = stsearch.Runner((args.results / 'metrics.csv').open('w+'))
+    smrunner = semgrep.Runner((args.results / 'config.yaml'),
+                              (args.results / 'semgrep.err').open('w'))
+
     for project, files in projects.items():
         logging.info(f' > project: {project}')
         fmodels = File.from_proj(files)
 
         logging.info(f'    * complete - {st.name}')
-        Run.batch(st, complete, fmodels, stsearch.run)
+        Run.batch(st, complete, fmodels, strunner)
 
         logging.info(f'    * complete - {sg.name}')
-        Run.batchX(sg, complete, project, fmodels, semgrep.run)
+        Run.batchX(sg, complete, project, fmodels, smrunner)
 
         logging.info(f'    * partials - {st.name}')
-        Run.batch(st, partials, fmodels, stsearch.run)
+        Run.batch(st, partials, fmodels, strunner)
 
     logging.info(f'analyzing matches')
+
+    epaths = set(map(Path, smrunner.epaths))
+    print(f'dropping {len(epaths)} paths w/ errors')
+    for path in epaths:
+        Run.delete().where(Run.file_id == File.get(path=path).id).execute()
+
     matches = {r: tuple(d) for l, *d, r in select.qdiff(st, sg)}
     save(args.results / 'matches', ((*l, *d) for l, d in matches.items()))
 
@@ -114,10 +124,34 @@ def main(args: Args):
     no_excl = sum(1 for i, b, e in matches.values() if not e)
     print(f'{100 * no_excl / len(matches):.2f}% queries w/o excluded')
 
-    totals = {q: t for q, t in report.qtotals(st)}
+    totals = {q: t for q, t in select.qtotals(st)}
     ptotals = {q: [totals[st] for sm, st in sorted(sm2st.items())
                    if q.syntax.startswith(sm.syntax)] for q in queries}
     save(args.results / 'progress', ((*q, *ts) for q, ts in ptotals.items()))
+
+    logging.info(f'analyzing metrics')
+    metrics = list(strunner.metrics())
+
+    seqs = {m.query: m.seq for m in metrics}  # dedups
+    print(stats('token length', seqs.values(), lambda s: s.length, 'tokens'))
+    print(stats('wildcards', seqs.values(), lambda s: s.wcount, 'wildcards'))
+
+    trees = {m.path: m.tree for m in metrics}  # dedups
+    print(stats('file size', files, lambda p: p.stat().st_size, 'B'))
+    print(stats('tree size', trees.values(), lambda t: t.size, 'nodes'))
+    print(stats('tree depth', trees.values(), lambda t: t.depth, 'nodes'))
+
+    runs = {(m.query, m.path): m.time for m in metrics}
+    print(stats('parse time', runs.values(), lambda t: t.parse, 'µs'))
+    print(stats('search time', runs.values(), lambda t: t.search, 'µs'))
+
+    pruns = {(q, p): sum(runs[q, str(f)].search for f in fs if (q, str(f)) in runs)
+             for q, (p, fs) in product(queries, projects.items())}
+    print(stats('project search', pruns.values(), lambda t: t, 'µs'))
+
+    thres = 1e6  # one second
+    fast = sum(1 for t in pruns.values() if t < thres)
+    print(f'{100 * fast / len(pruns):.2f}% projects ran in <{thres:.2E}µs')
 
 
 def prefixes(query: Query) -> Iterable[Query]:
