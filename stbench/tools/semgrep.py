@@ -14,6 +14,9 @@ import yaml
 from . import Language, Query, Match, Range
 
 
+logger = logging.getLogger(__name__)
+
+
 METAVAR = re.compile(r'(?P<name>\$(?P<kind>(\.{3})?)[A-Z0-9_]+)')
 # See: https://semgrep.dev/docs/writing-rules/pattern-syntax/#typed-metavariables
 TYPMETAVAR = re.compile(r'\(\s*(?P<metavar>\$[A-Z_]+)\s*:[^\(\)]+\)')
@@ -25,15 +28,15 @@ DEEP = re.compile(r'<\.{3}(?P<inner>.*?)\.{3}>')
 
 def rules(source: Path) -> Iterable[tuple[Path, dict]]:
     if source.is_file() and source.suffix == '.yaml':
-        logging.debug(f'config: {source}')
+        logger.debug(f'config: {source}')
         with source.open() as file:
             config: dict = yaml.safe_load(file)
             for rule in config['rules']:
                 name = rule['id']
                 if (msg := rule.get('message')) and re.search('rule (is|has been) deprecated', msg):
-                    logging.warn(f'{name}: deprecated')
+                    logger.warn(f'{name}: deprecated')
                     continue  # skip
-                logging.debug(f'rule: {name}')
+                logger.debug(f'rule: {name}')
                 yield source, rule
     elif source.is_dir():
         for entry in source.iterdir():
@@ -130,7 +133,7 @@ def canonical(query: Query) -> Query:
         pattern = pattern.removesuffix(';')  # i.e. just match the expression
 
     if query.syntax != pattern:
-        logging.debug(f'canonical: {query.syntax!r} => {pattern!r}')
+        logger.debug(f'canonical: {query.syntax!r} => {pattern!r}')
 
     return query._replace(syntax=pattern)
 
@@ -153,24 +156,24 @@ def run(queries: list[Query], project: Path, files: Sequence[Path | str], epaths
         file.flush()
 
         cmd = ['semgrep', 'scan', project, f'--config={file.name}', *FLAGS]
-        logging.debug(f'$ {subprocess.list2cmdline(cmd)}')
+        logger.debug(f'$ {subprocess.list2cmdline(cmd)}')
 
         try:
             output = subprocess.check_output(cmd, text=True, stderr=stderr)
         except subprocess.CalledProcessError as err:
-            logging.error(f'semgrep: {err}')
+            logger.exception(f'run failed')
             output = err.output
 
         data = json.loads(output)
 
         for error in data.pop('errors'):
-            logging.error(f'semgrep: unexpected error:' + error['message'])
+            logger.warning(f'error -' + error['message'])
             if epaths is not None and (path := error.get('path')):
                 epaths.add(path)
 
         expected = set(map(str, files))
         for path in expected.difference(data.pop('paths')['scanned']):
-            logging.warning(f'semgrep: unexpectedly skipped {path}')
+            logger.warning(f'skipped {path}')
             if epaths is not None:
                 epaths.add(path)
 

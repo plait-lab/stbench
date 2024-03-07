@@ -12,6 +12,8 @@ from pathlib import Path
 from pygments import lex
 from pygments.lexers import get_lexer_by_name
 
+from . import logger
+
 from .db import prepare, select
 from .db.model import Tool, Spec, File, Run
 
@@ -35,16 +37,20 @@ def add_args(parser: ArgumentParser):
 def main(args: Args):
     args.results.mkdir(parents=True, exist_ok=True)
 
-    logging.basicConfig(level=logging.INFO, handlers=[
-        logging.FileHandler(args.results / 'trace.log', 'w'),
-        logging.StreamHandler(),  # keep stderr
+    logfmt = '%(levelname)s %(name)s: %(message)s'
+    logging.basicConfig(level=logging.DEBUG, format=logfmt, handlers=[
+        tracer := logging.FileHandler(args.results / 'trace.log', 'w'),
+        console := logging.StreamHandler(),
     ])
 
-    logging.info(f'queries: {args.queries}')
+    tracer.addFilter(logging.Filter(logger.name))
+    console.setLevel(logging.INFO)
+
+    results = logging.FileHandler(args.results / 'results.log', 'w')
+    results.setFormatter(logging.Formatter('%(message)s'))
+    reporter.addHandler(results)
 
     rules = list(semgrep.rules(args.queries))
-    save(args.results / 'rules', ((s, r['id']) for s, r in rules))
-    print(f'{len(rules)} semgrep rules')
 
     queries: dict[Query, Query] = {}
     for source, rule in rules:
@@ -53,19 +59,21 @@ def main(args: Args):
             st = stsearch.from_semgrep(sg)
             queries[sg] = st
     save(args.results / 'complete', queries)
-    print(f'{len(queries)} unique queries')
 
     partial = {q: list(prefixes(q)) for q in queries}
+    partials = set().union(*partial.values()).difference(queries)
     save(args.results / 'partials',
          ((*q, *(p.syntax for p in ps)) for q, ps in partial.items()))
 
-    partials = set().union(*partial.values()).difference(queries)
-    print(f'{len(partials)} partial queries')
-
     languages = {q.language for q in queries}
-    print(f'languages: ' + ','.join(map(str, languages)))
 
-    logging.info(f'corpus: {args.corpus}')
+    report('\n- '.join([
+        f'queries: {args.queries}',
+        f'{len(rules):5} semgrep rules',
+        f'{len(queries):5} unique queries',
+        f'{len(partials):5} partial queries',
+        f'languages: ' + ','.join(map(str, languages)),
+    ]))
 
     projects: dict[Path, list[Path]] = {}
     with args.corpus.open() as file:
@@ -73,15 +81,17 @@ def main(args: Args):
             project = args.corpus.parent / name.rstrip()
             projects[project] = list(find(project, languages))
     save(args.results / 'projects', ((p,) for p in projects))
-    print(f'{len(projects)} projects included')
 
     files = [f for fs in projects.values() for f in fs]
-    print(f'{len(files)} files included')
+    save(args.results / 'files', ((f,) for f in files))
 
-    def fsize(p: Path): return p.stat().st_size
-    print(stats('file size', files, fsize, 'B'))
+    report('\n- '.join([
+        f'corpus: {args.corpus}',
+        f'{len(projects):5} projects',
+        f'{len(files):5} relevant files',
+    ]))
 
-    logging.info(f'collecting matches!')
+    logger.info(f'collecting matches!')
     prepare(args.results / 'matches.db', truncate=True)
     st, sg = Tool.from_names('stsearch', 'semgrep')
 
@@ -94,22 +104,21 @@ def main(args: Args):
                               (args.results / 'semgrep.err').open('w'))
 
     for project, files in projects.items():
-        logging.info(f' > project: {project}')
+        logger.info(f' > project: {project}')
         fmodels = File.from_proj(files)
 
-        logging.info(f'    * complete - {st.name}')
+        logger.info(f'  * complete - {st.name}')
         Run.batch(st, complete, fmodels, strunner)
 
-        logging.info(f'    * complete - {sg.name}')
+        logger.info(f'  * complete - {sg.name}')
         Run.batchX(sg, complete, project, fmodels, smrunner)
 
-        logging.info(f'    * partials - {st.name}')
+        logger.info(f'  * partials - {st.name}')
         Run.batch(st, partials, fmodels, strunner)
 
-    logging.info(f'analyzing matches')
+    logger.info(f'analyzing matches')
 
     epaths = set(map(Path, smrunner.epaths))
-    print(f'dropping {len(epaths)} paths w/ errors')
     for path in epaths:
         Run.delete().where(Run.file_id == File.get(path=path).id).execute()
 
@@ -117,41 +126,51 @@ def main(args: Args):
     save(args.results / 'matches', ((*l, *d) for l, d in matches.items()))
 
     matches = {l: d for l, d in matches.items() if any(d)}
-    print(f'selected {len(matches)} queries w/ results')
+    partial = {q: ps for q, ps in partial.items() if q in matches}
+    partials = set().union(*partial.values()).difference(queries)
+    report('\n- '.join([
+        f'analysis prelude',
+        f'dropped {len(epaths)} paths w/ errors',
+        f'selected {len(matches)} queries w/ results',
+        f'selected {len(partials)} corresp. partial queries',
+    ]))
 
     incl, both, excl = map(sum, zip(*matches.values()))
-    print(mmatrix('stsearch', incl, both, excl, 'semgrep'))
-    no_excl = sum(1 for i, b, e in matches.values() if not e)
-    print(f'{100 * no_excl / len(matches):.2f}% queries w/o excluded')
+    report(mmatrix('stsearch', incl, both, excl, 'semgrep'))
 
     totals = {q: t for q, t in select.qtotals(st)}
     ptotals = {q: [totals[st] for sm, st in sorted(sm2st.items())
                    if q.syntax.startswith(sm.syntax)] for q in queries}
     save(args.results / 'progress', ((*q, *ts) for q, ts in ptotals.items()))
 
-    logging.info(f'analyzing metrics')
+    logger.info(f'analyzing metrics')
     metrics = list(strunner.metrics())
 
     seqs = {m.query: m.seq for m in metrics}  # dedups
-    print(stats('token length', seqs.values(), lambda s: s.length, 'tokens'))
-    print(stats('wildcards', seqs.values(), lambda s: s.wcount, 'wildcards'))
+    report(stats('token length', seqs.values(), lambda s: s.length, 'tokens'))
+    report(stats('wildcards', seqs.values(), lambda s: s.wcount, 'wildcards'))
 
     trees = {m.path: m.tree for m in metrics}  # dedups
-    print(stats('file size', files, lambda p: p.stat().st_size, 'B'))
-    print(stats('tree size', trees.values(), lambda t: t.size, 'nodes'))
-    print(stats('tree depth', trees.values(), lambda t: t.depth, 'nodes'))
+    report(stats('file size', files, lambda p: p.stat().st_size, 'B'))
+    report(stats('tree size', trees.values(), lambda t: t.size, 'nodes'))
+    report(stats('tree depth', trees.values(), lambda t: t.depth, 'nodes'))
 
     runs = {(m.query, m.path): m.time for m in metrics}
-    print(stats('parse time', runs.values(), lambda t: t.parse, 'µs'))
-    print(stats('search time', runs.values(), lambda t: t.search, 'µs'))
+    report(stats('parse time', runs.values(), lambda t: t.parse, 'µs'))
+    report(stats('search time', runs.values(), lambda t: t.search, 'µs'))
 
     pruns = {(q, p): sum(runs[q, str(f)].search for f in fs if (q, str(f)) in runs)
              for q, (p, fs) in product(queries, projects.items())}
-    print(stats('project search', pruns.values(), lambda t: t, 'µs'))
+    report(stats('project search', pruns.values(), lambda t: t, 'µs'))
 
-    thres = 1e6  # one second
-    fast = sum(1 for t in pruns.values() if t < thres)
-    print(f'{100 * fast / len(pruns):.2f}% projects ran in <{thres:.2E}µs')
+    no_excl = sum(1 for i, b, e in matches.values() if not e)
+    fast = sum(1 for t in pruns.values() if t < (thres := 1e6))  # one second
+
+    report('\n- '.join([
+        f'key results',
+        f'{100 * no_excl / len(matches):.2f}% queries w/o excluded matches'
+        f'{100 * fast / len(pruns):.2f}% projects ran in <{thres:.2E}µs',
+    ]))
 
 
 def prefixes(query: Query) -> Iterable[Query]:
@@ -167,7 +186,15 @@ def prefixes(query: Query) -> Iterable[Query]:
 
 def save(path: Path, it: Iterable[tuple]):
     with path.with_suffix('.csv').open('w') as file:
+        logger.info(f'saving - {path}')
         csv.writer(file).writerows(it)
+
+
+def report(msg: str, *args):
+    return reporter.info(msg, *args)
+
+
+reporter = logging.getLogger('report')
 
 
 if __name__ == '__main__':

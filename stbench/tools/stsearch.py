@@ -12,6 +12,9 @@ from . import Language, Query, Match
 from .semgrep import METAVAR
 
 
+logger = logging.getLogger(__name__)
+
+
 def from_semgrep(query: Query) -> Query:
     '''Translate a Semgrep query to stsearch.'''
     language, pattern = query
@@ -80,9 +83,9 @@ def run(query: Query, file: Path | str, metrics: Optional[TextIO] = None) -> Ite
     if metrics:
         cmd.append('--metrics')
 
-    logging.debug(f'$ {subprocess.list2cmdline(cmd)}')
+    logger.debug(f'$ {subprocess.list2cmdline(cmd)}')
     with subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=metrics) as process:
         yield from map(Match.parse, process.stdout or ())
 
         if code := process.wait():
-            logging.error(f'stsearch: exit {code}')
+            logger.error(f'stsearch: exit {code}')
