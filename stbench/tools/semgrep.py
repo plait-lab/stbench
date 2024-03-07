@@ -167,13 +167,13 @@ def run(queries: list[Query], project: Path, files: Sequence[Path | str], epaths
         data = json.loads(output)
 
         for error in data.pop('errors'):
-            logger.warning(f'error -' + error['message'])
+            logger.warning(f'error: ' + error['message'])
             if epaths is not None and (path := error.get('path')):
                 epaths.add(path)
 
         expected = set(map(str, files))
         for path in expected.difference(data.pop('paths')['scanned']):
-            logger.warning(f'skipped {path}')
+            logger.warning(f'skipped: {path}')
             if epaths is not None:
                 epaths.add(path)
 

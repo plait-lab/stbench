@@ -2,7 +2,6 @@
 
 from typing import Iterable
 
-import csv
 import logging
 
 from argparse import ArgumentParser
@@ -12,7 +11,7 @@ from pathlib import Path
 from pygments import lex
 from pygments.lexers import get_lexer_by_name
 
-from . import logger
+from . import logger, Results, report
 
 from .db import prepare, select
 from .db.model import Tool, Spec, File, Run
@@ -35,69 +34,63 @@ def add_args(parser: ArgumentParser):
 
 
 def main(args: Args):
-    args.results.mkdir(parents=True, exist_ok=True)
+    results = Results(args.results)
+    results.report('report')
 
-    logfmt = '%(levelname)s %(name)s: %(message)s'
-    logging.basicConfig(level=logging.DEBUG, format=logfmt, handlers=[
-        tracer := logging.FileHandler(args.results / 'trace.log', 'w'),
+    logging.basicConfig(level=logging.DEBUG, handlers=[
         console := logging.StreamHandler(),
+        results.tracer('trace'),
     ])
 
-    tracer.addFilter(logging.Filter(logger.name))
+    # disable detailed logging in the terminal
     console.setLevel(logging.INFO)
 
-    results = logging.FileHandler(args.results / 'results.log', 'w')
-    results.setFormatter(logging.Formatter('%(message)s'))
-    reporter.addHandler(results)
-
     rules = list(semgrep.rules(args.queries))
-
     queries: dict[Query, Query] = {}
     for source, rule in rules:
         for pattern in semgrep.patterns(rule):
             sg = semgrep.canonical(pattern)
             st = stsearch.from_semgrep(sg)
             queries[sg] = st
-    save(args.results / 'complete', queries)
+    languages = {q.language for q in queries}
+    results.save('complete', queries)
 
     partial = {q: list(prefixes(q)) for q in queries}
-    partials = set().union(*partial.values()).difference(queries)
-    save(args.results / 'partials',
-         ((*q, *(p.syntax for p in ps)) for q, ps in partial.items()))
+    upartials = set().union(*partial.values()).difference(queries)
+    results.save('partials', ((ps[0].language, *(p.syntax for p in reversed(ps)))
+                              for ps in partial.values()))
 
-    languages = {q.language for q in queries}
-
-    report('\n- '.join([
+    report(
         f'queries: {args.queries}',
         f'{len(rules):5} semgrep rules',
         f'{len(queries):5} unique queries',
-        f'{len(partials):5} partial queries',
+        f'{len(upartials):5} partial queries',
         f'languages: ' + ','.join(map(str, languages)),
-    ]))
+    )
 
     projects: dict[Path, list[Path]] = {}
     with args.corpus.open() as file:
         for name in file:
             project = args.corpus.parent / name.rstrip()
             projects[project] = list(find(project, languages))
-    save(args.results / 'projects', ((p,) for p in projects))
+    results.save('projects', ((p,) for p in projects))
 
     files = [f for fs in projects.values() for f in fs]
-    save(args.results / 'files', ((f,) for f in files))
+    results.save('files', ((f,) for f in files))
 
-    report('\n- '.join([
+    report(
         f'corpus: {args.corpus}',
-        f'{len(projects):5} projects',
+        f'{len(projects):5} unique projects',
         f'{len(files):5} relevant files',
-    ]))
+    )
 
     logger.info(f'collecting matches!')
     prepare(args.results / 'matches.db', truncate=True)
     st, sg = Tool.from_names('stsearch', 'semgrep')
 
     complete = Spec.from_qs([sg, st], queries.items())
-    sm2st = queries | {q: stsearch.from_semgrep(q) for q in partials}
-    partials = Spec.from_qs([st], set((sm2st[q],) for q in partials))
+    sm2st = queries | {q: stsearch.from_semgrep(q) for q in upartials}
+    upartials = Spec.from_qs([st], set((sm2st[q],) for q in upartials))
 
     strunner = stsearch.Runner((args.results / 'metrics.csv').open('w+'))
     smrunner = semgrep.Runner((args.results / 'config.yaml'),
@@ -114,7 +107,7 @@ def main(args: Args):
         Run.batchX(sg, complete, project, fmodels, smrunner)
 
         logger.info(f'  * partials - {st.name}')
-        Run.batch(st, partials, fmodels, strunner)
+        Run.batch(st, upartials, fmodels, strunner)
 
     logger.info(f'analyzing matches')
 
@@ -123,17 +116,17 @@ def main(args: Args):
         Run.delete().where(Run.file_id == File.get(path=path).id).execute()
 
     matches = {r: tuple(d) for l, *d, r in select.qdiff(st, sg)}
-    save(args.results / 'matches', ((*l, *d) for l, d in matches.items()))
+    results.save('matches', ((*l, *d) for l, d in matches.items()))
 
     matches = {l: d for l, d in matches.items() if any(d)}
     partial = {q: ps for q, ps in partial.items() if q in matches}
-    partials = set().union(*partial.values()).difference(queries)
-    report('\n- '.join([
+    upartials = set().union(*partial.values()).difference(queries)
+    report(
         f'analysis prelude',
         f'dropped {len(epaths)} paths w/ errors',
         f'selected {len(matches)} queries w/ results',
-        f'selected {len(partials)} corresp. partial queries',
-    ]))
+        f'selected {len(upartials)} corresp. partial queries',
+    )
 
     incl, both, excl = map(sum, zip(*matches.values()))
     report(mmatrix('stsearch', incl, both, excl, 'semgrep'))
@@ -141,7 +134,7 @@ def main(args: Args):
     totals = {q: t for q, t in select.qtotals(st)}
     ptotals = {q: [totals[st] for sm, st in sorted(sm2st.items())
                    if q.syntax.startswith(sm.syntax)] for q in queries}
-    save(args.results / 'progress', ((*q, *ts) for q, ts in ptotals.items()))
+    results.save('progress', ((*q, *ts) for q, ts in ptotals.items()))
 
     logger.info(f'analyzing metrics')
     metrics = list(strunner.metrics())
@@ -166,11 +159,11 @@ def main(args: Args):
     no_excl = sum(1 for i, b, e in matches.values() if not e)
     fast = sum(1 for t in pruns.values() if t < (thres := 1e6))  # one second
 
-    report('\n- '.join([
+    report(
         f'key results',
-        f'{100 * no_excl / len(matches):.2f}% queries w/o excluded matches'
+        f'{100 * no_excl / len(matches):.2f}% queries w/o excluded matches',
         f'{100 * fast / len(pruns):.2f}% projects ran in <{thres:.2E}µs',
-    ]))
+    )
 
 
 def prefixes(query: Query) -> Iterable[Query]:
@@ -182,19 +175,6 @@ def prefixes(query: Query) -> Iterable[Query]:
 
     # Use canonical repr to filter whitespace & ambiguous prefixes
     return (q for q in queries if semgrep.canonical(q) == q)
-
-
-def save(path: Path, it: Iterable[tuple]):
-    with path.with_suffix('.csv').open('w') as file:
-        logger.info(f'saving - {path}')
-        csv.writer(file).writerows(it)
-
-
-def report(msg: str, *args):
-    return reporter.info(msg, *args)
-
-
-reporter = logging.getLogger('report')
 
 
 if __name__ == '__main__':
