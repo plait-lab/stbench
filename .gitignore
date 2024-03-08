@@ -3,5 +3,7 @@
 /results/**/*.db-wal
 /results/**/*.db-shm
 
+.semgrepignore
+
 __pycache__/
 *.pyc

@@ -140,6 +140,7 @@ def canonical(query: Query) -> Query:
 
 class Runner:
     def __init__(self, config: Optional[Path] = None, stderr: Optional[TextIO] = None) -> None:
+        Path('.semgrepignore').touch()  # disable semgrep ignore behavior
         self.config, self.stderr, self.epaths = config, stderr, set[str]()
 
     def __call__(self, queries: list[Query], project: Path, files: Sequence[Path | str]) -> Iterable[tuple[Query, Match]]:
