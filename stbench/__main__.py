@@ -5,7 +5,7 @@ from typing import Iterable
 import logging
 
 from argparse import ArgumentParser
-from itertools import accumulate, product
+from itertools import accumulate, product, groupby
 from pathlib import Path
 
 from pygments import lex
@@ -51,7 +51,7 @@ def main(args: Args):
         for pattern in semgrep.patterns(rule):
             sg = semgrep.canonical(pattern)
             st = stsearch.from_semgrep(sg)
-            queries[sg] = st
+            queries[st] = sg
     languages = {q.language for q in queries}
     results.save('complete', queries)
 
@@ -88,9 +88,8 @@ def main(args: Args):
     prepare(args.results / 'matches.db', truncate=True)
     st, sg = Tool.from_names('stsearch', 'semgrep')
 
-    complete = Spec.from_qs([sg, st], queries.items())
-    sm2st = queries | {q: stsearch.from_semgrep(q) for q in upartials}
-    upartials = Spec.from_qs([st], set((sm2st[q],) for q in upartials))
+    complete = Spec.from_qs([st, sg], queries.items())
+    upartials = Spec.from_qs([st], set((q,) for q in upartials))
 
     strunner = stsearch.Runner((args.results / 'metrics.csv').open('w+'))
     smrunner = semgrep.Runner((args.results / 'config.yaml'),
@@ -109,37 +108,13 @@ def main(args: Args):
         logger.info(f'  * partials - {st.name}')
         Run.batch(st, upartials, fmodels, strunner)
 
-    logger.info(f'analyzing matches')
+    metrics = list(strunner.metrics())
 
     epaths = set(map(Path, smrunner.epaths))
     for path in epaths:
         Run.delete().where(Run.file_id == File.get(path=path).id).execute()
 
-    matches = {r: tuple(d) for l, *d, r in select.qdiff(st, sg)}
-    results.save('matches', ((*l, *d) for l, d in matches.items()))
-
-    matches = {l: d for l, d in matches.items() if any(d)}
-    partial = {q: ps for q, ps in partial.items() if q in matches}
-    upartials = set().union(*partial.values()).difference(queries)
-    report(
-        f'analysis prelude',
-        f'dropped {len(epaths)} paths w/ errors',
-        f'selected {len(matches)} queries w/ results',
-        f'selected {len(upartials)} corresp. partial queries',
-    )
-
-    incl, both, excl = map(sum, zip(*matches.values()))
-    report(mmatrix('stsearch', incl, both, excl, 'semgrep'))
-
-    totals = {q: t for q, t in select.qtotals(st)}
-    ptotals = {q: [totals[st] for sm, st in sorted(sm2st.items())
-                   if q.syntax.startswith(sm.syntax)] for q in queries}
-    results.save('progress', ((*q, *ts) for q, ts in ptotals.items()))
-
-    logger.info(f'analyzing metrics')
-    metrics = list(strunner.metrics())
-
-    seqs = {m.query: m.seq for m in metrics}  # dedups
+    seqs = {m.query: m.seq for m in metrics if m.query in queries}  # dedups
     report(stats('token length', seqs.values(), lambda s: s.length, 'tokens'))
     report(stats('wildcards', seqs.values(), lambda s: s.wcount, 'wildcards'))
 
@@ -147,6 +122,28 @@ def main(args: Args):
     report(stats('file size', files, lambda p: p.stat().st_size, 'B'))
     report(stats('tree size', trees.values(), lambda t: t.size, 'nodes'))
     report(stats('tree depth', trees.values(), lambda t: t.depth, 'nodes'))
+
+    matches = {l: tuple(d) for l, *d, r in select.qdiff(st, sg) if any(d)}
+    results.save('matches', ((*l, *d) for l, d in matches.items()))
+    report(
+        f'analysis prelude',
+        f'dropped {len(epaths)} paths w/ errors',
+        f'selected {len(matches)} queries w/ results',
+    )
+
+    incl, both, excl = map(sum, zip(*matches.values()))
+    report(mmatrix('stsearch', incl, both, excl, 'semgrep'))
+
+    totals = {q: t for q, t in select.qtotals(st)}
+    partial = {q: ps for q, ps in partial.items() if totals[q]}
+    upartials = set().union(*partial.values()).difference(queries)
+    report(
+        f'analysis prelude',
+        f'selected {len(upartials)} queries w/ results',
+    )
+
+    ptotals = {q: [totals[p] for p in ps] for q, ps in partial.items()}
+    results.save('progress', ((*q, *ts) for q, ts in ptotals.items()))
 
     runs = {(m.query, m.path): m.time for m in metrics}
     report(stats('parse time', runs.values(), lambda t: t.parse, 'µs'))
@@ -173,8 +170,7 @@ def prefixes(query: Query) -> Iterable[Query]:
     prefixes = accumulate(v for t, v in lex(query.syntax, lexer))
     queries = map(lambda p: query._replace(syntax=p), prefixes)
 
-    # Use canonical repr to filter whitespace & ambiguous prefixes
-    return (q for q in queries if semgrep.canonical(q) == q)
+    return (next(qs) for q, qs in groupby(queries, key=Query.strip))
 
 
 if __name__ == '__main__':

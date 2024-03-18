@@ -11,6 +11,18 @@ class Query(NamedTuple):
     language: Language
     syntax: str
 
+    def strip(self) -> Self:
+        language, pattern = self
+
+        # FIX: generalize to more languages
+        assert language.name == 'javascript'
+
+        pattern = pattern.strip()
+        pattern = re.sub(r'[^\S\n\r]+', ' ', pattern)  # collapse whitespace
+        pattern = re.sub(r'\n(\r?)\s*\n\r?', r'\n\1', pattern)  # and empty lines
+
+        return self._replace(syntax=pattern)
+
 
 class Match(NamedTuple):
     path: str
