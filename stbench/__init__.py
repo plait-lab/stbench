@@ -13,7 +13,7 @@ reporter = logger.getChild('report')
 
 
 def report(*lines: str):
-    return reporter.info('\n- '.join(lines))
+    return reporter.info('\n' + '\n- '.join(lines))
 
 
 class Results:

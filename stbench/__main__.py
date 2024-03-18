@@ -74,7 +74,7 @@ def main(args: Args):
     with args.corpus.open() as file:
         for name in file:
             project = args.corpus.parent / name.rstrip()
-            projects[project] = list(find(project, languages))
+            projects[project] = sorted(find(project, languages))
     results.save('projects', ((p,) for p in projects))
 
     files = [f for fs in projects.values() for f in fs]
@@ -114,14 +114,19 @@ def main(args: Args):
     epaths = sorted(smrunner.epaths)
     metrics = list(strunner.metrics())
 
-    seqs = {m.query: m.seq for m in metrics if m.query in queries}  # dedups
-    report(stats('token length', seqs.values(), lambda s: s.length, 'tokens'))
-    report(stats('wildcards', seqs.values(), lambda s: s.wcount, 'wildcards'))
+    report(f'# BENCHMARK')
 
-    trees = {m.path: m.tree for m in metrics}  # dedups
-    report(stats('file size', files, lambda p: p.stat().st_size, 'B'))
-    report(stats('tree size', trees.values(), lambda t: t.size, 'nodes'))
-    report(stats('tree depth', trees.values(), lambda t: t.depth, 'nodes'))
+    seqs = {m.query: m.seq for m in metrics if m.query in queries}
+    report(stats('token length', (s.length for s in seqs.values()), 'tokens'))
+    report(stats('wildcards', (s.wcount for s in seqs.values()), 'wildcards'))
+
+    files = (f for fs in projects.values() for f in fs)
+    report(stats('file size', (f.stat().st_size for f in files), 'B'))
+    trees = {m.path: m.tree for m in metrics}
+    report(stats('tree size', (t.size for t in trees.values()), 'nodes'))
+    report(stats('tree depth', (t.depth for t in trees.values()), 'nodes'))
+
+    report(f'# COMPLETE')
 
     matches = {l: d for l, *d, r in select.qdiff(st, sg, epaths) if any(d)}
     results.save('errpaths', ((p,) for p in epaths))
@@ -135,27 +140,34 @@ def main(args: Args):
     incl, both, excl = map(sum, zip(*matches.values()))
     report(mmatrix('stsearch', incl, both, excl, 'semgrep'))
 
+    report(f'# PARTIAL')
+
     totals = {q: t for q, t in select.qtotals(st)}
     partial = {q: ps for q, ps in partial.items() if totals[q]}
     upartials = set().union(*partial.values()).difference(queries)
     report(
         f'analysis prelude',
-        f'selected {len(upartials)} queries w/ results',
+        f'selected {len(partial)} queries w/ results',
+        f'selected {len(upartials)} corresp. partial queries',
     )
 
     ptotals = {q: [totals[p] for p in ps] for q, ps in partial.items()}
     results.save('progress', ((*q, *ts) for q, ts in ptotals.items()))
 
+    report(f'# PERFORMANCE')
+
     runs = {(m.query, m.path): m.time for m in metrics}
-    report(stats('parse time', runs.values(), lambda t: t.parse, 'µs'))
-    report(stats('search time', runs.values(), lambda t: t.search, 'µs'))
+    report(stats('parse time', (t.parse for t in runs.values()), 'µs'))
+    report(stats('search time', (t.search for t in runs.values()), 'µs'))
 
     pruns = {(q, p): sum(runs[q, str(f)].search for f in fs if (q, str(f)) in runs)
              for q, (p, fs) in product(queries, projects.items())}
-    report(stats('project search', pruns.values(), lambda t: t, 'µs'))
+    report(stats('project search', pruns.values(), 'µs'))
 
     no_excl = sum(1 for i, b, e in matches.values() if not e)
     fast = sum(1 for t in pruns.values() if t < (thres := 1e6))  # one second
+
+    report(f'# OVERALL')
 
     report(
         f'key results',
