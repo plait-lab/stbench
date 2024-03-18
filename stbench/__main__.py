@@ -25,12 +25,14 @@ class Args:
     queries: Path
     corpus: Path
     results: Path
+    fresh: bool
 
 
 def add_args(parser: ArgumentParser):
     parser.add_argument('--queries', required=True, type=Path)
     parser.add_argument('--corpus', required=True, type=Path)
     parser.add_argument('--results', required=True, type=Path)
+    parser.add_argument('--fresh', action='store_true')
 
 
 def main(args: Args):
@@ -85,15 +87,16 @@ def main(args: Args):
     )
 
     logger.info(f'collecting matches!')
-    prepare(args.results / 'matches.db', truncate=True)
+    prepare(args.results / 'matches.db', truncate=args.fresh)
     st, sg = Tool.from_names('stsearch', 'semgrep')
 
     complete = Spec.from_qs([st, sg], queries.items())
     upartials = Spec.from_qs([st], set((q,) for q in upartials))
 
-    strunner = stsearch.Runner((args.results / 'metrics.csv').open('w+'))
+    mode = 'w' if args.fresh else 'a'  # keep previous results
+    strunner = stsearch.Runner((args.results / 'metrics.csv').open(mode+'+'))
     smrunner = semgrep.Runner((args.results / 'config.yaml'),
-                              (args.results / 'semgrep.err').open('w'))
+                              (args.results / 'semgrep.err').open(mode))
 
     for project, files in projects.items():
         logger.info(f' > project: {project}')
@@ -108,11 +111,8 @@ def main(args: Args):
         logger.info(f'  * partials - {st.name}')
         Run.batch(st, upartials, fmodels, strunner)
 
+    epaths = sorted(smrunner.epaths)
     metrics = list(strunner.metrics())
-
-    epaths = set(map(Path, smrunner.epaths))
-    for path in epaths:
-        Run.delete().where(Run.file_id == File.get(path=path).id).execute()
 
     seqs = {m.query: m.seq for m in metrics if m.query in queries}  # dedups
     report(stats('token length', seqs.values(), lambda s: s.length, 'tokens'))
@@ -123,7 +123,8 @@ def main(args: Args):
     report(stats('tree size', trees.values(), lambda t: t.size, 'nodes'))
     report(stats('tree depth', trees.values(), lambda t: t.depth, 'nodes'))
 
-    matches = {l: tuple(d) for l, *d, r in select.qdiff(st, sg) if any(d)}
+    matches = {l: d for l, *d, r in select.qdiff(st, sg, epaths) if any(d)}
+    results.save('errpaths', ((p,) for p in epaths))
     results.save('matches', ((*l, *d) for l, d in matches.items()))
     report(
         f'analysis prelude',

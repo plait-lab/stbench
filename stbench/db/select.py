@@ -2,14 +2,14 @@ from typing import Iterable, Optional
 
 from peewee import Select, Column, Expression, fn
 
-from .model import Tool, Query, Spec, Run, Result
+from .model import Tool, Query, Spec, File, Run, Result
 
 
-def qdiff(left: Tool, right: Tool) -> Iterable[tuple[Query, int, int, int, Query]]:
-    matches = umatches(
+def qdiff(left: Tool, right: Tool, fpaths: list[str]) -> Iterable[tuple[Query, int, int, int, Query]]:
+    matches: Select = umatches(
         fn.MAX(Run.tool_id == left.id).alias('left'),
         fn.MAX(Run.tool_id == right.id).alias('right'),
-    )
+    ).where(Run.file_id.not_in(File.select(File.id).where(File.path << fpaths)))  # type: ignore
 
     return ((s.query(left), s.left, s.both, s.right, s.query(right)) for s in (
         Spec.select(
