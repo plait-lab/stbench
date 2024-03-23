@@ -114,6 +114,10 @@ def main(args: Args):
     epaths = sorted(smrunner.epaths)
     metrics = list(strunner.metrics())
 
+    if not args.fresh:
+        epaths += [p for p, in results.load('errpaths')]
+    results.save('errpaths', ((p,) for p in epaths))
+
     report(f'# BENCHMARK')
 
     seqs = {m.query: m.seq for m in metrics if m.query in queries}
@@ -129,7 +133,6 @@ def main(args: Args):
     report(f'# COMPLETE')
 
     matches = {l: d for l, *d, r in select.qdiff(st, sg, epaths) if any(d)}
-    results.save('errpaths', ((p,) for p in epaths))
     results.save('matches', ((*l, *d) for l, d in matches.items()))
     report(
         f'analysis prelude',

@@ -29,6 +29,12 @@ class Results:
             logger.info(f'saving: {file.name}')
             csv.writer(file).writerows(it)
 
+    def load(self, name: str) -> Iterable[list[str]]:
+        if (path := self.new(name).with_suffix('.csv')).exists():
+            with path.open() as file:
+                logger.info(f'loading: {file.name}')
+                yield from csv.reader(file)
+
     def tracer(self, name: str) -> logging.Handler:
         tracer = logging.FileHandler(self.new(name).with_suffix('.log'), 'w')
         tracer.addFilter(logging.Filter(logger.name))
