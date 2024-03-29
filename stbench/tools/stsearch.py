@@ -26,8 +26,13 @@ def from_semgrep(query: Query) -> Query:
     pattern = METAVAR.sub(lambda m: wildcard(m['kind']), pattern)
 
     # FIX: generalize to more languages
+    assert language.name == 'javascript'
+
     pattern = re.sub(r',?(\s*\.{3}\s*),?', r'\1', pattern)
     pattern = re.sub(r'(?<!\.)\.\s*(\.{3}\s*\.)(?!\.)', r'\1', pattern)
+
+    if query.syntax != pattern:
+        logger.debug(f'translated: {query.syntax!r} => {pattern!r}')
 
     return query._replace(syntax=pattern)
 
