@@ -61,6 +61,7 @@ def main(args: Args):
     upartials = set().union(*partial.values()).difference(queries)
     results.save('partials', ((ps[0].language, *(p.syntax for p in reversed(ps)))
                               for ps in partial.values()))
+    results.save('upartials', sorted(upartials))
 
     report(
         f'queries: {args.queries}',
