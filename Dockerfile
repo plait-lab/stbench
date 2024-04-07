@@ -11,8 +11,7 @@ WORKDIR /artifact
 COPY queries queries
 
 # Load corpus snapshot
-RUN --mount=source=corpus.tgz,target=/tmp/corpus.tgz \
-    tar xf /tmp/corpus.tgz
+ADD corpus.tgz .
 
 # Includes stsearch source
 COPY --from=stsearch /stsearch stsearch
