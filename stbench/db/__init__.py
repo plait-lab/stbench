@@ -1,8 +1,8 @@
-from typing import Iterable, Any
+from typing import Self, Iterable, Any
 
 from pathlib import Path
 
-from peewee import SqliteDatabase, Model, chunked
+from peewee import SqliteDatabase, Model, IntegrityError, chunked
 
 
 db = SqliteDatabase(None)
@@ -23,6 +23,18 @@ class Base(Model):
         # https://www.sqlite.org/limits.html#max_variable_number
         for chunk in chunked(it, 32766 // len(fields)):
             cls.insert_many(chunk, fields).execute()
+
+    _created: bool
+
+    @classmethod
+    def ensure(cls, **query) -> Self:
+        try:
+            model = cls.create(**query)
+            model._created = True
+        except IntegrityError:
+            model = cls.get(**query)
+            model._created = False
+        return model
 
 
 def prepare(database: Path, truncate=False):

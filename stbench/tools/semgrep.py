@@ -99,14 +99,8 @@ def patterns(rule: dict, languages: Optional[set[Language]] = None) -> Iterable[
 
 def canonical(query: Query) -> Query:
     '''Given a Semgrep pattern, normalize spacing/naming & remove ambiguity.'''
-    language, pattern = query
+    language, pattern = query.strip()
 
-    # FIX: generalize to more languages
-    assert query.language.name == 'javascript'
-
-    pattern = pattern.strip()
-    pattern = re.sub(r'[^\S\n\r]+', ' ', pattern)  # collapse whitespace
-    pattern = re.sub(r'\n(\r?)\s*\n\r?', r'\n\1', pattern)  # and empty lines
     pattern = TYPMETAVAR.sub(lambda m: m['metavar'], pattern)
 
     def metavar(name=None, kind=''):
@@ -116,6 +110,9 @@ def canonical(query: Query) -> Query:
 
     pattern = METAVAR.sub(
         lambda m: metavar(m['name'], m['kind']), pattern)
+
+    # FIX: generalize to more languages
+    assert language.name == 'javascript'
 
     # Sometimes generated when extracting deep patterns
     redundant_ellipsis = re.compile(r'\.{3}\s*(,|\n)\s*\.{3}')
@@ -224,11 +221,13 @@ FLAGS = [
     # Track queries through ids
     '--no-rewrite-rule-ids',
     # Everything must be reported
+    '--no-git-ignore',
     '--disable-nosem',
+    '--max-target-bytes=0',
+    '--timeout=0',
     '--verbose',
     # For performance
     '--metrics=off',
-    '--no-git-ignore',
     '--disable-version-check',
     # For reproducibility
     '--oss-only',

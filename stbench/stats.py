@@ -1,6 +1,6 @@
 from typing import Iterable, TypeVar, Collection, Callable
 
-from statistics import mean, stdev, quantiles
+from statistics import mean, median, stdev, quantiles
 
 
 T = TypeVar('T')
@@ -9,18 +9,16 @@ T = TypeVar('T')
 tail_pi = 99
 
 
-def stats(name: str, data: Collection[T], proj: Callable[[T], float], units: str) -> str:
-    vs = list(map(proj, data))
+def stats(name: str, data: Iterable[float], units: str) -> str:
+    vs = list(data)  # materialize values
     return '\n- '.join([
         name,
+        f'n =\t{len(vs)}',
+        f'med\t{median(vs)} {units}',
         f'mean\t{mean(vs):.2f}±{stdev(vs):.2f} {units}',
-        f'{tail_pi}pi\t{percentiles(vs)[tail_pi - 1]:.2f} {units}',
+        f'{tail_pi}pi\t{quantiles(vs, n=100)[tail_pi - 1]:.2f} {units}',
         f'max\t{max(vs)} {units}',
     ])
-
-
-def percentiles(it: Iterable[float]) -> list[float]:
-    return quantiles(it, n=100)
 
 
 def mmatrix(lhs: str, incl: int, both: int, excl: int, rhs: str) -> str:
